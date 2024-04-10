@@ -2,3 +2,21 @@
 title: "Hands-on Exercise 1"
 author: "Alicia Loh"
 ---
+
+# Getting Started
+
+Install and launching R packages
+
+The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.
+
+```{r}
+pacman::p_load(tidyverse)
+```
+
+# Importing the Data
+
+Search from folder 'data' and read the csv file 'Exam_data.csv'. The file is imported and saved as 'exam_data'.
+```{r}
+exam_data <- read_csv("data/Exam_data.csv")
+```
+
