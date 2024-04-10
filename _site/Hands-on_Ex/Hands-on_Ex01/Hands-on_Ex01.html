@@ -196,7 +196,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Getting Started</h1>
 <section id="installing-and-loading-the-required-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="installing-and-loading-the-required-libraries">Installing and loading the required libraries</h2>
-<p>Note: Ensure that the <a href="https://cran.r-project.org/web/packages/pacman/">pacman</a> package has already been installed</p>
+<p>Note: Ensure that the <a href="https://cran.r-project.org/web/packages/pacman/">pacman</a> package has already been installed.</p>
 <p>The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -261,6 +261,12 @@ dbl (3): ENGLISH, MATHS, SCIENCE
 </div>
 </div>
 </div>
+<p>::: callout-note ## Benefits of ggplot2 over in-built R graphics</p>
+<ul>
+<li><p>Automated Legends: Unlike built-in plotting which requires manual legend creation, ggplot2 automatically generates legends based on the data’s aesthetics. This streamlines the process, especially for beginners who may find managing legends challenging.</p></li>
+<li><p>Simplified Faceting: ggplot2 simplifies the creation of faceted plots (multiple subplots) compared to base R plotting. The latter can be quite complex, requiring setup with par() and potentially confusing for loops, which might be overwhelming for beginners.</p></li>
+<li><p>Tidy Data Integration: ggplot2 encourages the use of ‘tidy data’ principles, aligning with how other R tools and packages handle data. This practice helps beginners learn a consistent and widely-adopted approach to data analysis in R. :::</p></li>
+</ul>
 
 
 </section>

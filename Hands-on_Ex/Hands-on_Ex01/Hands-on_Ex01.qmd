@@ -13,7 +13,7 @@ Learning Objectives:
 
 ## Installing and loading the required libraries
 
-Note: Ensure that the [pacman](https://cran.r-project.org/web/packages/pacman/) package has already been installed
+Note: Ensure that the [pacman](https://cran.r-project.org/web/packages/pacman/) package has already been installed.
 
 The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.
 
@@ -63,3 +63,12 @@ ggplot(data=exam_data, aes(x = MATHS)) +
   ggtitle("Distribution of Maths scores")
 ```
 :::
+
+::: callout-note
+## Benefits of ggplot2 over in-built R graphics
+
+-   Automated Legends: Unlike built-in plotting which requires manual legend creation, ggplot2 automatically generates legends based on the data's aesthetics. This streamlines the process, especially for beginners who may find managing legends challenging.
+
+-   Simplified Faceting: ggplot2 simplifies the creation of faceted plots (multiple subplots) compared to base R plotting. The latter can be quite complex, requiring setup with par() and potentially confusing for loops, which might be overwhelming for beginners.
+
+-   Tidy Data Integration: ggplot2 encourages the use of 'tidy data' principles, aligning with how other R tools and packages handle data. This practice helps beginners learn a consistent and widely-adopted approach to data analysis in R. :::
