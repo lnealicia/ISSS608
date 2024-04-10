@@ -3,3 +3,15 @@ title: "ISSS608 Visual Analytics and Applications"
 ---
 
 Welcome to **ISSS608 Visual Analytics and Applications** homepage. In this website, you will find my coursework prepared for this course.
+
+Overview:
+
+Introduction to Visual Analytics\
+Designing Graphics to Enlighten\
+Interactivity in Visual Analytics\
+Fundamentals of Visual Analytics\
+Designing Web-enabled Visual Analytics application with Shiny\
+Visual Multivariate Analysis\
+Visualising & Analysing Time Oriented Data\
+Network Data Visualisation & Analysis\
+Information Dashboard Design
