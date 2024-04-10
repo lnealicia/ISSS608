@@ -158,6 +158,17 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#importing-the-data" id="toc-importing-the-data" class="nav-link" data-scroll-target="#importing-the-data">Importing the Data</a></li>
   </ul></li>
   <li><a href="#introducing-ggplot" id="toc-introducing-ggplot" class="nav-link" data-scroll-target="#introducing-ggplot">Introducing ggplot</a></li>
+  <li><a href="#grammar-of-graphics" id="toc-grammar-of-graphics" class="nav-link" data-scroll-target="#grammar-of-graphics">Grammar of Graphics</a>
+  <ul class="collapse">
+  <li><a href="#a-layered-grammar-of-graphics" id="toc-a-layered-grammar-of-graphics" class="nav-link" data-scroll-target="#a-layered-grammar-of-graphics">A Layered Grammar of Graphics</a></li>
+  </ul></li>
+  <li><a href="#essential-grammatical-elements-in-ggplot2-data" id="toc-essential-grammatical-elements-in-ggplot2-data" class="nav-link" data-scroll-target="#essential-grammatical-elements-in-ggplot2-data">Essential Grammatical Elements in ggplot2: data</a></li>
+  <li><a href="#essential-grammatical-elements-in-ggplot2-aesthetic-mappings" id="toc-essential-grammatical-elements-in-ggplot2-aesthetic-mappings" class="nav-link" data-scroll-target="#essential-grammatical-elements-in-ggplot2-aesthetic-mappings"><strong>Essential Grammatical Elements in ggplot2: Aesthetic mappings</strong></a></li>
+  <li><a href="#essential-grammatical-elements-in-ggplot2-geom" id="toc-essential-grammatical-elements-in-ggplot2-geom" class="nav-link" data-scroll-target="#essential-grammatical-elements-in-ggplot2-geom">Essential Grammatical Elements in ggplot2: geom</a>
+  <ul class="collapse">
+  <li><a href="#geometric-objects-geom_bar" id="toc-geometric-objects-geom_bar" class="nav-link" data-scroll-target="#geometric-objects-geom_bar">Geometric Objects: geom_bar</a></li>
+  <li><a href="#geometric-objects-geom_dotplot" id="toc-geometric-objects-geom_dotplot" class="nav-link" data-scroll-target="#geometric-objects-geom_dotplot">Geometric Objects: geom_dotplot</a></li>
+  </ul></li>
   </ul>
 </nav>
     </div>
@@ -197,7 +208,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="installing-and-loading-the-required-libraries" class="level2">
 <h2 class="anchored" data-anchor-id="installing-and-loading-the-required-libraries">Installing and loading the required libraries</h2>
 <p>Note: Ensure that the <a href="https://cran.r-project.org/web/packages/pacman/">pacman</a> package has already been installed.</p>
-<p>The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.</p>
+<p>The code chunk below uses <code>p_load()</code> of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -261,14 +272,137 @@ dbl (3): ENGLISH, MATHS, SCIENCE
 </div>
 </div>
 </div>
-<p>::: callout-note ## Benefits of ggplot2 over in-built R graphics</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Benefits of ggplot2 over in-built R graphics</p>
 <ul>
 <li><p>Automated Legends: Unlike built-in plotting which requires manual legend creation, ggplot2 automatically generates legends based on the data’s aesthetics. This streamlines the process, especially for beginners who may find managing legends challenging.</p></li>
 <li><p>Simplified Faceting: ggplot2 simplifies the creation of faceted plots (multiple subplots) compared to base R plotting. The latter can be quite complex, requiring setup with par() and potentially confusing for loops, which might be overwhelming for beginners.</p></li>
-<li><p>Tidy Data Integration: ggplot2 encourages the use of ‘tidy data’ principles, aligning with how other R tools and packages handle data. This practice helps beginners learn a consistent and widely-adopted approach to data analysis in R. :::</p></li>
+<li><p>Tidy Data Integration: ggplot2 encourages the use of ‘tidy data’ principles, aligning with how other R tools and packages handle data. This practice helps beginners learn a consistent and widely-adopted approach to data analysis in R.</p></li>
 </ul>
+</div>
+</div>
+</section>
+<section id="grammar-of-graphics" class="level1">
+<h1>Grammar of Graphics</h1>
+<p>Grammar of Graphics is a general scheme for data visualization which breaks up graphs into semantic components e.g., scales and layers. It was introduced by Leland Wilkinson (1999)&nbsp;<strong>Grammar of Graphics</strong>, Springer. In summary, Grammar of Graphics defines the rules of structuring mathematical and aesthetic elements into a meaningful graph.</p>
+<p>There are two principles in Grammar of Graphics, they are:</p>
+<ul>
+<li><p>Graphics = distinct layers of grammatical elements</p></li>
+<li><p>Meaningful plots through aesthetic mapping</p></li>
+</ul>
+<p>A good grammar of graphics will allow us to gain insight into the composition of complicated graphics, and reveal unexpected connections between seemingly different graphics (Cox 1978). It also provides a strong foundation for understanding a diverse range of graphics. Furthermore, it may serve as a guide on what a well-formed correct graphic looks like.</p>
+<section id="a-layered-grammar-of-graphics" class="level2">
+<h2 class="anchored" data-anchor-id="a-layered-grammar-of-graphics">A Layered Grammar of Graphics</h2>
+<p>ggplot2 is an implementation of Leland Wilkinson’s Grammar of Graphics.</p>
+<p>There are seven grammars of ggplot2:</p>
+<ul>
+<li><p><strong>Data</strong>: The dataset being plotted.</p></li>
+<li><p><strong>Aesthetics</strong> take attributes of the data and use them to influence visual characteristics, such as position, colours, size, shape, or transparency.</p></li>
+<li><p><strong>Geometrics</strong>: The visual elements used for our data, such as point, bar or line.</p></li>
+<li><p><strong>Facets</strong> split the data into subsets to create multiple variations of the same graph (paneling, multiple plots).</p></li>
+<li><p><strong>Statistics</strong>, statiscal transformations that summarise data (e.g.&nbsp;mean, confidence intervals).</p></li>
+<li><p><strong>Coordinate systems</strong> define the plane on which data are mapped on the graphic.</p></li>
+<li><p><strong>Themes</strong> modify all non-data components of a plot, such as main title, sub-title, y-aixs title, or legend background.</p></li>
+</ul>
+</section>
+</section>
+<section id="essential-grammatical-elements-in-ggplot2-data" class="level1">
+<h1>Essential Grammatical Elements in ggplot2: data</h1>
+<p>Call the <code>ggplot()</code>&nbsp;function using the code chunk below</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex01_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>A blank canvas appears.</li>
+<li><code>ggplot()</code> initializes a ggplot object.</li>
+<li>The <em>data</em> argument defines the dataset to be used for plotting.</li>
+<li>If the dataset is not already a data.frame, it will be converted to one by <code>fortify()</code>.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="essential-grammatical-elements-in-ggplot2-aesthetic-mappings" class="level1">
+<h1><strong>Essential Grammatical Elements in ggplot2: <a href="https://ggplot2.tidyverse.org/articles/ggplot2-specs.html">Aesthetic mappings</a></strong></h1>
+<p>The aesthetic mappings take attributes of the data and and use them to influence visual characteristics, e.g., position, colour, size, shape, or transparency. Each visual characteristic can thus encode an aspect of the data and be used to convey information.</p>
+<p>All aesthetics of a plot are specified in the <a href="https://ggplot2.tidyverse.org/reference/aes.html"><code>aes()</code></a> function call.</p>
+<p>Code chunk below adds the aesthetic element into the plot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span> MATHS))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex01_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<ul>
+<li>ggplot includes the x-axis and the axis’s label.</li>
+</ul>
+</div>
+</div>
+</section>
+<section id="essential-grammatical-elements-in-ggplot2-geom" class="level1">
+<h1>Essential Grammatical Elements in ggplot2: <a href="https://ggplot2.tidyverse.org/reference/#section-layer-geoms">geom</a></h1>
+<p>Geometric objects are the actual marks we put on a plot. Some examples:</p>
+<ul>
+<li><p><em>geom_point</em> for drawing individual points (e.g., a scatter plot)</p></li>
+<li><p><em>geom_line</em> for drawing lines (e.g., for a line charts)</p></li>
+<li><p><em>geom_smooth</em> for drawing smoothed lines (e.g., for simple trends or approximations)</p></li>
+<li><p><em>geom_bar</em> for drawing bars (e.g., for bar charts)</p></li>
+<li><p><em>geom_histogram</em> for drawing binned values (e.g.&nbsp;a histogram)</p></li>
+<li><p><em>geom_polygon</em> for drawing arbitrary shapes</p></li>
+<li><p><em>geom_map</em> for drawing polygons in the shape of a map! (You can access the data to use for these maps by using the map_data() function).</p></li>
+</ul>
+<p>Note: A plot must have at least one geom; there is no upper limit. A geom can be added to a plot using the <strong>+</strong> operator.</p>
+<section id="geometric-objects-geom_bar" class="level2">
+<h2 class="anchored" data-anchor-id="geometric-objects-geom_bar">Geometric Objects: geom_bar</h2>
+<p>The code chunk below plots a bar chart by using&nbsp;<a href="https://ggplot2.tidyverse.org/reference/geom_bar.html"><code>geom_bar()</code></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>exam_data, </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x=</span>RACE)) <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Hands-on_Ex01_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
+<section id="geometric-objects-geom_dotplot" class="level2">
+<h2 class="anchored" data-anchor-id="geometric-objects-geom_dotplot">Geometric Objects: geom_dotplot</h2>
+<p>In a dot plot, the width of a dot corresponds to the bin width (or maximum width, depending on the binning algorithm), and dots are stacked, with each dot representing one observation.</p>
+<p>In the code chunk below, <a href="https://ggplot2.tidyverse.org/reference/geom_dotplot.html"><code>geom_dotplot()</code></a> of ggplot2 is used to plot a dot plot.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

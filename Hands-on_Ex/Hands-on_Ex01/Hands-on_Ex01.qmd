@@ -15,7 +15,7 @@ Learning Objectives:
 
 Note: Ensure that the [pacman](https://cran.r-project.org/web/packages/pacman/) package has already been installed.
 
-The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.
+The code chunk below uses `p_load()` of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.
 
 ```{r}
 pacman::p_load(tidyverse)
@@ -65,10 +65,111 @@ ggplot(data=exam_data, aes(x = MATHS)) +
 :::
 
 ::: callout-note
-## Benefits of ggplot2 over in-built R graphics
+Benefits of ggplot2 over in-built R graphics
 
 -   Automated Legends: Unlike built-in plotting which requires manual legend creation, ggplot2 automatically generates legends based on the data's aesthetics. This streamlines the process, especially for beginners who may find managing legends challenging.
 
 -   Simplified Faceting: ggplot2 simplifies the creation of faceted plots (multiple subplots) compared to base R plotting. The latter can be quite complex, requiring setup with par() and potentially confusing for loops, which might be overwhelming for beginners.
 
--   Tidy Data Integration: ggplot2 encourages the use of 'tidy data' principles, aligning with how other R tools and packages handle data. This practice helps beginners learn a consistent and widely-adopted approach to data analysis in R. :::
+-   Tidy Data Integration: ggplot2 encourages the use of 'tidy data' principles, aligning with how other R tools and packages handle data. This practice helps beginners learn a consistent and widely-adopted approach to data analysis in R.
+:::
+
+# Grammar of Graphics
+
+Grammar of Graphics is a general scheme for data visualization which breaks up graphs into semantic components e.g., scales and layers. It was introduced by Leland Wilkinson (1999) **Grammar of Graphics**, Springer. In summary, Grammar of Graphics defines the rules of structuring mathematical and aesthetic elements into a meaningful graph.
+
+There are two principles in Grammar of Graphics, they are:
+
+-   Graphics = distinct layers of grammatical elements
+
+-   Meaningful plots through aesthetic mapping
+
+A good grammar of graphics will allow us to gain insight into the composition of complicated graphics, and reveal unexpected connections between seemingly different graphics (Cox 1978). It also provides a strong foundation for understanding a diverse range of graphics. Furthermore, it may serve as a guide on what a well-formed correct graphic looks like.
+
+## A Layered Grammar of Graphics
+
+ggplot2 is an implementation of Leland Wilkinson’s Grammar of Graphics.
+
+There are seven grammars of ggplot2:
+
+-   **Data**: The dataset being plotted.
+
+-   **Aesthetics** take attributes of the data and use them to influence visual characteristics, such as position, colours, size, shape, or transparency.
+
+-   **Geometrics**: The visual elements used for our data, such as point, bar or line.
+
+-   **Facets** split the data into subsets to create multiple variations of the same graph (paneling, multiple plots).
+
+-   **Statistics**, statiscal transformations that summarise data (e.g. mean, confidence intervals).
+
+-   **Coordinate systems** define the plane on which data are mapped on the graphic.
+
+-   **Themes** modify all non-data components of a plot, such as main title, sub-title, y-aixs title, or legend background.
+
+# Essential Grammatical Elements in ggplot2: data
+
+Call the `ggplot()` function using the code chunk below
+
+```{r}
+ggplot(data=exam_data)
+```
+
+::: callout-note
+-   A blank canvas appears.
+-   `ggplot()` initializes a ggplot object.
+-   The *data* argument defines the dataset to be used for plotting.
+-   If the dataset is not already a data.frame, it will be converted to one by `fortify()`.
+:::
+
+# **Essential Grammatical Elements in ggplot2: [Aesthetic mappings](https://ggplot2.tidyverse.org/articles/ggplot2-specs.html)**
+
+The aesthetic mappings take attributes of the data and and use them to influence visual characteristics, e.g., position, colour, size, shape, or transparency. Each visual characteristic can thus encode an aspect of the data and be used to convey information.
+
+All aesthetics of a plot are specified in the [`aes()`](https://ggplot2.tidyverse.org/reference/aes.html) function call.
+
+Code chunk below adds the aesthetic element into the plot.
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x= MATHS))
+```
+
+::: callout-note
+-   ggplot includes the x-axis and the axis’s label.
+:::
+
+# Essential Grammatical Elements in ggplot2: [geom](https://ggplot2.tidyverse.org/reference/#section-layer-geoms)
+
+Geometric objects are the actual marks we put on a plot. Some examples:
+
+-   *geom_point* for drawing individual points (e.g., a scatter plot)
+
+-   *geom_line* for drawing lines (e.g., for a line charts)
+
+-   *geom_smooth* for drawing smoothed lines (e.g., for simple trends or approximations)
+
+-   *geom_bar* for drawing bars (e.g., for bar charts)
+
+-   *geom_histogram* for drawing binned values (e.g. a histogram)
+
+-   *geom_polygon* for drawing arbitrary shapes
+
+-   *geom_map* for drawing polygons in the shape of a map! (You can access the data to use for these maps by using the map_data() function).
+
+Note: A plot must have at least one geom; there is no upper limit. A geom can be added to a plot using the **+** operator.
+
+## Geometric Objects: geom_bar
+
+The code chunk below plots a bar chart by using [`geom_bar()`](https://ggplot2.tidyverse.org/reference/geom_bar.html).
+
+```{r}
+ggplot(data=exam_data, 
+       aes(x=RACE)) +
+  geom_bar()
+```
+
+## Geometric Objects: geom_dotplot
+
+In a dot plot, the width of a dot corresponds to the bin width (or maximum width, depending on the binning algorithm), and dots are stacked, with each dot representing one observation.
+
+In the code chunk below, [`geom_dotplot()`](https://ggplot2.tidyverse.org/reference/geom_dotplot.html) of ggplot2 is used to plot a dot plot.
