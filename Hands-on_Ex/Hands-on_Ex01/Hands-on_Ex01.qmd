@@ -20,3 +20,10 @@ Search from folder 'data' and read the csv file 'Exam_data.csv'. The file is imp
 exam_data <- read_csv("data/Exam_data.csv")
 ```
 
+# Plotting a simple bar chart
+
+```{r}
+ggplot(data = exam_data,
+       aes(x = RACE)) + 
+  geom_bar()
+```
