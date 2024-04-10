@@ -3,9 +3,17 @@ title: "Hands-on Exercise 1 - A Layered Grammar of Graphics: ggplot2 methods"
 date-modified: last-modified
 ---
 
+Learning Objectives:
+
+-   Basic Principles and essential components of ggplot2
+
+-   Plot statistical graphics based on the principle of Layered Grammar of Graphics
+
 # Getting Started
 
-## Install and launching R packages
+## Installing and loading the required libraries
+
+Note: Ensure that the [pacman](https://cran.r-project.org/web/packages/pacman/) package has already been installed
 
 The code chunk below uses p_load() of pacman package to check if tidyverse packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.
 
@@ -15,16 +23,43 @@ pacman::p_load(tidyverse)
 
 ## Importing the Data
 
-Search from folder 'data' and read the csv file 'Exam_data.csv'. The file is imported and saved as 'exam_data'.
+-   The code chunk below imports *exam_data.csv* into R environment by using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package.
+
+-   **readr** is one of the tidyverse package.
 
 ```{r}
 exam_data <- read_csv("data/Exam_data.csv")
 ```
 
-# Plotting a simple bar chart
+**exam_data contains:**
+
+-   Year end examination grades of a cohort of primary 3 students from a local school.
+
+-   There are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.
+
+    -   The categorical attributes are: ID, CLASS, GENDER and RACE.
+
+    -   The continuous attributes are: MATHS, ENGLISH and SCIENCE.
+
+# Introducing ggplot
+
+[ggplot2](https://ggplot2.tidyverse.org/) is an R package for **declaratively** creating **data-driven** graphics based on ***The Grammar of Graphics***. It is also part of the tidyverse family specially designed for visual exploration and communication.
+
+::: panel-tabset
+## R Graphics
 
 ```{r}
-ggplot(data = exam_data,
-       aes(x = RACE)) + 
-  geom_bar()
+hist(exam_data$MATHS)
 ```
+
+## ggplot2
+
+```{r}
+ggplot(data=exam_data, aes(x = MATHS)) +
+  geom_histogram(bins=10, 
+                 boundary = 100,
+                 color="black", 
+                 fill="grey") +
+  ggtitle("Distribution of Maths scores")
+```
+:::

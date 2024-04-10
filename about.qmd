@@ -2,8 +2,4 @@
 title: "About"
 ---
 
-About this site
-
-```{r}
-1 + 1
-```
+Hello, my name is Alicia. Welcome to my Visual Analytics learning journey.
