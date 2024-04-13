@@ -1,5 +1,6 @@
 ---
 title: "Hands-on Exercise 2 - Beyond ggplot2 Fundamentals"
+author: Alicia Loh
 date-modified: last-modified
 ---
 
@@ -97,6 +98,8 @@ ggplot(data=exam_data,
   ggtitle("English scores versus Maths scores for Primary 3")
 ```
 :::
+
+## **Working with ggrepel**
 
 [**ggrepel**](https://ggrepel.slowkow.com/) is an extension of **ggplot2** package which provides `geoms` for **ggplot2** to repel overlapping text seen below. Simply replace `geom_text()` by [`geom_text_repel()`](https://ggrepel.slowkow.com/reference/geom_text_repel.html) and `geom_label()` by [`geom_label_repel`](https://ggrepel.slowkow.com/reference/geom_text_repel.html).
 

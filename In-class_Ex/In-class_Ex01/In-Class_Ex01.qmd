@@ -1,5 +1,6 @@
 ---
 title: "In-Class Exercise 1 - XXX"
+author: Alicia Loh
 date-modified: last-modified
 ---
 
