@@ -1,6 +1,6 @@
 ---
-title: "In-Class Exercise 1 - XXX"
-author: Alicia Loh
+title: "In-Class Exercise 1"
+author: "Alicia Loh"
 date-modified: last-modified
 ---
 

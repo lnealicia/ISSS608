@@ -1,6 +1,6 @@
 ---
 title: "Hands-on Exercise 2 - Beyond ggplot2 Fundamentals"
-author: Alicia Loh
+author: "Alicia Loh"
 date-modified: last-modified
 ---
 
