@@ -77,7 +77,7 @@ pacman::p_load(tidyverse, reshape2, ggthemr, ggridges, ggdist, ggpubr)
 
 -   **readr** is one of the tidyverse package.
 
-```{r}
+```{r, eval=FALSE}
 res_txn <- read_csv("data/")
 ```
 
