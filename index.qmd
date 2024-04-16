@@ -2,11 +2,13 @@
 title: "ISSS608 Visual Analytics and Applications"
 ---
 
-Welcome to **ISSS608 Visual Analytics and Applications** homepage. In this website, you will find my coursework prepared for this course.
+Welcome to **ISSS608 Visual Analytics and Applications** homepage. In this website, you will find my coursework.
+
+![](images/clipboard-514459332.png)
 
 Overview:
 
-Introduction to Visual Analytics\
+[Introduction to Visual Analytics](Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html)\
 Designing Graphics to Enlighten\
 Interactivity in Visual Analytics\
 Fundamentals of Visual Analytics\

@@ -43,8 +43,6 @@ To accomplish the task, transaction data of [REALIS](https://www.ura.gov.sg/reis
 7.  Due to the size of the dataset, it is split into multiple segments. Download all in .csv format\
     ![](images/clipboard-2283550883.png)
 
-8.  
-
 ## **The Designing Tool**
 
 The data will be processed using the appropriate **tidyverse** family of packages and the statistical graphics will be prepared using **ggplot2** and its extensions.
@@ -57,35 +55,33 @@ Note: Ensure that the [pacman](https://cran.r-project.org/web/packages/pacman/) 
 
 The code chunk below uses `p_load()` of pacman package to check if the listed packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.
 
--   [**haven**](https://haven.tidyverse.org/) - import SAS files
+-   [**tidyverse**](https://www.tidyverse.org/) (i.e. readr, tidyr, dplyr, ggplot2) for performing data science tasks such as importing, tidying, and wrangling data, as well as creating graphics based on The Grammar of Graphics
 
--   [**tidyverse**](https://www.tidyverse.org/) (i.e. readr, tidyr, dplyr, ggplot2) for performing data science tasks such as importing, tidying, and wrangling data, as well as creating graphics based on The Grammar of Graphics;
+-   [**reshape2**](https://seananderson.ca/2013/10/19/reshape/) for transforming data between wide and long formats
 
--   [**reshape2**](https://seananderson.ca/2013/10/19/reshape/) for transforming data between wide and long formats;
+-   [**ggthemr**](https://www.shanelynn.ie/themes-and-colours-for-r-ggplots-with-ggthemr/) for aesthetic themes created by user, Ciarán Tobin
 
--   [**ggthemr**](https://www.shanelynn.ie/themes-and-colours-for-r-ggplots-with-ggthemr/) for aesthetic themes created by user, Ciarán Tobin;
+-   [**ggridges**](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html) for creating ridgeline plots
 
--   [**ggridges**](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html) for creating ridgeline plots;
+-   [**ggdist**](https://mjskay.github.io/ggdist/) for visualising distributions and uncertainty
 
--   [**ggdist**](https://mjskay.github.io/ggdist/) for visualising distributions and uncertainty; and
-
--   [**ggpubr**](https://rpkgs.datanovia.com/ggpubr/) for creating publication ready ggplot2 plots.
+-   [**ggpubr**](https://rpkgs.datanovia.com/ggpubr/) for creating publication ready ggplot2 plots
 
 ```{r}
-pacman::p_load(tidyverse)
+pacman::p_load(tidyverse, reshape2, ggthemr, ggridges, ggdist, ggpubr)
 ```
 
 ## Importing the Data
 
--   The code chunk below imports *exam_data.csv* into R environment by using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package.
+-   The code chunk below imports all .csv files from data folder into R environment by using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package.
 
 -   **readr** is one of the tidyverse package.
 
 ```{r}
-exam_data <- read_csv("data/Exam_data.csv")
+res_txn <- read_csv("data/")
 ```
 
-**exam_data contains:**
+**res_txn contains:**
 
 -   Year end examination grades of a cohort of primary 3 students from a local school.
 
@@ -599,6 +595,12 @@ ggplot(data=exam_data,
   theme_minimal()
 ```
 
-# **References and inspiration**
+# **References and Inspiration**
 
 Kam, Tin Seong. (2023). Visualising Distribution. *R for Visual Analytics.* <https://r4va.netlify.app/chap09>
+
+Lew, Ying Zhen Serena (2024). *ISSS608: Visual Analytics and Applications.* <https://isss608-spacebun.netlify.app/>
+
+Tan, Kylie Jing Yi (2024). *Welcome to my Visual Analytics Adventures.* <https://akalestale.netlify.app>
+
+Toa, Zi Ying Janet (2024). *ISSS608: Visual Analytics and Applications.* <https://janettoaisss608.netlify.app/>
