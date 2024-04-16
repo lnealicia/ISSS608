@@ -98,13 +98,13 @@ res_txn <- read_csv("data/")
 ::: panel-tabset
 ## R Graphics
 
-```{r}
+```{r, eval=FALSE}
 hist(exam_data$MATHS)
 ```
 
 ## ggplot2
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, aes(x = MATHS)) +
   geom_histogram(bins=10, 
                  boundary = 100,
@@ -160,7 +160,7 @@ There are seven grammars of ggplot2:
 
 Call the `ggplot()` function using the code chunk below
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data)
 ```
 
@@ -179,7 +179,7 @@ All aesthetics of a plot are specified in the [`aes()`](https://ggplot2.tidyvers
 
 Code chunk below adds the aesthetic element into the plot.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x= MATHS))
 ```
@@ -212,7 +212,7 @@ Note: A plot must have at least one geom; there is no upper limit. A geom can be
 
 The code chunk below plots a bar chart by using [`geom_bar()`](https://ggplot2.tidyverse.org/reference/geom_bar.html).
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
   geom_bar()
@@ -224,7 +224,7 @@ In a dot plot, the width of a dot corresponds to the bin width (or maximum width
 
 In the code chunk below, [`geom_dotplot()`](https://ggplot2.tidyverse.org/reference/geom_dotplot.html) of ggplot2 is used to plot a dot plot.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_dotplot(dotsize = 0.5)
@@ -240,7 +240,7 @@ The code chunk below does the following:
 
 -   *binwidth argument* is used to change the binwidth to 2.5.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_dotplot(binwidth=2.5,         
@@ -253,7 +253,7 @@ ggplot(data=exam_data,
 
 The code chunk below, uses [*geom_histogram()*](https://ggplot2.tidyverse.org/reference/geom_histogram.html) create a simple histogram by using values in *MATHS* field of *exam_data*.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_histogram()       
@@ -273,7 +273,7 @@ The code chunk below, does the following:
 
 -   *color* argument is used to change the outline colour of the bars in black
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x= MATHS)) +
   geom_histogram(bins=20,            
@@ -285,7 +285,7 @@ ggplot(data=exam_data,
 
 The code chunk below changes the interior colour of the histogram (i.e. *fill*) by using sub-group of *aesthetic()*.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x= MATHS, 
            fill = GENDER)) +
@@ -305,7 +305,7 @@ It is a useful alternative to the histogram for continuous data that comes from 
 
 The code below plots the distribution of Maths scores in a kernel density estimate plot.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x = MATHS)) +
   geom_density()           
@@ -313,7 +313,7 @@ ggplot(data=exam_data,
 
 The code chunk below plots two kernel density lines by using *colour* or *fill* arguments of *aes()*
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x = MATHS, 
            colour = GENDER)) +
@@ -326,7 +326,7 @@ ggplot(data=exam_data,
 
 The code chunk below plots boxplots by using [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html).
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(y = MATHS,       
            x= GENDER)) +    
@@ -337,7 +337,7 @@ ggplot(data=exam_data,
 
 The code chunk below plots the distribution of Maths scores by gender in notched plot instead of boxplot.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(y = MATHS, 
            x= GENDER)) +
@@ -350,7 +350,7 @@ ggplot(data=exam_data,
 
 The code below plot the distribution of Maths score by gender in violin plot.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(y = MATHS, 
            x= GENDER)) +
@@ -363,7 +363,7 @@ ggplot(data=exam_data,
 
 The code chunk below plots a scatterplot showing the Maths and English grades of pupils by using `geom_point()`.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x= MATHS, 
            y=ENGLISH)) +
@@ -374,7 +374,7 @@ ggplot(data=exam_data,
 
 The code chunk below plots the data points on the boxplots by using both `geom_boxplot()` and `geom_point()`.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(y = MATHS, 
            x= GENDER)) +
@@ -403,7 +403,7 @@ The [Statistics functions](https://ggplot2.tidyverse.org/reference/#stats) stati
 
 The boxplots below are incomplete because the positions of the means were not shown.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(y = MATHS, x= GENDER)) +
   geom_boxplot()
@@ -413,7 +413,7 @@ ggplot(data=exam_data,
 
 The code chunk below adds mean values by using [`stat_summary()`](https://ggplot2.tidyverse.org/reference/stat_summary.html) function and overriding the default geom.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(y = MATHS, x= GENDER)) +
   geom_boxplot() +
@@ -427,7 +427,7 @@ ggplot(data=exam_data,
 
 The code chunk below adding mean values by using `geom_()` function and overriding the default stat.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(y = MATHS, x= GENDER)) +
   geom_boxplot() +
@@ -441,7 +441,7 @@ ggplot(data=exam_data,
 
 The interpretability of scatterplots can be improved by adding a best fit curve. n the code chunk below, [`geom_smooth()`](https://ggplot2.tidyverse.org/reference/geom_smooth.html) is used to plot a best fit curve on the scatterplot.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x= MATHS, y=ENGLISH)) +
   geom_point() +
@@ -454,7 +454,7 @@ The default method used is *loess*.
 
 The default smoothing method can be overridden as shown below.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x= MATHS, 
            y=ENGLISH)) +
@@ -473,7 +473,7 @@ Facetting generates small multiples (aka trellis plot), each displaying a differ
 
 The code chunk below plots a trellis plot using `facet-wrap()`.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x= MATHS)) +
   geom_histogram(bins=20) +
@@ -486,7 +486,7 @@ ggplot(data=exam_data,
 
 The code chunk below plots a trellis plot using `facet_grid()`.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x= MATHS)) +
   geom_histogram(bins=20) +
@@ -509,7 +509,7 @@ The *Coordinates* functions map the position of objects onto the plane of the pl
 
 By the default, the bar chart of ggplot2 is in vertical form.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
   geom_bar()
@@ -517,7 +517,7 @@ ggplot(data=exam_data,
 
 The code chunk below flips the horizontal bar chart into vertical bar chart by using `coord_flip()`.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
   geom_bar() +
@@ -528,7 +528,7 @@ ggplot(data=exam_data,
 
 The scatterplot below is slightly misleading because the y-aixs and x-axis range are not equal.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x= MATHS, y=ENGLISH)) +
   geom_point() +
@@ -537,7 +537,7 @@ ggplot(data=exam_data,
 
 The code chunk below fixed both the y-axis and x-axis range from 0-100.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x= MATHS, y=ENGLISH)) +
   geom_point() +
@@ -567,7 +567,7 @@ Each theme element can be conceived of as either a line (e.g. x-axis), a rectan
 
 The code chunk below plot a horizontal bar chart using `theme_gray()`.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
   geom_bar() +
@@ -577,7 +577,7 @@ ggplot(data=exam_data,
 
 A horizontal bar chart plotted using `theme_classic()`.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
   geom_bar() +
@@ -587,7 +587,7 @@ ggplot(data=exam_data,
 
 A horizontal bar chart plotted using `theme_minimal()`.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(data=exam_data, 
        aes(x=RACE)) +
   geom_bar() +
