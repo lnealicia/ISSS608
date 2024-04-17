@@ -457,7 +457,7 @@ p3 <- ggplot(data=exam_data,
 
 ## **Creating Composite Graphics: pathwork methods**
 
-Several ggplot2 extension’s functions support composite figures by combining several graphs e.g., [`grid.arrange()`](https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html) of **gridExtra** package and [`plot_grid()`](https://wilkelab.org/cowplot/reference/plot_grid.html) of [**cowplot**](https://wilkelab.org/cowplot/) package.
+ggplot2 extension’s functions support composite figures by combining several graphs e.g., [`grid.arrange()`](https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html) of **gridExtra** package and [`plot_grid()`](https://wilkelab.org/cowplot/reference/plot_grid.html) of [**cowplot**](https://wilkelab.org/cowplot/) package.
 
 This section uses a ggplot2 extension called [**patchwork**](https://patchwork.data-imaginist.com/)**,** specially designed for combining separate ggplot2 graphs into a single figure.
 
@@ -469,85 +469,145 @@ Patchwork package has a very simple syntax to create layouts. General syntax:
 
 -   Division Sign "/" - Two-Row Layout
 
+## **Combining two ggplot2 graphs**
+
+Figure in the tabset below shows a composite of two histograms (p1 & p2 from above) created using patchwork.
+
+::: panel-tabset
+## Plot
+
 ```{r}
-ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_histogram()       
+
+#| echo: false
+
+p1 + p2
 ```
 
-::: callout-note
-The default bin is **30**
+## Code
+
+```{r}
+#| eval: false
+
+p1 + p2
+```
 :::
 
-## **Modifying a geometric object by changing `geom()`**
-
-The code chunk below, does the following:
-
--   *bins* argument is used to change the number of bins to 20,
-
--   *fill* argument is used to shade the histogram with light blue color, and
-
--   *color* argument is used to change the outline colour of the bars in black
-
-```{r}
-ggplot(data=exam_data, 
-       aes(x= MATHS)) +
-  geom_histogram(bins=20,            
-                 color="black",      
-                 fill="light blue")  
-```
-
-## **Modifying a geometric object by changing *aes()***
-
-The code chunk below changes the interior colour of the histogram (i.e. *fill*) by using sub-group of *aesthetic()*.
-
-```{r}
-ggplot(data=exam_data, 
-       aes(x= MATHS, 
-           fill = GENDER)) +
-  geom_histogram(bins=20, 
-                 color="grey30")
-```
-
 ::: callout-note
-This approach can be used to colour, fill and alpha of the geometric.
+Note the syntax simplicity. i.e. `p1 + p2`
 :::
 
-## **Geometric Objects: geom-density()**
+## **Combining three ggplot2 graphs**
 
-[`geom-density()`](https://ggplot2.tidyverse.org/reference/geom_density.html) computes and plots [kernel density estimate](https://en.wikipedia.org/wiki/Kernel_density_estimation), which is a smoothed version of the histogram.
+More complex composites can be achieved by using appropriate operators. For example, the composite figure below uses:
 
-It is a useful alternative to the histogram for continuous data that comes from an underlying smooth distribution.
+-   “/” - stack two ggplot2 graphs on top of another
 
-The code below plots the distribution of Maths scores in a kernel density estimate plot.
+-   “\|” - place the plots adjacent to each other
 
-```{r}
-ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_density()           
-```
+-   “( )” - define plot sequence
 
-The code chunk below plots two kernel density lines by using *colour* or *fill* arguments of *aes()*
+::: panel-tabset
+## Plot
 
 ```{r}
-ggplot(data=exam_data, 
-       aes(x = MATHS, 
-           colour = GENDER)) +
-  geom_density()
+
+#| echo: false
+
+(p1 / p2) | p3
 ```
 
-## **Geometric Objects: geom_boxplot**
-
-[`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html) displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually.
-
-The code chunk below plots boxplots by using [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html).
+## Code
 
 ```{r}
-ggplot(data=exam_data, 
-       aes(y = MATHS,       
-           x= GENDER)) +    
-  geom_boxplot()            
+#| eval: false
+
+(p1 / p2) | p3
 ```
+:::
+
+::: callout-note
+Refer to [Plot Assembly](https://patchwork.data-imaginist.com/articles/guides/assembly.html). for more modification and layout controls
+:::
+
+## **Creating a composite figure with tag**
+
+**patchwork** also provides auto-tagging capabilities to identify subplots in text, as shown in the figure below.
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
+
+((p1 / p2) | p3) + 
+  plot_annotation(tag_levels = 'I')
+```
+
+## Code
+
+```{r}
+#| eval: false
+((p1 / p2) | p3) + 
+  plot_annotation(tag_levels = 'I')
+```
+:::
+
+::: callout-note
+Note the I, II, III labels in the subplots have been automatically labelled.
+:::
+
+## **Creating figure with insert**
+
+ [`inset_element()`](https://patchwork.data-imaginist.com/reference/inset_element.html) of **patchwork**, allows the placement of one or several plots or graphic elements freely on top or below another plot.
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
+
+p3 + inset_element(p2, 
+                   left = 0.02, 
+                   bottom = 0.7, 
+                   right = 0.5, 
+                   top = 1)
+```
+
+## Code
+
+```{r}
+#| eval: false
+
+p3 + inset_element(p2, 
+                   left = 0.02, 
+                   bottom = 0.7, 
+                   right = 0.5, 
+                   top = 1)
+```
+:::
+
+## **Creating a composite figure by using patchwork and ggtheme**
+
+**patchwork** and *theme_economist()* of **ggthemes** package are used to create the figure below
+
+## Plot
+
+```{r}
+#| echo: false
+
+patchwork <- (p1 / p2) | p3
+patchwork & theme_economist()
+```
+
+## Code
+
+```{r}
+#| eval: false
+
+patchwork <- (p1 / p2) | p3
+patchwork & theme_economist()
+```
+:::
 
 [**Notches**](https://sites.google.com/site/davidsstatistics/home/notched-box-plots) are used in box plots to help visually assess whether the medians of distributions differ. If the notches do not overlap, this is evidence that the medians are different.
 
