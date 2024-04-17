@@ -9,7 +9,7 @@ Welcome to **ISSS608 Visual Analytics and Applications** homepage. In this websi
 Overview:
 
 [Introduction to Visual Analytics](Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html)\
-Designing Graphics to Enlighten\
+[Designing Graphics to Enlighten](Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html)\
 Interactivity in Visual Analytics\
 Fundamentals of Visual Analytics\
 Designing Web-enabled Visual Analytics application with Shiny\
