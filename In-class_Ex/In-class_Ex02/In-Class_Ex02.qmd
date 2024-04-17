@@ -1,0 +1,42 @@
+---
+title: "In-Class Exercise 2"
+author: "Alicia Loh"
+date-modified: last-modified
+execute: 
+  eval: true
+  echo: true
+  warning: false
+---
+
+# Getting Started
+
+## Loading R packages
+
+Note: Ensure that the [pacman](https://cran.r-project.org/web/packages/pacman/) package has already been installed.
+
+The code chunk below uses [`p_load()`](https://www.rdocumentation.org/packages/pacman/versions/0.5.1/topics/p_load) of pacman package to load the tidyverse family of packages.
+
+```{r}
+pacman::p_load(tidyverse)
+```
+
+## Importing the Data
+
+-   The code chunk below imports *realis2019.csv* into R environment by using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package.
+
+-   **readr** is one of the tidyverse package.
+
+```{r, eval=FALSE}
+realis <- read_csv("data/realis2019.csv")
+```
+
+# ggplot
+
+[ggplot2](https://ggplot2.tidyverse.org/) is an R package for **declaratively** creating **data-driven** graphics based on ***The Grammar of Graphics***. It is also part of the tidyverse family specially designed for visual exploration and communication.
+
+```{r, eval=FALSE}
+ggplot(data=realis, 
+       aes(x = `Unit Price ($ psm)`)) +
+  geom_histogram() +
+  ggtitle("Distribution of Unit Price ($ psm)")
+```
