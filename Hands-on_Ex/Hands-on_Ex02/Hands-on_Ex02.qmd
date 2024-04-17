@@ -4,7 +4,6 @@ author: "Alicia Loh"
 date-modified: last-modified
 execute: 
   eval: true
-  echo: true
   warning: false
 ---
 
@@ -30,7 +29,7 @@ Besides tidyverse, the following R packages will be used.
 
 -   patchwork: an R package for preparing composite figure created using ggplot2.
 
-Code chunk below will be used to check if these packages have been installed and also will load them onto your working R environment.
+Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
 
 ```{r}
 pacman::p_load(ggrepel, patchwork, 
@@ -42,7 +41,7 @@ pacman::p_load(ggrepel, patchwork,
 
 -   The code chunk below imports *exam_data.csv* into R environment by using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package.
 
--   **readr** is one of the tidyverse package.
+-   **readr** is a pacakge within tidyverse.
 
 ```{r}
 exam_data <- read_csv("data/Exam_data.csv")
@@ -66,7 +65,6 @@ One of the challenge in plotting statistical graph is annotation, especially wit
 ## Plot
 
 ```{r}
-
 #| echo: false
 
 ggplot(data=exam_data, 
