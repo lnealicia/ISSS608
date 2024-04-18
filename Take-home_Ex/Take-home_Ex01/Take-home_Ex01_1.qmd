@@ -8,7 +8,7 @@ execute:
   warning: false
 ---
 
-![](images/clipboard-3122103337.png){width="536"}
+![](images/clipboard-3122103337.png){width="700"}
 
 ## **Context**
 
@@ -55,20 +55,25 @@ Note: Ensure that the [pacman](https://cran.r-project.org/web/packages/pacman/) 
 
 The code chunk below uses `p_load()` of pacman package to check if the listed packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.
 
--   [**tidyverse**](https://www.tidyverse.org/) (i.e. readr, tidyr, dplyr, ggplot2) for performing data science tasks such as importing, tidying, and wrangling data, as well as creating graphics based on The Grammar of Graphics
+-   [**tidyverse**](https://www.tidyverse.org/): (i.e. readr, tidyr, dplyr, ggplot2) for performing data science tasks such as importing, tidying, and wrangling data, as well as creating graphics based on The Grammar of Graphics
 
 -   [**reshape2**](https://seananderson.ca/2013/10/19/reshape/) for transforming data between wide and long formats
-
--   [**ggthemr**](https://www.shanelynn.ie/themes-and-colours-for-r-ggplots-with-ggthemr/) for aesthetic themes created by user, Ciarán Tobin
 
 -   [**ggridges**](https://cran.r-project.org/web/packages/ggridges/vignettes/introduction.html) for creating ridgeline plots
 
 -   [**ggdist**](https://mjskay.github.io/ggdist/) for visualising distributions and uncertainty
 
--   [**ggpubr**](https://rpkgs.datanovia.com/ggpubr/) for creating publication ready ggplot2 plots
+-   ggrepel: provides geoms for ggplot2 to repel overlapping text labels.
+
+-   ggthemes: provides some extra themes, geoms, and scales for ‘ggplot2’.
+
+-   hrbrthemes: provides typography-centric themes and theme components for ggplot2.
+
+-   patchwork: preparing composite figure created using ggplot2.
 
 ```{r}
-pacman::p_load(tidyverse, reshape2, ggthemr, ggridges, ggdist, ggpubr)
+pacman::p_load(tidyverse, reshape2, ggridges, ggdist,
+               ggrepel, ggthemes, hrbrthemes, patchwork)
 ```
 
 ## Importing the Data
@@ -77,7 +82,7 @@ pacman::p_load(tidyverse, reshape2, ggthemr, ggridges, ggdist, ggpubr)
 
 -   **readr** is one of the tidyverse package.
 
-```{r, eval=FALSE}
+```{r}
 res_txn <- read_csv("data/")
 ```
 
