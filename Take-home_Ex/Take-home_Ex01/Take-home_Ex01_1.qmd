@@ -55,7 +55,7 @@ Note: Ensure that the [pacman](https://cran.r-project.org/web/packages/pacman/) 
 
 The code chunk below uses `p_load()` of pacman package to check if the listed packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.
 
--   [**tidyverse**](https://www.tidyverse.org/): (i.e. readr, tidyr, dplyr, ggplot2) for performing data science tasks such as importing, tidying, and wrangling data, as well as creating graphics based on The Grammar of Graphics
+-   [**tidyverse**](https://www.tidyverse.org/): (i.e. readr, tidyr, [dplyr](https://dplyr.tidyverse.org/), ggplot2, [lubridate](https://lubridate.tidyverse.org/)) for performing data science tasks such as importing, tidying, and wrangling data, as well as creating graphics based on The Grammar of Graphics
 
 -   [**reshape2**](https://seananderson.ca/2013/10/19/reshape/) for transforming data between wide and long formats
 
@@ -69,15 +69,11 @@ The code chunk below uses `p_load()` of pacman package to check if the listed pa
 
 -   hrbrthemes: provides typography-centric themes and theme components for ggplot2.
 
--   patchwork: preparing composite figure created using ggplot2.
-
--   dplyr:
-
--   lubridate
+-   patchwork: preparing composite figure created using ggplot2
 
 ```{r}
 pacman::p_load(tidyverse, reshape2, ggridges, ggdist,
-               ggrepel, ggthemes, hrbrthemes, patchwork, dplyr, lubridate)
+               ggrepel, ggthemes, hrbrthemes, patchwork)
 ```
 
 ## Importing the Data
@@ -140,17 +136,25 @@ The "Sales Date" column is currently a *cha* type. It needs to be converted into
 
 dmy() is a function from the lubridate package that converts character strings to date format in the day-month-year (DMY) order.
 
+Verify column type
+
 ```{r}
 class(realis_all$`Sale Date`)
 ```
+
+Standardise Date Format and verify column type after standardisation
 
 ```{r}
 
 realis_all$`Sale Date` <- dmy(realis_all$`Sale Date`)
+class(realis_all$`Sale Date`)
 ```
 
+Check data
+
 ```{r}
-class(realis_all$`Sale Date`)
+
+head(realis_all$`Sale Date`)
 ```
 
 ### Keep only relevant rows
@@ -164,12 +168,59 @@ Filter and keep only rows that:
 In addition, any duplicate or empty rows are also removed.
 
 ```{r}
-q1_pte <- realis_all %>%
+q1_pte_raw <- realis_all %>%
     filter(`Sale Date` >= as.Date("2024-01-01") & 
           `Sale Date` <= as.Date("2024-03-31"),
           `Purchaser Address Indicator` != "HDB") %>%
     distinct() %>%
     drop_na()
+```
+
+### View Data
+
+```{r}
+glimpse(q1_pte_raw)
+```
+
+::: callout-note
+**q1_pte_raw contains:**
+
+-   Private residential property transaction data from 1st January 2024 to 31st March 2024
+
+-   There are 3567 rows and 21 columns.
+:::
+
+### Keep only relevant columns
+
+Not all 21 columns will be used for analysis e.g. irrelevant, contains overlapping information as another column. Only relevant columns will be kept.
+
+Columns to drop:
+
+-   Type of Area: Not used in analysis
+
+-   Area (SQM): Similar information as Area (SQFT)
+
+-   Unit Price (\$ PSM): Similar information as Unit Price (\$ PSF)
+
+-   Nett Price (\$): Similar information as Transacted Price (\$)
+
+-   Purchaser Address Indicator: Not used in analysis
+
+-   Postal District and Postal Sector: Overlapping information as Postal Code
+
+The **`select()`** function is used to choose the columns to keep. However, by prefixing the column names with a minus sign (**`-`**), the function will drop the specified columns instead.
+
+```{r}
+q1_pte <- q1_pte_raw %>%
+    select(
+        -`Type of Area`,
+        -`Area (SQM)`,
+        -`Unit Price ($ PSM)`,
+        -`Nett Price($)`,
+        -`Purchaser Address Indicator`,
+        -`Postal District`,
+        -`Postal Sector`
+    )
 ```
 
 ### View Data
@@ -183,13 +234,65 @@ glimpse(q1_pte)
 
 -   Private residential property transaction data from 1st January 2024 to 31st March 2024
 
--   There are 3567 rows and 21 columns.
+-   There are 3567 rows and 14 columns.
 :::
 
-### Keep only relevant columns
+## Visualisation
 
-Not all 21 columns will be used for analysis e.g. irrelevant, contains overlapping information as another column. Only relevant columns will be kept.
+### Group by Property Type
 
-Columns to drop:
+There are various types of Properties for Private residences.
 
--   
+```{r}
+unique(q1_pte$`Property Type`)
+```
+
+::: callout-note
+The different types in the dataset are:
+
+-   Condominium
+
+-   Terrace House
+
+-   Apartment
+
+-   Executive Condominium
+
+-   Semi-Detached House
+
+-   Detached House
+:::
+
+To allow for more in depth analysis of each Property Type, **`q1_pte`** tibble data frame is split into a list of smaller tibbles based on "Property Type".
+
+-   **`group_by()`** groups the **`q1_pte`** tibble data frame by the "Property Type" column.
+
+-   **`group_split()`** splits the grouped data frame into a list of smaller tibbles based on "Property Type."
+
+-   **`group_keys()`** retrieves the values of the grouping column ("Property Type") for each group.
+
+-   **`setNames()`** is used to create a named list where each element of the list is one of the smaller tibbles, and each tibble is named according to the corresponding value of the "Property Type" column.
+
+```{r}
+grouped_q1_pte <- q1_pte %>%
+    group_by(`Property Type`)
+
+tibble_list <- group_split(grouped_q1_pte)
+ppty_type_name <- group_keys(grouped_q1_pte)$`Property Type`
+ppty_type_name <- setNames(tibble_list, ppty_type_name)
+
+```
+
+### View Data
+
+The tabset below allows the view of the newly created smaller Property Type tibble
+
+```{r}
+ppty_type_name
+```
+
+Geographical Distribution:
+
+Choropleth Map: Use a map to visualize property sales and prices across different districts or areas in Singapore. This can reveal hotspots of activity and areas with higher or lower average prices.
+
+Sales Heatmap: Create a heatmap showing the density of property transactions in different areas. This can provide insights into which parts of Singapore are seeing the most activity in the private residential market.
