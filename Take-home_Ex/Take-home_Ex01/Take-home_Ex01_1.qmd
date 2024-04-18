@@ -106,17 +106,22 @@ realis_all <- bind_rows(realis)
 ### View Data
 
 -   Use the **`names()`** function to print the names of the columns in the tibble data frame.
+-   Use the **`glimpse()`** function to get a quick overview of the tibble data frame
+
+::: panel-tabset
+## Column Names
 
 ```{r}
 col_names <- names(realis_all)
 col_names
 ```
 
--   Use the **`glimpse()`** function to get a quick overview of the tibble data frame
+## Overview of Tibble Data Frame
 
 ```{r}
 glimpse(realis_all)
 ```
+:::
 
 ::: callout-note
 **realis_all contains:**
@@ -135,12 +140,6 @@ The task only requires data from the private residential market and sub-markets 
 The "Sales Date" column is currently a *cha* type. It needs to be converted into date format.
 
 dmy() is a function from the lubridate package that converts character strings to date format in the day-month-year (DMY) order.
-
-Verify column type
-
-```{r}
-class(realis_all$`Sale Date`)
-```
 
 Standardise Date Format and verify column type after standardisation
 
@@ -245,7 +244,12 @@ Create box plots for the price distribution of each private residence property t
 
 Note: For better visibility, **`labels`** parameter with the function **`scales::number`**, formats the y-axis labels to include thousands separators.
 
+::: panel-tabset
+## Plot
+
 ```{r}
+#| echo: false
+
 box_plot <- ggplot(data = q1_pte, 
                    aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
             geom_boxplot() +
@@ -253,10 +257,31 @@ box_plot <- ggplot(data = q1_pte,
                 x = "Property Type",
                 y = "Transacted Price ($)") +
             scale_y_continuous(labels = scales::number) + 
-            theme_gray() + theme(axis.text.x = element_text(angle = 45, hjust = 1,
+            theme_gray() + theme(axis.text.x = element_text(angle = 45, 
+                                                            hjust = 1,
                                                             vjust=1))
 box_plot
 ```
+
+## Code
+
+```{r}
+#| eval: false
+
+box_plot <- ggplot(data = q1_pte, 
+                   aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+            geom_boxplot() +
+            labs(title = "Box Plot of Transacted Price ($) by Property Type",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+            scale_y_continuous(labels = scales::number) + 
+            theme_gray() + theme(axis.text.x = element_text(angle = 45, 
+                                                            hjust = 1,
+                                                            vjust=1))
+box_plot
+
+```
+:::
 
 ::: callout-tip
 According to the box plot, Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status. Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers.
