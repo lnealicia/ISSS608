@@ -239,6 +239,35 @@ glimpse(q1_pte)
 
 ## Visualisation
 
+### Price Distribution
+
+Create box plots for the price distribution of each private residence property type. [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html) displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually.
+
+Note: For better visibility, **`labels`** parameter with the function **`scales::number`**, formats the y-axis labels to include thousands separators.
+
+```{r}
+box_plot <- ggplot(data = q1_pte, 
+                   aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+            geom_boxplot() +
+            labs(title = "Box Plot of Transacted Price ($) by Property Type",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+            scale_y_continuous(labels = scales::number) + 
+            theme_gray() + theme(axis.text.x = element_text(angle = 45, hjust = 1,
+                                                            vjust=1))
+box_plot
+```
+
+::: callout-tip
+According to the box plot, Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status. Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers.
+
+In contrast, both Executive Condominiums and Terrace Houses demonstrate the least variability in transacted prices, with their interquartile ranges (IQR) closely aligning with their medians. This suggests a stable and consistent pricing trend for these property types.
+
+Executive Condominiums have the lowest transacted prices, indicating their appeal as an affordable option within the private housing market.
+
+Apartments and Condominiums, on the other hand, show a significant number of outliers in their transacted prices, suggesting a wider range of pricing and potentially more diversity in market conditions for these property types.
+:::
+
 ### Group by Property Type
 
 There are various types of Properties for Private residences.
@@ -285,11 +314,51 @@ ppty_type_name <- setNames(tibble_list, ppty_type_name)
 
 ### View Data
 
-The tabset below allows the view of the newly created smaller Property Type tibble
+The tabset below allows the view of the newly created smaller Property Type tibble data frames in alphabetical order.
+
+::: panel-tabset
+## Apartment
 
 ```{r}
-ppty_type_name
+apart_df <- ppty_type_name[["Apartment"]]
+apart_df
 ```
+
+## Condominium
+
+```{r}
+condo_df <- ppty_type_name[["Condominium"]]
+condo_df
+```
+
+## Detached House
+
+```{r}
+det_df <- ppty_type_name[["Detached House"]]
+det_df
+```
+
+## Executive Condominium
+
+```{r}
+ec_df <- ppty_type_name[["Executive Condominium"]]
+ec_df
+```
+
+## Semi-Detached House
+
+```{r}
+semi <- ppty_type_name[["Semi-Detached House"]]
+semi
+```
+
+## Terrace House
+
+```{r}
+terra <- ppty_type_name[["Terrace House"]]
+terra
+```
+:::
 
 Geographical Distribution:
 
