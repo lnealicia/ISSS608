@@ -11,7 +11,7 @@
     "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01_1.html#the-task",
     "title": "Take-home Exercise 1 Part I - Creating Data Visualisation Beyond Default",
     "section": "The Task",
-    "text": "The Task\nAssuming the role of a graphical editor of a median company, a minimum two and maximum three of data visualisations are to be prepared to reveal the private residential market and sub-markets of Singapore for the 1st quarter of 2024."
+    "text": "The Task\nAssuming the role of a graphical editor of a median company, a minimum two and maximum three of data visualisations are prepared to reveal the private residential market and sub-markets of Singapore for the 1st quarter of 2024."
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01_1.html#the-data",
@@ -32,14 +32,14 @@
     "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01_1.html#installing-and-loading-the-required-libraries",
     "title": "Take-home Exercise 1 Part I - Creating Data Visualisation Beyond Default",
     "section": "Installing and loading the required libraries",
-    "text": "Installing and loading the required libraries\nNote: Ensure that the pacman package has already been installed.\nThe code chunk below uses p_load() of pacman package to check if the listed packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.\n\ntidyverse (i.e. readr, tidyr, dplyr, ggplot2) for performing data science tasks such as importing, tidying, and wrangling data, as well as creating graphics based on The Grammar of Graphics\nreshape2 for transforming data between wide and long formats\nggthemr for aesthetic themes created by user, Ciarán Tobin\nggridges for creating ridgeline plots\nggdist for visualising distributions and uncertainty\nggpubr for creating publication ready ggplot2 plots\n\n\npacman::p_load(tidyverse, reshape2, ggthemr, ggridges, ggdist, ggpubr)\n\npackage 'ggpubr' successfully unpacked and MD5 sums checked\n\nThe downloaded binary packages are in\n    C:\\Users\\NLOH0\\AppData\\Local\\Temp\\Rtmpwdcs2J\\downloaded_packages"
+    "text": "Installing and loading the required libraries\nNote: Ensure that the pacman package has already been installed.\nThe code chunk below uses p_load() of pacman package to check if the listed packages are installed in the computer. If they are, then they will be launched into R. Otherwise, tidyverse will be installed and launched into R.\n\ntidyverse: (i.e. readr, tidyr, dplyr, ggplot2) for performing data science tasks such as importing, tidying, and wrangling data, as well as creating graphics based on The Grammar of Graphics\nreshape2 for transforming data between wide and long formats\nggridges for creating ridgeline plots\nggdist for visualising distributions and uncertainty\nggrepel: provides geoms for ggplot2 to repel overlapping text labels.\nggthemes: provides some extra themes, geoms, and scales for ‘ggplot2’.\nhrbrthemes: provides typography-centric themes and theme components for ggplot2.\npatchwork: preparing composite figure created using ggplot2.\n\n\npacman::p_load(tidyverse, reshape2, ggridges, ggdist,\n               ggrepel, ggthemes, hrbrthemes, patchwork)"
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01_1.html#importing-the-data",
     "href": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01_1.html#importing-the-data",
     "title": "Take-home Exercise 1 Part I - Creating Data Visualisation Beyond Default",
     "section": "Importing the Data",
-    "text": "Importing the Data\n\nThe code chunk below imports all .csv files from data folder into R environment by using read_csv() function of readr package.\nreadr is one of the tidyverse package.\n\n\nres_txn &lt;- read_csv(\"data/\")\n\nres_txn contains:\n\nYear end examination grades of a cohort of primary 3 students from a local school.\nThere are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.\n\nThe categorical attributes are: ID, CLASS, GENDER and RACE.\nThe continuous attributes are: MATHS, ENGLISH and SCIENCE."
+    "text": "Importing the Data\n\nThe data has been split into 5 .csv files.\nThe code chunk below imports all .csv files from data folder into R environment by using read_csv() function of readr package.\nreadr is one of the tidyverse package.\n\n\nres_txn &lt;- read_csv(\"data/\")\n\nres_txn contains:\n\nYear end examination grades of a cohort of primary 3 students from a local school.\nThere are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.\n\nThe categorical attributes are: ID, CLASS, GENDER and RACE.\nThe continuous attributes are: MATHS, ENGLISH and SCIENCE."
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01_1.html#a-layered-grammar-of-graphics",
