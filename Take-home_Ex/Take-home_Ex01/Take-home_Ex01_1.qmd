@@ -326,7 +326,7 @@ The code chunk below loads the following packages:
 -   [**furrr**](https://furrr.futureverse.org/): combine purrr’s family of mapping functions (within tidyverse) with future’s parallel processing capabilities
 
 ```{r}
-pacman::p_load(tmap,sf,httr2, future, furrr)
+pacman::p_load(tmap,sf,httr, future, furrr)
 
 ```
 
