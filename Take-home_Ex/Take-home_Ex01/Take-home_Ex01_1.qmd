@@ -475,14 +475,18 @@ mpsz_avg_txn_px <- mpsz %>%
 
 ### **Plotting a point simple feature layer**
 
-```{r}
+The overall plot shows both the average transacted price of the planning area and the distribution of private residences. If viewing the data separately is preferred, click on the relevant tabs.
 
+::: panel-tabset
+## Overall Plot
+
+```{r}
 tmap_mode("view")
 
 map <- tm_shape(mpsz_avg_txn_px) +
     tm_polygons(col = "Avg_Transacted_Price", 
                 palette = "Blues", 
-                alpha = 0.5,
+                alpha = 0.4,
                 style = "quantile") +
     tmap_options(check.and.fix = TRUE) +
     
@@ -493,10 +497,44 @@ map <- tm_shape(mpsz_avg_txn_px) +
 
 map
 
-# Set tmap mode back to plot
 tmap_mode("plot")
-
 ```
+
+## Average Transacted Price
+
+```{r}
+tmap_mode("view")
+
+map2 <- tm_shape(mpsz_avg_txn_px) +
+    tm_polygons(col = "Avg_Transacted_Price", 
+                palette = "Blues", 
+                alpha = 0.5,
+                style = "quantile") +
+    tmap_options(check.and.fix = TRUE) +
+  tm_view(set.zoom.limits = c(11,14))
+
+map2
+
+tmap_mode("plot")
+```
+
+## Geographic Distribution of Private Property
+
+```{r}
+tmap_mode("view")
+
+map3 <- tm_shape(mpsz_avg_txn_px) +
+    tm_polygons() +
+    tm_shape(q1_pte_sf_plot) +
+    tm_dots(col = "Property Type") +
+
+  tm_view(set.zoom.limits = c(11,14))
+
+map3
+
+tmap_mode("plot")
+```
+:::
 
 ::: callout-note
 **tmap_mode("view")**:
@@ -512,4 +550,8 @@ tmap_mode("plot")
 -   Does not support interactions like zooming and panning.
 
 Setting the mode to plot after the map is generated saves on resources and allows the code to run faster, as the plot does not require continuous updating.
+:::
+
+::: callout-tip
+Using the overall plot,
 :::
