@@ -10,21 +10,21 @@ execute:
 
 ![](images/clipboard-3122103337.png){width="700"}
 
-## **Context**
+# **Context**
 
 There are two major residential property market in Singapore, namely public and private housing. Public housing aims to meet the basic need of the general public with monthly household income less than or equal to S\$14,000. For families with monthly household income more than S\$14,000, they need to turn to the private residential market.
 
-## **The Task**
+# **The Task**
 
 Assuming the role of a graphical editor of a median company, a minimum two and maximum three of data visualisations are prepared to reveal the private residential market and sub-markets of Singapore for the 1st quarter of 2024.
 
-## **The Data**
+# **The Data**
 
 ![](images/clipboard-3619198007.png){width="177"}
 
 To accomplish the task, transaction data of [REALIS](https://www.ura.gov.sg/reis/index) will be used.
 
-### Downloading the Dataset
+## Downloading the Dataset
 
 1.  Access Dataset via [**SMU e-library**](https://www-ura-gov-sg.libproxy.smu.edu.sg/reis/ipLoginNotice)\
     [![](images/clipboard-1634732179.png)](images/clipboard-1634732179.png)
@@ -103,7 +103,7 @@ for (file in csv_files) {
 realis_all <- bind_rows(realis)
 ```
 
-### View Data
+## View Data
 
 -   Use the **`names()`** function to print the names of the columns in the tibble data frame.
 -   Use the **`glimpse()`** function to get a quick overview of the tibble data frame
@@ -236,9 +236,29 @@ glimpse(q1_pte)
 -   There are 3567 rows and 14 columns.
 :::
 
-## Visualisation
+# Visualisation
 
-### Price Distribution
+There are various types of Properties for Private residences.
+
+```{r}
+unique(q1_pte$`Property Type`)
+```
+
+The different types in the dataset are:
+
+-   Condominium
+
+-   Terrace House
+
+-   Apartment
+
+-   Executive Condominium
+
+-   Semi-Detached House
+
+-   Detached House
+
+## Price Distribution
 
 Create box plots for the price distribution of each private residence property type. [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html) displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually.
 
@@ -284,7 +304,9 @@ box_plot
 :::
 
 ::: callout-tip
-According to the box plot, Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status. Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers.
+There are six private property types in the dataset.
+
+The boxplot shows Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status. Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers.
 
 In contrast, both Executive Condominiums and Terrace Houses demonstrate the least variability in transacted prices, with their interquartile ranges (IQR) closely aligning with their medians. This suggests a stable and consistent pricing trend for these property types.
 
@@ -293,100 +315,120 @@ Executive Condominiums have the lowest transacted prices, indicating their appea
 Apartments and Condominiums, on the other hand, show a significant number of outliers in their transacted prices, suggesting a wider range of pricing and potentially more diversity in market conditions for these property types.
 :::
 
-### Group by Property Type
+## Geographical Distribution
 
-There are various types of Properties for Private residences.
+A choropleth map is used to visualize property sales and prices across different districts or areas in Singapore. This can reveal hotspots of activity and areas with higher or lower average prices.
 
-```{r}
-unique(q1_pte$`Property Type`)
-```
+Two data sets will be used to create the choropleth map. They are:
 
-::: callout-note
-The different types in the dataset are:
+-   MPSZ-2019: This data provides the sub-zone boundary of URA Master Plan 2019. It can be downloaded at [data.gov.sg](https://data.gov.sg/) It consists of the geographical boundary of Singapore at the planning subzone level. The data is based on URA Master Plan 2019.
 
--   Condominium
+-   Private residential property transaction data from 1st January 2024 to 31st March 2024 in tibble data frame (i.e. `q1_pte`).
 
--   Terrace House
+The code chunk below loads the following packages:
 
--   Apartment
+-   tmap: for thematic mapping
 
--   Executive Condominium
+-   sf: for geospatial data handling
 
--   Semi-Detached House
-
--   Detached House
-:::
-
-To allow for more in depth analysis of each Property Type, **`q1_pte`** tibble data frame is split into a list of smaller tibbles based on "Property Type".
-
--   **`group_by()`** groups the **`q1_pte`** tibble data frame by the "Property Type" column.
-
--   **`group_split()`** splits the grouped data frame into a list of smaller tibbles based on "Property Type."
-
--   **`group_keys()`** retrieves the values of the grouping column ("Property Type") for each group.
-
--   **`setNames()`** is used to create a named list where each element of the list is one of the smaller tibbles, and each tibble is named according to the corresponding value of the "Property Type" column.
+-   httr:
 
 ```{r}
-grouped_q1_pte <- q1_pte %>%
-    group_by(`Property Type`)
-
-tibble_list <- group_split(grouped_q1_pte)
-ppty_type_name <- group_keys(grouped_q1_pte)$`Property Type`
-ppty_type_name <- setNames(tibble_list, ppty_type_name)
-
+pacman::p_load(tmap,sf,httr)
 ```
 
-### View Data
+### Geospatial Data
 
-The tabset below allows the view of the newly created smaller Property Type tibble data frames in alphabetical order.
+|                                      |                                      |
+|----------------|----------------|
+| ![](images/clipboard-3052492118.png) | ![](images/clipboard-3082063216.png) |
+
+### **Geocoding using Singapore Land Authority (SLA) API**
+
+Geocoding - provide geographical coordinates corresponding to a location.
+
+```{r}
+
+url <- "https://www.onemap.gov.sg/api/common/elastic/search"
+
+postcodes <- q1_pte$`postal_code`
+
+found <- data.frame()
+not_found <- data.frame()
+
+for(postcode in postcodes){
+  query<-list('searchVal'=postcode,'returnGeom'='Y','getAddrDetails'='Y', 'pageNum'='1')
+  res <- GET(url,query=query)
+  
+  if((content(res)$found)!=0){
+    found <- rbind(found, data.frame(content(res))[4:13])
+  } else{
+    not_found = data.frame(postcode)
+  }
+}
+```
+
+```{r}
+merged = merge(csv, found, by.x= 'postal_code', by.y = 'results.POSTAL', all=TRUE)
+write.csv(merged, file = "data/aspatial/pte_postal.csv")
+write.csv(not_found, file = "data/aspatial/not_found.csv")
+```
+
+### Import Geospatial Data
+
+The code chunk below uses the *st_read()* function of **sf** package to import `MPSZ-2019` shapefile into R as a simple feature data frame called `mpsz`.
 
 ::: panel-tabset
-## Apartment
+## Code
 
 ```{r}
-apart_df <- ppty_type_name[["Apartment"]]
-apart_df
+#| eval: false
+mpsz <- st_read(dsn = "data/geospatial",
+                layer = "MPSZ-2019") %>%
+  st_transform(crs = 3414)
 ```
 
-## Condominium
+## Content
 
 ```{r}
-condo_df <- ppty_type_name[["Condominium"]]
-condo_df
-```
-
-## Detached House
-
-```{r}
-det_df <- ppty_type_name[["Detached House"]]
-det_df
-```
-
-## Executive Condominium
-
-```{r}
-ec_df <- ppty_type_name[["Executive Condominium"]]
-ec_df
-```
-
-## Semi-Detached House
-
-```{r}
-semi <- ppty_type_name[["Semi-Detached House"]]
-semi
-```
-
-## Terrace House
-
-```{r}
-terra <- ppty_type_name[["Terrace House"]]
-terra
+#| echo: false
+mpsz <- st_read(dsn = "data/geospatial",
+                layer = "MPSZ-2019") %>%
+  st_transform(crs = 3414)
 ```
 :::
 
-Geographical Distribution:
+## Joining the attribute data and geospatial data
 
-Choropleth Map: Use a map to visualize property sales and prices across different districts or areas in Singapore. This can reveal hotspots of activity and areas with higher or lower average prices.
+Before performing the georelational join, one extra step is required to convert the values in `q1_pte Planning Area` column. This is because these values are made up of upper- and lowercase. On the other hand, `mpsz PLN_AREA_N` column are in uppercase.
 
-Sales Heatmap: Create a heatmap showing the density of property transactions in different areas. This can provide insights into which parts of Singapore are seeing the most activity in the private residential market.
+```{r}
+q1_pte <- q1_pte %>%
+  mutate_at(.vars = vars(`Planning Area`), 
+          .funs = list(toupper))
+```
+
+*left_join()* of **dplyr** is used to join the geographical data and attribute table using planning area name e.g. *SUBZONE_N* and *Planning Area* as the common identifier.
+
+```{r}
+mpsz_q1 <- left_join(q1_pte, mpsz,
+                          by = c("Planning Area" = "SUBZONE_N"))
+```
+
+Save output in rds format
+
+```{r}
+write_rds(mpsz_q1, "data/rds/mpsz_q1.rds")
+```
+
+### Choropleth Mapping Geospatial Data Using tmap
+
+```{r}
+str(mpsz_q1)
+```
+
+```{r}
+tmap_mode("plot")
+qtm(mpsz_q1, 
+    fill = "Transacted Price ($)")
+```
