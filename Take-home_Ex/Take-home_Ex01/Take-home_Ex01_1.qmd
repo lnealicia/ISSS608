@@ -407,3 +407,41 @@ mpsz <- st_read(dsn = "data/geospatial",
   st_transform(crs = 3414)
 ```
 :::
+
+Add coordinates to q1_pte
+
+```{r}
+q1_pte_coor <- q1_pte %>%
+    left_join(
+        found %>% select(results.POSTAL, results.LATITUDE, results.LONGITUDE),
+        by = c("Postal Code" = "results.POSTAL")
+    ) %>%
+    rename(
+        Latitude = results.LATITUDE,
+        Longitude = results.LONGITUDE
+    ) %>%
+   filter(!is.na(Longitude) & !is.na(Latitude))
+```
+
+### **Converting an aspatial data into a simple features tibble data frame**
+
+```{r}
+q1_pte_sf <- st_as_sf(q1_pte_coor,
+                       coords = c("Longitude", "Latitude"),
+                       crs =4326) %>%
+  st_transform(crs = 3414)
+```
+
+### **Plotting a point simple feature layer**
+
+```{r}
+tmap_mode("view")
+
+tm_shape(q1_pte_sf) +
+  tm_dots() +
+tm_view(set.zoom.limits = c(11,14))
+
+tmap_mode("plot")
+```
+
+do i need to drop irrelevant columns for this to work?
