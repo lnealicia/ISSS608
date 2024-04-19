@@ -319,7 +319,7 @@ The code chunk below loads the following packages:
 
 -   [**sf**](https://r-spatial.github.io/sf/): for geospatial data handling
 
--   [**httr2**](https://httr2.r-lib.org/): Make HTTP requests and handles web APIs
+-   [**httr**](https://httr.r-lib.org/): Make HTTP requests and handles web APIs
 
 -   [**future**](https://cran.r-project.org/web/packages/future/index.html): Allows sequential and parallel processing
 
@@ -376,6 +376,10 @@ found <- found %>%
 
 write.csv(found, file = "data/aspatial/found.csv")
 ```
+
+::: callout-note
+Above code chunk was written with syntax for httr, which has been superseded by [httr2](https://httr2.r-lib.org/). Please make relevant modifications to utilise the newer package.
+:::
 
 ### Import Geospatial Data
 
@@ -470,7 +474,7 @@ mpsz_avg_txn_px <- mpsz %>%
 
 ### **Plotting Choropleth Map and Geographical Distribution of Private Properties**
 
-The overall plot shows both the average transacted price of the planning area and the geographical distribution of private residences. If viewing the data separately is preferred, click on the relevant tabs.
+The overall plot shows both the average transacted price of the planning area and the distribution of private residences. If viewing the data separately is preferred, click on the relevant tabs.
 
 ::: panel-tabset
 ## Overall Plot
