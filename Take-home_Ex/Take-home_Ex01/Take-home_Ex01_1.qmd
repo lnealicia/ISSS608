@@ -317,7 +317,7 @@ Apartments and Condominiums, on the other hand, show a significant number of out
 
 ## Geographical Distribution
 
-A choropleth map is used to visualize property sales and prices across different districts or areas in Singapore. This can reveal hotspots of activity and areas with higher or lower average prices.
+A choropleth map is used to visualize property sales across different districts or areas in Singapore.
 
 Two data sets will be used to create the choropleth map. They are:
 
@@ -340,7 +340,7 @@ pacman::p_load(tmap,sf,httr, purrr, future, furrr)
 ### Geospatial Data
 
 |                                      |                                      |
-|----------------|----------------|
+|------------------------------------|------------------------------------|
 | ![](images/clipboard-3052492118.png) | ![](images/clipboard-3082063216.png) |
 
 ### **Geocoding using Singapore Land Authority (SLA) API**
@@ -408,7 +408,7 @@ mpsz <- st_read(dsn = "data/geospatial",
 ```
 :::
 
-Add coordinates to q1_pte
+### Add coordinates
 
 ```{r}
 q1_pte_coor <- q1_pte %>%
@@ -423,7 +423,7 @@ q1_pte_coor <- q1_pte %>%
    filter(!is.na(Longitude) & !is.na(Latitude))
 ```
 
-### **Converting an aspatial data into a simple features tibble data frame**
+### Convert to a simple features tibble data frame
 
 ```{r}
 q1_pte_sf <- st_as_sf(q1_pte_coor,
@@ -432,16 +432,51 @@ q1_pte_sf <- st_as_sf(q1_pte_coor,
   st_transform(crs = 3414)
 ```
 
+### Keep relevant columns
+
+```{r}
+q1_pte_sf_plot <- q1_pte_sf %>%
+    select(-`Project Name`,
+           -`Sale Date`,
+           -`Address`,
+           -`Type of Sale`,
+           -`Tenure`,
+           -`Completion Date`)
+```
+
 ### **Plotting a point simple feature layer**
 
 ```{r}
+
 tmap_mode("view")
 
-tm_shape(q1_pte_sf) +
-  tm_dots() +
-tm_view(set.zoom.limits = c(11,14))
+map <- tm_shape(q1_pte_sf_plot) +
+    tm_dots(col = "Property Type") +
+    # Set view options
+    tm_view(set.zoom.limits = c(11,14))
 
+# Print the map
+print(map)
+
+# Set tmap mode back to plot
 tmap_mode("plot")
+
 ```
 
-do i need to drop irrelevant columns for this to work?
+::: callout-note
+**tmap_mode("view")**:
+
+-   Designed for interactive viewing of spatial data.
+
+-   Enables zooming, panning, and other interactive features, making it easier to explore the data in detail.
+
+**tmap_mode("plot")**:
+
+-   Used for static plotting of spatial data.
+
+-   Suitable for creating publication-ready maps that can be saved as static images (e.g., PNG, PDF).
+
+-   Does not support interactions like zooming and panning.
+
+Setting the mode to plot after the map is generated saves on resources and allows the code to run faster, as the plot does not require continuous updating.
+:::
