@@ -444,19 +444,54 @@ q1_pte_sf_plot <- q1_pte_sf %>%
            -`Completion Date`)
 ```
 
+### Average Transacted Price by Planning Area
+
+```{r}
+avg_txn_px <- q1_pte_sf_plot %>%
+    group_by(`Planning Area`) %>%
+    summarize(
+        Avg_Transacted_Price = mean(`Transacted Price ($)`, na.rm = TRUE)
+    )
+
+avg_txn_px <- avg_txn_px %>%
+    mutate(`Planning Area` = toupper(`Planning Area`))
+
+avg_txn_px <- st_drop_geometry(avg_txn_px)
+
+```
+
+### Combine avg_txn_px and mpsz
+
+Populates the average transacted price of each planning area into mpsz sf data frame. Not every planning area may have transaction data, so empty rows are dropped.
+
+```{r}
+mpsz_avg_txn_px <- mpsz %>%
+    left_join(
+        avg_txn_px,
+        by = c("PLN_AREA_N" = "Planning Area")
+    ) %>%
+  drop_na()
+```
+
 ### **Plotting a point simple feature layer**
 
 ```{r}
 
 tmap_mode("view")
 
-map <- tm_shape(q1_pte_sf_plot) +
+map <- tm_shape(mpsz_avg_txn_px) +
+    tm_polygons(col = "Avg_Transacted_Price", 
+                palette = "Blues", 
+                alpha = 0.5,
+                style = "quantile") +
+    tmap_options(check.and.fix = TRUE) +
+    
+    tm_shape(q1_pte_sf_plot) +
     tm_dots(col = "Property Type") +
-    # Set view options
-    tm_view(set.zoom.limits = c(11,14))
 
-# Print the map
-print(map)
+  tm_view(set.zoom.limits = c(11,14))
+
+map
 
 # Set tmap mode back to plot
 tmap_mode("plot")
@@ -472,9 +507,7 @@ tmap_mode("plot")
 
 **tmap_mode("plot")**:
 
--   Used for static plotting of spatial data.
-
--   Suitable for creating publication-ready maps that can be saved as static images (e.g., PNG, PDF).
+-   Used for static plotting of spatial data that can be saved as static images e.g., PNG
 
 -   Does not support interactions like zooming and panning.
 
