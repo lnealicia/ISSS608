@@ -192,15 +192,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><strong>The Data</strong></a>
   <ul class="collapse">
   <li><a href="#downloading-the-dataset" id="toc-downloading-the-dataset" class="nav-link" data-scroll-target="#downloading-the-dataset">Downloading the Dataset</a></li>
-  </ul></li>
   <li><a href="#the-designing-tool" id="toc-the-designing-tool" class="nav-link" data-scroll-target="#the-designing-tool"><strong>The Designing Tool</strong></a></li>
+  </ul></li>
   <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a>
   <ul class="collapse">
   <li><a href="#installing-and-loading-the-required-libraries" id="toc-installing-and-loading-the-required-libraries" class="nav-link" data-scroll-target="#installing-and-loading-the-required-libraries">Installing and loading the required libraries</a></li>
-  <li><a href="#importing-the-data" id="toc-importing-the-data" class="nav-link" data-scroll-target="#importing-the-data">Importing the Data</a>
-  <ul class="collapse">
+  <li><a href="#importing-the-data" id="toc-importing-the-data" class="nav-link" data-scroll-target="#importing-the-data">Importing the Data</a></li>
   <li><a href="#view-data" id="toc-view-data" class="nav-link" data-scroll-target="#view-data">View Data</a></li>
-  </ul></li>
   <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a>
   <ul class="collapse">
   <li><a href="#standardise-date-column-format" id="toc-standardise-date-column-format" class="nav-link" data-scroll-target="#standardise-date-column-format">Standardise Date Column Format</a></li>
@@ -209,11 +207,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#keep-only-relevant-columns" id="toc-keep-only-relevant-columns" class="nav-link" data-scroll-target="#keep-only-relevant-columns">Keep only relevant columns</a></li>
   <li><a href="#view-data-2" id="toc-view-data-2" class="nav-link" data-scroll-target="#view-data-2">View Data</a></li>
   </ul></li>
+  </ul></li>
   <li><a href="#visualisation" id="toc-visualisation" class="nav-link" data-scroll-target="#visualisation">Visualisation</a>
   <ul class="collapse">
   <li><a href="#price-distribution" id="toc-price-distribution" class="nav-link" data-scroll-target="#price-distribution">Price Distribution</a></li>
-  <li><a href="#group-by-property-type" id="toc-group-by-property-type" class="nav-link" data-scroll-target="#group-by-property-type">Group by Property Type</a></li>
-  <li><a href="#view-data-3" id="toc-view-data-3" class="nav-link" data-scroll-target="#view-data-3">View Data</a></li>
+  <li><a href="#geographical-distribution" id="toc-geographical-distribution" class="nav-link" data-scroll-target="#geographical-distribution">Geographical Distribution</a>
+  <ul class="collapse">
+  <li><a href="#geospatial-data" id="toc-geospatial-data" class="nav-link" data-scroll-target="#geospatial-data">Geospatial Data</a></li>
+  <li><a href="#geocoding-using-singapore-land-authority-sla-api" id="toc-geocoding-using-singapore-land-authority-sla-api" class="nav-link" data-scroll-target="#geocoding-using-singapore-land-authority-sla-api"><strong>Geocoding using Singapore Land Authority (SLA) API</strong></a></li>
+  <li><a href="#import-geospatial-data" id="toc-import-geospatial-data" class="nav-link" data-scroll-target="#import-geospatial-data">Import Geospatial Data</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -252,20 +254,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 <p><img src="images/clipboard-3122103337.png" class="img-fluid" width="700"></p>
-<section id="context" class="level2">
-<h2 class="anchored" data-anchor-id="context"><strong>Context</strong></h2>
+<section id="context" class="level1">
+<h1><strong>Context</strong></h1>
 <p>There are two major residential property market in Singapore, namely public and private housing. Public housing aims to meet the basic need of the general public with monthly household income less than or equal to S$14,000. For families with monthly household income more than S$14,000, they need to turn to the private residential market.</p>
 </section>
-<section id="the-task" class="level2">
-<h2 class="anchored" data-anchor-id="the-task"><strong>The Task</strong></h2>
+<section id="the-task" class="level1">
+<h1><strong>The Task</strong></h1>
 <p>Assuming the role of a graphical editor of a median company, a minimum two and maximum three of data visualisations are prepared to reveal the private residential market and sub-markets of Singapore for the 1st quarter of 2024.</p>
 </section>
-<section id="the-data" class="level2">
-<h2 class="anchored" data-anchor-id="the-data"><strong>The Data</strong></h2>
+<section id="the-data" class="level1">
+<h1><strong>The Data</strong></h1>
 <p><img src="images/clipboard-3619198007.png" class="img-fluid" width="177"></p>
 <p>To accomplish the task, transaction data of <a href="https://www.ura.gov.sg/reis/index">REALIS</a> will be used.</p>
-<section id="downloading-the-dataset" class="level3">
-<h3 class="anchored" data-anchor-id="downloading-the-dataset">Downloading the Dataset</h3>
+<section id="downloading-the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="downloading-the-dataset">Downloading the Dataset</h2>
 <ol type="1">
 <li><p>Access Dataset via <a href="https://www-ura-gov-sg.libproxy.smu.edu.sg/reis/ipLoginNotice"><strong>SMU e-library</strong></a><br>
 <a href="images/clipboard-1634732179.png"><img src="images/clipboard-1634732179.png" class="img-fluid"></a></p></li>
@@ -279,10 +281,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <a href="images/clipboard-2283550883.png"><img src="images/clipboard-2283550883.png" class="img-fluid"></a></p></li>
 </ol>
 </section>
-</section>
 <section id="the-designing-tool" class="level2">
 <h2 class="anchored" data-anchor-id="the-designing-tool"><strong>The Designing Tool</strong></h2>
 <p>The data will be processed using the appropriate <strong>tidyverse</strong> family of packages and the statistical graphics will be prepared using <strong>ggplot2</strong> and its extensions.</p>
+</section>
 </section>
 <section id="getting-started" class="level1">
 <h1>Getting Started</h1>
@@ -327,8 +329,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>realis_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(realis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="view-data" class="level3">
-<h3 class="anchored" data-anchor-id="view-data">View Data</h3>
+</section>
+<section id="view-data" class="level2">
+<h2 class="anchored" data-anchor-id="view-data">View Data</h2>
 <ul>
 <li>Use the <strong><code>names()</code></strong> function to print the names of the columns in the tibble data frame.</li>
 <li>Use the <strong><code>glimpse()</code></strong> function to get a quick overview of the tibble data frame</li>
@@ -404,7 +407,6 @@ Note
 </ul>
 </div>
 </div>
-</section>
 </section>
 <section id="data-preparation" class="level2">
 <h2 class="anchored" data-anchor-id="data-preparation">Data Preparation</h2>
@@ -563,10 +565,28 @@ Note
 </div>
 </section>
 </section>
-<section id="visualisation" class="level2">
-<h2 class="anchored" data-anchor-id="visualisation">Visualisation</h2>
-<section id="price-distribution" class="level3">
-<h3 class="anchored" data-anchor-id="price-distribution">Price Distribution</h3>
+</section>
+<section id="visualisation" class="level1">
+<h1>Visualisation</h1>
+<p>There are various types of Properties for Private residences.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(q1_pte<span class="sc">$</span><span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Condominium"           "Terrace House"         "Apartment"            
+[4] "Executive Condominium" "Semi-Detached House"   "Detached House"       </code></pre>
+</div>
+</div>
+<p>The different types in the dataset are:</p>
+<ul>
+<li><p>Condominium</p></li>
+<li><p>Terrace House</p></li>
+<li><p>Apartment</p></li>
+<li><p>Executive Condominium</p></li>
+<li><p>Semi-Detached House</p></li>
+<li><p>Detached House</p></li>
+</ul>
+<section id="price-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="price-distribution">Price Distribution</h2>
 <p>Create box plots for the price distribution of each private residence property type. <a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html"><code>geom_boxplot()</code></a>&nbsp;displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually.</p>
 <p>Note: For better visibility, <strong><code>labels</code></strong> parameter with the function <strong><code>scales::number</code></strong>, formats the y-axis labels to include thousands separators.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
@@ -575,23 +595,23 @@ Note
 <div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
 <div class="cell">
 <div class="cell-output-display">
-<p><img src="Take-home_Ex01_1_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="672"></p>
+<p><img src="Take-home_Ex01_1_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </div>
 <div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>box_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> q1_pte, </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>)) <span class="sc">+</span> </span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Box Plot of Transacted Price ($) by Property Type"</span>,</span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">x =</span> <span class="st">"Property Type"</span>,</span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">"Transacted Price ($)"</span>) <span class="sc">+</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>number) <span class="sc">+</span> </span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">theme_gray</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, </span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">hjust =</span> <span class="dv">1</span>,</span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">vjust=</span><span class="dv">1</span>))</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>box_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>box_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> q1_pte, </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>)) <span class="sc">+</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Box Plot of Transacted Price ($) by Property Type"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">x =</span> <span class="st">"Property Type"</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">"Transacted Price ($)"</span>) <span class="sc">+</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>            <span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>number) <span class="sc">+</span> </span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>            <span class="fu">theme_gray</span>() <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, </span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">hjust =</span> <span class="dv">1</span>,</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>                                                            <span class="at">vjust=</span><span class="dv">1</span>))</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>box_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 </div>
@@ -606,227 +626,113 @@ Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>According to the box plot, Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status. Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers.</p>
+<p>There are six private property types in the dataset.</p>
+<p>The boxplot shows Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status. Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers.</p>
 <p>In contrast, both Executive Condominiums and Terrace Houses demonstrate the least variability in transacted prices, with their interquartile ranges (IQR) closely aligning with their medians. This suggests a stable and consistent pricing trend for these property types.</p>
 <p>Executive Condominiums have the lowest transacted prices, indicating their appeal as an affordable option within the private housing market.</p>
 <p>Apartments and Condominiums, on the other hand, show a significant number of outliers in their transacted prices, suggesting a wider range of pricing and potentially more diversity in market conditions for these property types.</p>
 </div>
 </div>
 </section>
-<section id="group-by-property-type" class="level3">
-<h3 class="anchored" data-anchor-id="group-by-property-type">Group by Property Type</h3>
-<p>There are various types of Properties for Private residences.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(q1_pte<span class="sc">$</span><span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] "Condominium"           "Terrace House"         "Apartment"            
-[4] "Executive Condominium" "Semi-Detached House"   "Detached House"       </code></pre>
-</div>
-</div>
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Note
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The different types in the dataset are:</p>
+<section id="geographical-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="geographical-distribution">Geographical Distribution</h2>
+<p>A choropleth map is used to visualize property sales and prices across different districts or areas in Singapore. This can reveal hotspots of activity and areas with higher or lower average prices.</p>
+<p>Two data sets will be used to create the choropleth map. They are:</p>
 <ul>
-<li><p>Condominium</p></li>
-<li><p>Terrace House</p></li>
-<li><p>Apartment</p></li>
-<li><p>Executive Condominium</p></li>
-<li><p>Semi-Detached House</p></li>
-<li><p>Detached House</p></li>
+<li><p>MPSZ-2019: This data provides the sub-zone boundary of URA Master Plan 2019. It can be downloaded at <a href="https://data.gov.sg/">data.gov.sg</a> It consists of the geographical boundary of Singapore at the planning subzone level. The data is based on URA Master Plan 2019.</p></li>
+<li><p>Private residential property transaction data from 1st January 2024 to 31st March 2024 in tibble data frame (i.e.&nbsp;<code>q1_pte</code>).</p></li>
 </ul>
-</div>
-</div>
-<p>To allow for more in depth analysis of each Property Type, <strong><code>q1_pte</code></strong> tibble data frame is split into a list of smaller tibbles based on “Property Type”.</p>
+<p>The code chunk below loads the following packages:</p>
 <ul>
-<li><p><strong><code>group_by()</code></strong> groups the <strong><code>q1_pte</code></strong> tibble data frame by the “Property Type” column.</p></li>
-<li><p><strong><code>group_split()</code></strong> splits the grouped data frame into a list of smaller tibbles based on “Property Type.”</p></li>
-<li><p><strong><code>group_keys()</code></strong> retrieves the values of the grouping column (“Property Type”) for each group.</p></li>
-<li><p><strong><code>setNames()</code></strong> is used to create a named list where each element of the list is one of the smaller tibbles, and each tibble is named according to the corresponding value of the “Property Type” column.</p></li>
+<li><p>tmap: for thematic mapping</p></li>
+<li><p>sf: for geospatial data handling</p></li>
+<li><p>httr:</p></li>
 </ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>grouped_q1_pte <span class="ot">&lt;-</span> q1_pte <span class="sc">%&gt;%</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>tibble_list <span class="ot">&lt;-</span> <span class="fu">group_split</span>(grouped_q1_pte)</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>ppty_type_name <span class="ot">&lt;-</span> <span class="fu">group_keys</span>(grouped_q1_pte)<span class="sc">$</span><span class="st">`</span><span class="at">Property Type</span><span class="st">`</span></span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>ppty_type_name <span class="ot">&lt;-</span> <span class="fu">setNames</span>(tibble_list, ppty_type_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tmap,sf,httr, purrr, future, furrr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="geospatial-data" class="level3">
+<h3 class="anchored" data-anchor-id="geospatial-data">Geospatial Data</h3>
+<table class="table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><img src="images/clipboard-3052492118.png" class="img-fluid"></td>
+<td><img src="images/clipboard-3082063216.png" class="img-fluid"></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="geocoding-using-singapore-land-authority-sla-api" class="level3">
+<h3 class="anchored" data-anchor-id="geocoding-using-singapore-land-authority-sla-api"><strong>Geocoding using Singapore Land Authority (SLA) API</strong></h3>
+<p>Geocoding - provide geographical coordinates corresponding to a location.</p>
+<p>Parallel processing is set up to speed up the process.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plan</span>(multisession)</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>url <span class="ot">&lt;-</span> <span class="st">"https://www.onemap.gov.sg/api/common/elastic/search"</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>postcodes <span class="ot">&lt;-</span> <span class="fu">unique</span>(q1_pte<span class="sc">$</span><span class="st">`</span><span class="at">Postal Code</span><span class="st">`</span>)</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to fetch data for a single postal code</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>fetch_postcode_data <span class="ot">&lt;-</span> <span class="cf">function</span>(postcode) {</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    query <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="st">'searchVal'</span> <span class="ot">=</span> postcode, <span class="st">'returnGeom'</span> <span class="ot">=</span> <span class="st">'Y'</span>, <span class="st">'getAddrDetails'</span> <span class="ot">=</span> <span class="st">'Y'</span>, <span class="st">'pageNum'</span> <span class="ot">=</span> <span class="st">'1'</span>)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    res <span class="ot">&lt;-</span> <span class="fu">GET</span>(url, <span class="at">query =</span> query)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">http_error</span>(res)) {</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(<span class="cn">NULL</span>) </span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    content_res <span class="ot">&lt;-</span> <span class="fu">content</span>(res)</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (content_res<span class="sc">$</span>found <span class="sc">!=</span> <span class="dv">0</span>) {</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(<span class="fu">data.frame</span>(content_res)[<span class="dv">4</span><span class="sc">:</span><span class="dv">13</span>])</span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>        <span class="fu">return</span>(<span class="fu">data.frame</span>(<span class="at">postcode =</span> postcode))</span>
+<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">future_map</span>(postcodes, fetch_postcode_data)</span>
+<span id="cb22-25"><a href="#cb22-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-26"><a href="#cb22-26" aria-hidden="true" tabindex="-1"></a>found <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(results, <span class="at">.id =</span> <span class="st">"postcode"</span>)</span>
+<span id="cb22-27"><a href="#cb22-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-28"><a href="#cb22-28" aria-hidden="true" tabindex="-1"></a>found <span class="ot">&lt;-</span> found <span class="sc">%&gt;%</span></span>
+<span id="cb22-29"><a href="#cb22-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(postcode))</span>
+<span id="cb22-30"><a href="#cb22-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-31"><a href="#cb22-31" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(found, <span class="at">file =</span> <span class="st">"data/aspatial/found.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="view-data-3" class="level3">
-<h3 class="anchored" data-anchor-id="view-data-3">View Data</h3>
-<p>The tabset below allows the view of the newly created smaller Property Type tibble data frames in alphabetical order.</p>
+<section id="import-geospatial-data" class="level3">
+<h3 class="anchored" data-anchor-id="import-geospatial-data">Import Geospatial Data</h3>
+<p>The code chunk below uses the&nbsp;<em>st_read()</em>&nbsp;function of&nbsp;<strong>sf</strong>&nbsp;package to import&nbsp;<code>MPSZ-2019</code>&nbsp;shapefile into R as a simple feature data frame called&nbsp;<code>mpsz</code>.</p>
 <div class="tabset-margin-container"></div><div class="panel-tabset">
-<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Apartment</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Condominium</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-3" role="tab" aria-controls="tabset-3-3" aria-selected="false">Detached House</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-4" role="tab" aria-controls="tabset-3-4" aria-selected="false">Executive Condominium</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-5" role="tab" aria-controls="tabset-3-5" aria-selected="false">Semi-Detached House</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-6-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-6" role="tab" aria-controls="tabset-3-6" aria-selected="false">Terrace House</a></li></ul>
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">Content</a></li></ul>
 <div class="tab-content">
 <div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>apart_df <span class="ot">&lt;-</span> ppty_type_name[[<span class="st">"Apartment"</span>]]</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>apart_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1,425 × 14
-   `Project Name`      `Transacted Price ($)` `Area (SQFT)` `Unit Price ($ PSF)`
-   &lt;chr&gt;                                &lt;dbl&gt;         &lt;dbl&gt;                &lt;dbl&gt;
- 1 TERRA HILL                         2190000          807.                 2713
- 2 THE RESERVE RESIDE…                3412201         1324.                 2577
- 3 PARC KOMO                          1758000         1001.                 1756
- 4 SIXTH AVENUE CENTRE                1935000         1173.                 1649
- 5 NOMA                               1500000          850.                 1764
- 6 MAYSPRINGS                          960000          904.                 1062
- 7 PARC ESTA                          2088000         1023.                 2042
- 8 BLOSSOMS BY THE PA…                3364000         1302.                 2583
- 9 THE RESERVE RESIDE…                3350000         1324.                 2530
-10 NORTHVALE                           790000          689.                 1147
-# ℹ 1,415 more rows
-# ℹ 10 more variables: `Sale Date` &lt;date&gt;, Address &lt;chr&gt;, `Type of Sale` &lt;chr&gt;,
-#   `Property Type` &lt;chr&gt;, `Number of Units` &lt;dbl&gt;, Tenure &lt;chr&gt;,
-#   `Completion Date` &lt;chr&gt;, `Postal Code` &lt;chr&gt;, `Planning Region` &lt;chr&gt;,
-#   `Planning Area` &lt;chr&gt;</code></pre>
-</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>mpsz <span class="ot">&lt;-</span> <span class="fu">st_read</span>(<span class="at">dsn =</span> <span class="st">"data/geospatial"</span>,</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>                <span class="at">layer =</span> <span class="st">"MPSZ-2019"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">st_transform</span>(<span class="at">crs =</span> <span class="dv">3414</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </div>
 <div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>condo_df <span class="ot">&lt;-</span> ppty_type_name[[<span class="st">"Condominium"</span>]]</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>condo_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1,295 × 14
-   `Project Name`      `Transacted Price ($)` `Area (SQFT)` `Unit Price ($ PSF)`
-   &lt;chr&gt;                                &lt;dbl&gt;         &lt;dbl&gt;                &lt;dbl&gt;
- 1 THE LANDMARK                       2726888         1076.                 2533
- 2 PINETREE HILL                      1954000          797.                 2453
- 3 ECO                                1620000          990.                 1636
- 4 THE GARDENS AT BIS…                1800000         1206.                 1493
- 5 THOMSON 800                        2800000         1625.                 1723
- 6 SELETAR PARK RESID…                1490000         1507.                  989
- 7 THE ESTUARY                        1540000         1195.                 1289
- 8 THE INTERLACE                      2658000         1615.                 1646
- 9 DUNMAN VIEW                        1800000         1216.                 1480
-10 EUHABITAT                           788000          560.                 1408
-# ℹ 1,285 more rows
-# ℹ 10 more variables: `Sale Date` &lt;date&gt;, Address &lt;chr&gt;, `Type of Sale` &lt;chr&gt;,
-#   `Property Type` &lt;chr&gt;, `Number of Units` &lt;dbl&gt;, Tenure &lt;chr&gt;,
-#   `Completion Date` &lt;chr&gt;, `Postal Code` &lt;chr&gt;, `Planning Region` &lt;chr&gt;,
-#   `Planning Area` &lt;chr&gt;</code></pre>
-</div>
-</div>
-</div>
-<div id="tabset-3-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-3-tab">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>det_df <span class="ot">&lt;-</span> ppty_type_name[[<span class="st">"Detached House"</span>]]</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>det_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 39 × 14
-   `Project Name`      `Transacted Price ($)` `Area (SQFT)` `Unit Price ($ PSF)`
-   &lt;chr&gt;                                &lt;dbl&gt;         &lt;dbl&gt;                &lt;dbl&gt;
- 1 N.A.                              15000000         8701.                 1724
- 2 FRANKEL ESTATE                     8380000         4514.                 1856
- 3 N.A.                              26500000        12871.                 2059
- 4 N.A.                              13990000         5880.                 2379
- 5 SELETAR HILLS ESTA…                8800000         8302.                 1060
- 6 N.A.                              13400000         6448.                 2078
- 7 KIARA 10                           3618000         5748.                  629
- 8 VERDURE VILLAS                     5400000         5199.                 1039
- 9 DUNEARN ESTATE                    17500000         5013.                 3491
-10 FRANKEL ESTATE                     9500000         5635.                 1686
-# ℹ 29 more rows
-# ℹ 10 more variables: `Sale Date` &lt;date&gt;, Address &lt;chr&gt;, `Type of Sale` &lt;chr&gt;,
-#   `Property Type` &lt;chr&gt;, `Number of Units` &lt;dbl&gt;, Tenure &lt;chr&gt;,
-#   `Completion Date` &lt;chr&gt;, `Postal Code` &lt;chr&gt;, `Planning Region` &lt;chr&gt;,
-#   `Planning Area` &lt;chr&gt;</code></pre>
-</div>
-</div>
-</div>
-<div id="tabset-3-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-4-tab">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>ec_df <span class="ot">&lt;-</span> ppty_type_name[[<span class="st">"Executive Condominium"</span>]]</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>ec_df</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 549 × 14
-   `Project Name`      `Transacted Price ($)` `Area (SQFT)` `Unit Price ($ PSF)`
-   &lt;chr&gt;                                &lt;dbl&gt;         &lt;dbl&gt;                &lt;dbl&gt;
- 1 TREASURE CREST                     1790000         1249.                 1434
- 2 ESPARINA RESIDENCES                1318800          829.                 1591
- 3 WATERBAY                           1598000         1141.                 1401
- 4 TREASURE CREST                     1562000         1076.                 1451
- 5 BLOSSOM RESIDENCES                 1245000         1055.                 1180
- 6 NORTH GAIA                         1487000         1076.                 1381
- 7 THE CRITERION                      1550000         1249.                 1241
- 8 SOL ACRES                          1170000          850.                 1376
- 9 LA CASA                            1130000         1141.                  990
-10 ESPARINA RESIDENCES                1828000         1163.                 1572
-# ℹ 539 more rows
-# ℹ 10 more variables: `Sale Date` &lt;date&gt;, Address &lt;chr&gt;, `Type of Sale` &lt;chr&gt;,
-#   `Property Type` &lt;chr&gt;, `Number of Units` &lt;dbl&gt;, Tenure &lt;chr&gt;,
-#   `Completion Date` &lt;chr&gt;, `Postal Code` &lt;chr&gt;, `Planning Region` &lt;chr&gt;,
-#   `Planning Area` &lt;chr&gt;</code></pre>
-</div>
-</div>
-</div>
-<div id="tabset-3-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-5-tab">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>semi <span class="ot">&lt;-</span> ppty_type_name[[<span class="st">"Semi-Detached House"</span>]]</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>semi</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 82 × 14
-   `Project Name`      `Transacted Price ($)` `Area (SQFT)` `Unit Price ($ PSF)`
-   &lt;chr&gt;                                &lt;dbl&gt;         &lt;dbl&gt;                &lt;dbl&gt;
- 1 ORCHID VILLAGE                    13100000         3667.                 3572
- 2 MAYFLOWER GARDENS                  6980000         4085.                 1709
- 3 HOLLAND GROVE                      3500000         2398.                 1459
- 4 N.A.                               5900000         3996.                 1477
- 5 N.A.                              11500000         6016                  1912
- 6 SENNETT ESTATE                     6000000         4497.                 1334
- 7 CAMELIA PARK                       5300000         4672.                 1135
- 8 SERANGOON GARDEN E…                4700000         2486.                 1890
- 9 N.A.                               5700000         4048.                 1408
-10 FRANKEL ESTATE                     6300000         3828.                 1646
-# ℹ 72 more rows
-# ℹ 10 more variables: `Sale Date` &lt;date&gt;, Address &lt;chr&gt;, `Type of Sale` &lt;chr&gt;,
-#   `Property Type` &lt;chr&gt;, `Number of Units` &lt;dbl&gt;, Tenure &lt;chr&gt;,
-#   `Completion Date` &lt;chr&gt;, `Postal Code` &lt;chr&gt;, `Planning Region` &lt;chr&gt;,
-#   `Planning Area` &lt;chr&gt;</code></pre>
-</div>
-</div>
-</div>
-<div id="tabset-3-6" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-6-tab">
-<div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>terra <span class="ot">&lt;-</span> ppty_type_name[[<span class="st">"Terrace House"</span>]]</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>terra</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 177 × 14
-   `Project Name`      `Transacted Price ($)` `Area (SQFT)` `Unit Price ($ PSF)`
-   &lt;chr&gt;                                &lt;dbl&gt;         &lt;dbl&gt;                &lt;dbl&gt;
- 1 POLLEN COLLECTION                  3850000         1808.                 2129
- 2 SUMMER VILLAS                      2960000         3531.                  838
- 3 SEMBAWANG HILLS ES…                4200000         2093.                 2007
- 4 THE MORRIS RESIDEN…                3530000         4015.                  879
- 5 CABANA                             2750000         3068.                  896
- 6 APOLLO GARDENS                     5100000         4592.                 1111
- 7 N.A.                               2750000         3299.                  834
- 8 POLLEN COLLECTION                  4050000         2153.                 1881
- 9 PICARDY GARDENS                    3940000         2310.                 1706
-10 N.A.                               3950000         2646.                 1493
-# ℹ 167 more rows
-# ℹ 10 more variables: `Sale Date` &lt;date&gt;, Address &lt;chr&gt;, `Type of Sale` &lt;chr&gt;,
-#   `Property Type` &lt;chr&gt;, `Number of Units` &lt;dbl&gt;, Tenure &lt;chr&gt;,
-#   `Completion Date` &lt;chr&gt;, `Postal Code` &lt;chr&gt;, `Planning Region` &lt;chr&gt;,
-#   `Planning Area` &lt;chr&gt;</code></pre>
+<pre><code>Reading layer `MPSZ-2019' from data source 
+  `C:\lnealicia\ISSS608\Take-home_Ex\Take-home_Ex01\data\geospatial' 
+  using driver `ESRI Shapefile'
+Simple feature collection with 332 features and 6 fields
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 103.6057 ymin: 1.158699 xmax: 104.0885 ymax: 1.470775
+Geodetic CRS:  WGS 84</code></pre>
 </div>
 </div>
 </div>
 </div>
 </div>
-<p>Geographical Distribution:</p>
-<p>Choropleth Map: Use a map to visualize property sales and prices across different districts or areas in Singapore. This can reveal hotspots of activity and areas with higher or lower average prices.</p>
-<p>Sales Heatmap: Create a heatmap showing the density of property transactions in different areas. This can provide insights into which parts of Singapore are seeing the most activity in the private residential market.</p>
 
 
 </section>

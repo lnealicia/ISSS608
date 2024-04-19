@@ -334,7 +334,7 @@ The code chunk below loads the following packages:
 -   httr:
 
 ```{r}
-pacman::p_load(tmap,sf,httr)
+pacman::p_load(tmap,sf,httr, purrr, future, furrr)
 ```
 
 ### Geospatial Data
@@ -347,31 +347,41 @@ pacman::p_load(tmap,sf,httr)
 
 Geocoding - provide geographical coordinates corresponding to a location.
 
+Parallel processing is set up to speed up the process. Results are saved into a .csv file for easy future access.
+
 ```{r}
+
+plan(multisession)
 
 url <- "https://www.onemap.gov.sg/api/common/elastic/search"
 
-postcodes <- q1_pte$`postal_code`
+postcodes <- unique(q1_pte$`Postal Code`)
 
-found <- data.frame()
-not_found <- data.frame()
-
-for(postcode in postcodes){
-  query<-list('searchVal'=postcode,'returnGeom'='Y','getAddrDetails'='Y', 'pageNum'='1')
-  res <- GET(url,query=query)
-  
-  if((content(res)$found)!=0){
-    found <- rbind(found, data.frame(content(res))[4:13])
-  } else{
-    not_found = data.frame(postcode)
-  }
+# Function to fetch data for a single postal code
+fetch_postcode_data <- function(postcode) {
+    query <- list('searchVal' = postcode, 'returnGeom' = 'Y', 'getAddrDetails' = 'Y', 'pageNum' = '1')
+    res <- GET(url, query = query)
+    
+    if (http_error(res)) {
+        return(NULL) 
+    }
+    
+    content_res <- content(res)
+    if (content_res$found != 0) {
+        return(data.frame(content_res)[4:13])
+    } else {
+        return(data.frame(postcode = postcode))
+    }
 }
-```
 
-```{r}
-merged = merge(csv, found, by.x= 'postal_code', by.y = 'results.POSTAL', all=TRUE)
-write.csv(merged, file = "data/aspatial/pte_postal.csv")
-write.csv(not_found, file = "data/aspatial/not_found.csv")
+results <- future_map(postcodes, fetch_postcode_data)
+
+found <- bind_rows(results, .id = "postcode")
+
+found <- found %>%
+    filter(!is.na(postcode))
+
+write.csv(found, file = "data/aspatial/found.csv")
 ```
 
 ### Import Geospatial Data
@@ -397,38 +407,3 @@ mpsz <- st_read(dsn = "data/geospatial",
   st_transform(crs = 3414)
 ```
 :::
-
-## Joining the attribute data and geospatial data
-
-Before performing the georelational join, one extra step is required to convert the values in `q1_pte Planning Area` column. This is because these values are made up of upper- and lowercase. On the other hand, `mpsz PLN_AREA_N` column are in uppercase.
-
-```{r}
-q1_pte <- q1_pte %>%
-  mutate_at(.vars = vars(`Planning Area`), 
-          .funs = list(toupper))
-```
-
-*left_join()* of **dplyr** is used to join the geographical data and attribute table using planning area name e.g. *SUBZONE_N* and *Planning Area* as the common identifier.
-
-```{r}
-mpsz_q1 <- left_join(q1_pte, mpsz,
-                          by = c("Planning Area" = "SUBZONE_N"))
-```
-
-Save output in rds format
-
-```{r}
-write_rds(mpsz_q1, "data/rds/mpsz_q1.rds")
-```
-
-### Choropleth Mapping Geospatial Data Using tmap
-
-```{r}
-str(mpsz_q1)
-```
-
-```{r}
-tmap_mode("plot")
-qtm(mpsz_q1, 
-    fill = "Transacted Price ($)")
-```
