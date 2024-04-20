@@ -1,11 +1,13 @@
 ---
 title: "In-Class Exercise 1"
 author: "Alicia Loh"
+date: "April 13, 2024"
 date-modified: last-modified
 execute: 
   eval: true
   echo: true
   warning: false
+  freeze: true
 ---
 
 # Getting Started
