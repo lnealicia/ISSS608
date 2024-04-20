@@ -1,0 +1,16 @@
+{
+  "hash": "c5091c0c47d8811d82906eab2805e0ee",
+  "result": {
+    "markdown": "---\ntitle: \"In-Class Exercise 1\"\nauthor: \"Alicia Loh\"\ndate: \"April 13, 2024\"\ndate-modified: last-modified\nexecute: \n  eval: true\n  echo: true\n  warning: false\n  freeze: true\n---\n\n\n# Getting Started\n\n## Loading R packages\n\nNote: Ensure that the [pacman](https://cran.r-project.org/web/packages/pacman/) package has already been installed.\n\nThe code chunk below uses [`p_load()`](https://www.rdocumentation.org/packages/pacman/versions/0.5.1/topics/p_load) of pacman package to load the tidyverse family of packages.\n\n\n::: {.cell}\n\n```{.r .cell-code}\npacman::p_load(tidyverse)\n```\n:::\n\n\n## Importing the Data\n\n-   The code chunk below imports *realis2019.csv* into R environment by using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package.\n\n-   **readr** is one of the tidyverse package.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nrealis <- read_csv(\"data/realis2019.csv\")\n```\n:::\n\n\n# ggplot\n\n[ggplot2](https://ggplot2.tidyverse.org/) is an R package for **declaratively** creating **data-driven** graphics based on ***The Grammar of Graphics***. It is also part of the tidyverse family specially designed for visual exploration and communication.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nggplot(data=realis, \n       aes(x = `Unit Price ($ psm)`)) +\n  geom_histogram() +\n  ggtitle(\"Distribution of Unit Price ($ psm)\")\n```\n\n::: {.cell-output-display}\n![](In-Class_Ex01_files/figure-html/unnamed-chunk-3-1.png){width=672}\n:::\n:::\n",
+    "supporting": [
+      "In-Class_Ex01_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}
