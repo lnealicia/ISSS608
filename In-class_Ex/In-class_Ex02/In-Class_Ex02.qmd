@@ -46,9 +46,65 @@ exam_df <- read_csv("data/Exam_data.csv")
 
 [ggplot2](https://ggplot2.tidyverse.org/) is an R package for **declaratively** creating **data-driven** graphics based on ***The Grammar of Graphics***. It is also part of the tidyverse family specially designed for visual exploration and communication.
 
-```{r, eval=FALSE}
-ggplot(data=realis, 
-       aes(x = `Unit Price ($ psm)`)) +
-  geom_histogram() +
-  ggtitle("Distribution of Unit Price ($ psm)")
+```{r}
+ggplot(data=exam_df, aes(x = ENGLISH)) +
+  geom_histogram(bins=10, 
+                 boundary = 100,
+                 color="black", 
+                 fill="skyblue") +
+  ggtitle("Distribution of English scores")
+```
+
+# Probability Density Plot
+
+More appropriate method to represent continuous values
+
+```{r}
+ggplot(data=exam_df, aes(x = ENGLISH)) +
+  geom_density(color="skyblue", 
+               adjust = .65,
+               alpha = .1) +
+  ggtitle("Probability Density Plot of English scores")
+```
+
+# Alternative Design
+
+```{r}
+median_eng <- median(exam_df$ENGLISH)
+mean_eng <- mean(exam_df$ENGLISH)
+std_eng <- sd(exam_df$ENGLISH)
+
+
+ggplot(data=exam_df, aes(x = ENGLISH)) +
+  geom_density(color="skyblue", 
+               adjust = .65,
+               alpha = .1) +
+  stat_function(
+    fun = dnorm,
+    args = list(mean = mean_eng, sd = std_eng),
+    col = "gray",
+    size = .8) +
+  geom_vline(
+    aes(xintercept = mean_eng),
+    colour = "darkgreen",
+    linewidth = .6,
+    linetype = "dashed") +
+  annotate(geom = "text",
+           x = mean_eng -8,
+           y = .04,
+           label = paste0("Mean ENGLISH: ",
+                          round((mean_eng),2)),
+           colour="darkgreen") +
+  geom_vline(
+    aes(xintercept = median_eng),
+    colour = "navy",
+    linewidth = .6,
+    linetype = "dashed") +
+  annotate(geom = "text",
+           x = mean_eng -8,
+           y = .04,
+           label = paste0("Mean ENGLISH: ",
+                          round((mean_eng),2)),
+           colour="navy") +
+  ggtitle("Comparison of English scores")
 ```
