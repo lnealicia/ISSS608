@@ -169,7 +169,7 @@ glimpse(q1_pte_raw)
 
 -   Private residential property transaction data from 1st January 2024 to 31st March 2024
 
--   There are 3567 rows and 21 columns.
+-   There are 4902 rows and 21 columns.
 :::
 
 ### Keep Relevant Columns
@@ -216,7 +216,7 @@ glimpse(q1_pte)
 
 -   Private residential property transaction data from 1st January 2024 to 31st March 2024
 
--   There are 3567 rows and 14 columns.
+-   There are 4902 rows and 14 columns.
 :::
 
 # Visualisation
@@ -553,9 +553,9 @@ Setting the mode to plot after the map is generated saves on resources and allow
 ::: callout-tip
 ## Write Up
 
-The plots reveal that areas with the highest average transaction price are concentrated around the Central Region, including areas like Bukit Timah and Newton. This is likely due to their proximity to the Central Business District (CBD). Although there are very few transactions in Sentosa and Changi, these areas still have high average transaction prices, mainly consisting of condominiums.
+The plots reveal that of the private properties sold in Q1 2024, areas with the highest average transaction price are concentrated around the Central Region, including areas like Bukit Timah and Newton. This is likely due to their proximity to the Central Business District (CBD). Although there are very few transactions in Sentosa and Changi, these areas still have high average transaction prices, mainly consisting of condominiums.
 
-Executive Condominiums, which were previously noted to have the lowest overall transaction price and low transaction price variability, are predominantly located in the outskirts of Singapore, such as Woodlands and Bukit Batok. This suggests a trend toward more affordable housing options in these areas.
+Sales of Executive Condominiums, which were previously noted to have the lowest overall transaction price and low transaction price variability, are predominantly located in the outskirts of Singapore, such as Woodlands and Bukit Batok. This suggests a trend toward more affordable options in these areas.
 
-Apartments and condominiums constitute the majority of private residences and are distributed throughout the city-state. This extensive distribution may account for the significant number of outliers observed earlier in transaction prices.
+Apartments and condominiums constitute the majority of private residences sold and are distributed throughout the city-state. This extensive distribution may account for the significant number of outliers observed earlier in transaction prices.
 :::
