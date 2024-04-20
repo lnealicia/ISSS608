@@ -148,15 +148,12 @@ Filter and keep only rows that:
 
 -   Sales Date occur within Q1 2024 i.e. between 01 Jan 2024 to 31 Mar 2024 inclusive.
 
--   Purchaser Address Indicator not equal to "HDB"
-
 In addition, duplicate and empty rows are also removed.
 
 ```{r}
 q1_pte_raw <- realis_all %>%
     filter(`Sale Date` >= as.Date("2024-01-01") & 
-          `Sale Date` <= as.Date("2024-03-31"),
-          `Purchaser Address Indicator` != "HDB") %>%
+          `Sale Date` <= as.Date("2024-03-31")) %>%
     distinct() %>%
     drop_na()
 ```
