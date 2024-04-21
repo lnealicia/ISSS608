@@ -1,5 +1,5 @@
 ---
-title: "Take-home Exercise 1 Part I - Creating Data Visualisation Beyond Default"
+title: "Take-home Exercise 1 - Creating Data Visualisation Beyond Default"
 author: "Alicia Loh"
 date-modified: last-modified
 execute: 
@@ -364,7 +364,8 @@ qa_plot <- ggplot(qa_pte,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_flip()
 
 qa_plot
 ```
@@ -386,7 +387,8 @@ q1_plot <- ggplot(q1,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_flip()
 
 q1_plot
 ```
@@ -408,7 +410,8 @@ q2_plot <- ggplot(q2,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_flip()
 q2_plot
 ```
 
@@ -429,7 +432,8 @@ q3_plot <- ggplot(q3,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_flip()
 q3_plot
 ```
 
@@ -450,7 +454,8 @@ q4_plot <- ggplot(q4,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_flip()
 q4_plot
 ```
 
@@ -471,24 +476,24 @@ q5_plot <- ggplot(q5,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  coord_flip()
 q5_plot
 ```
 :::
 
 ### Composite Plot
 
-Using **`patchwork`** package, the above plots are stacked into 1 composite plot.
+Using **`patchwork`** package, the plots for Q1 2023 and Q1 2024 are stacked into 1 composite plot.
 
 ```{r}
-(q1_plot | q2_plot) / 
-  (q3_plot / q4_plot) / q5_plot
+q1_plot / q5_plot
 ```
 
 ::: callout-tip
 ## Write Up
 
-There are six private property types in the dataset.
+Comparing the raincloud
 
 The boxplot shows Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status. Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers.
 
