@@ -4,8 +4,14 @@ title: "About"
 
 Hello, my name is Alicia. Welcome to my Visual Analytics learning journey.
 
-|                                                  |                                                                                                                                                         |
-|--------------------|----------------------------------------------------|
-| ![](images/clipboard-2500192515.png){width="70"} | [My motivations for MITB](https://masters.smu.edu.sg/programme/master_of_it_in_business/community-stories/alicia_loh_analytics)                         |
-| ![](images/clipboard-3389787073.png){width="51"} | [Chat with me on UniBuddy](https://api.unibuddy.co/og/singapore-management-university-pg/buddies/students/659ea87b6b5e790e17aa7e10?buddyPosition=share) |
-| ![](images/clipboard-2757522519.png){width="51"} | [Linkedin](https://www.linkedin.com/in/lnealicia/)                                                                                                      |
+``` html
+<iframe width="768" height="432" src="https://miro.com/app/live-embed/uXjVKR8-IxE=/?moveToViewport=-1002,369,1343,399&embedId=329478284806" frameborder="0" scrolling="no" allow="fullscreen; clipboard-read; clipboard-write" allowfullscreen></iframe>
+```
+
+|                                                              |                                                                                                                                                         |
+|----------------------|--------------------------------------------------|
+| ![](images/clipboard-2500192515.png){width="70"}             | [My motivations for MITB](https://masters.smu.edu.sg/programme/master_of_it_in_business/community-stories/alicia_loh_analytics)                         |
+| ![](images/clipboard-3389787073.png){width="51"}             | [Chat with me on UniBuddy](https://api.unibuddy.co/og/singapore-management-university-pg/buddies/students/659ea87b6b5e790e17aa7e10?buddyPosition=share) |
+| ![](images/clipboard-2757522519.png){width="51"}             | [Linkedin](https://www.linkedin.com/in/lnealicia/)                                                                                                      |
+| ![](images/clipboard-3089214546.png){width="51"}             | [Tableau](https://public.tableau.com/app/profile/lne.alicia/vizzes)                                                                                     |
+| ![](images/clipboard-3605694906.png){width="52" height="51"} | [GitHub](https://github.com/lnealicia)                                                                                                                  |
