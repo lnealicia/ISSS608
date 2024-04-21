@@ -303,8 +303,8 @@ ggplot(q1_pte,
 #| eval: false
 
 ggplot(q1_pte, 
-       aes(x = RACE, 
-           y = ENGLISH)) +
+       aes(x = `Property Type`, 
+           y = `Unit Price ($ PSM)`)) +
   stat_halfeye(adjust = 0.5,
                justification = -0.2,
                .width = 0,
@@ -315,7 +315,8 @@ ggplot(q1_pte,
             justification = 1.2, 
             binwidth = .5,
             dotsize = 1.5) +
-  coord_flip() +
+  scale_y_continuous(labels = scales::number_format()) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   theme_economist()
 ```
 :::
