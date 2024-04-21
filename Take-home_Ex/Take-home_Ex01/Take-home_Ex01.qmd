@@ -493,7 +493,7 @@ Two data sets will be used to create the map. They are:
 
 -   MPSZ-2019: This data provides the sub-zone boundary of URA Master Plan 2019. It can be downloaded at [data.gov.sg](https://data.gov.sg/) It consists of the geographical boundary of Singapore at the planning subzone level. The data is based on URA Master Plan 2019.
 
--   Private residential property transaction data from 1st January 2024 to 31st March 2024 in tibble data frame (i.e. `qa_pte`).
+-   Private residential property transaction data from 1st January 2024 to 31st March 2024 in tibble data frame (i.e. `q5`).
 
 The code chunk below loads the following packages:
 
@@ -530,7 +530,7 @@ plan(multisession)
 
 url <- "https://www.onemap.gov.sg/api/common/elastic/search"
 
-postcodes <- unique(qa_pte$`Postal Code`)
+postcodes <- unique(q5$`Postal Code`)
 
 # Function to fetch data for a single postal code
 fetch_postcode_data <- function(postcode) {
@@ -592,7 +592,7 @@ mpsz <- st_read(dsn = "data/geospatial",
 Link postal code to their relevant coordinates. Empty rows are removed. Not all postal codes may have relevant sales during Q1 of 2024.
 
 ```{r}
-qa_pte_coor <- qa_pte %>%
+q5_coor <- q5 %>%
     left_join(
         found %>% select(results.POSTAL, results.LATITUDE, results.LONGITUDE),
         by = c("Postal Code" = "results.POSTAL")
@@ -607,7 +607,7 @@ qa_pte_coor <- qa_pte %>%
 ### Convert to a sf tibble data frame
 
 ```{r}
-qa_pte_sf <- st_as_sf(qa_pte_coor,
+q5_sf <- st_as_sf(q5_coor,
                        coords = c("Longitude", "Latitude"),
                        crs =4326) %>%
   st_transform(crs = 3414)
@@ -616,7 +616,7 @@ qa_pte_sf <- st_as_sf(qa_pte_coor,
 ### Keep relevant columns
 
 ```{r}
-qa_pte_sf_plot <- qa_pte_sf %>%
+q5_sf_plot <- q5_sf %>%
     select(-`Project Name`,
            -`Sale Date`,
            -`Address`,
@@ -628,7 +628,7 @@ qa_pte_sf_plot <- qa_pte_sf %>%
 ### Average Transacted Price by Planning Area
 
 ```{r}
-avg_txn_px <- qa_pte_sf_plot %>%
+avg_txn_px <- q5_sf_plot %>%
     group_by(`Planning Area`) %>%
     summarize(
         Avg_Transacted_Price = mean(`Transacted Price ($)`, na.rm = TRUE)
@@ -672,7 +672,7 @@ map <- tm_shape(mpsz_avg_txn_px) +
                 n = 7) +
     tmap_options(check.and.fix = TRUE) +
     
-    tm_shape(qa_pte_sf_plot) +
+    tm_shape(q5_sf_plot) +
     tm_dots(col = "Property Type") +
 
   tm_view(set.zoom.limits = c(11,14))
@@ -708,7 +708,7 @@ tmap_mode("view")
 
 map3 <- tm_shape(mpsz_avg_txn_px) +
     tm_polygons() +
-    tm_shape(qa_pte_sf_plot) +
+    tm_shape(q5_sf_plot) +
     tm_dots(col = "Property Type") +
 
   tm_view(set.zoom.limits = c(11,14))
