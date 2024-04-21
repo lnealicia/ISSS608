@@ -6,6 +6,7 @@ execute:
   eval: true
   echo: true
   warning: false
+  freeze: true
 ---
 
 ![](images/clipboard-3122103337.png){width="700"}
@@ -365,7 +366,7 @@ pacman::p_load(tmap,sf,httr, future, furrr)
 ### Geospatial Data
 
 |                                      |                                      |
-|--------------------------------------|--------------------------------------|
+|------------------------------------|------------------------------------|
 | ![](images/clipboard-3052492118.png) | ![](images/clipboard-3082063216.png) |
 
 ### **Geocoding using Singapore Land Authority (SLA) API**
