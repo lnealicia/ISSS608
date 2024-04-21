@@ -111,8 +111,6 @@ glimpse(realis_all)
 :::
 
 ::: callout-note
-The dataset used for analysis was prepared by Prof. Kam and contains data beyond the required first quarter (Q1) of 2024. If you downloaded the data directly from Realis and applied the correct filters according to the "Downloading the Dataset" section, your data should be limited to the period of Q1 2024.
-
 **realis_all contains:**
 
 -   Public and Private residential property transaction data from 1st January 2023 to 31st March 2024.
@@ -330,7 +328,7 @@ pacman::p_load(tmap,sf,httr, future, furrr)
 ### Geospatial Data
 
 |                                      |                                      |
-|--------------------------------------|--------------------------------------|
+|------------------------------------|------------------------------------|
 | ![](images/clipboard-3052492118.png) | ![](images/clipboard-3082063216.png) |
 
 ### **Geocoding using Singapore Land Authority (SLA) API**
