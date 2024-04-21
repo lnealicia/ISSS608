@@ -364,7 +364,6 @@ qa_plot <- ggplot(qa_pte,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_flip()
 
 qa_plot
@@ -387,7 +386,6 @@ q1_plot <- ggplot(q1,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_flip()
 
 q1_plot
@@ -410,7 +408,6 @@ q2_plot <- ggplot(q2,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_flip()
 q2_plot
 ```
@@ -432,7 +429,6 @@ q3_plot <- ggplot(q3,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_flip()
 q3_plot
 ```
@@ -454,7 +450,6 @@ q4_plot <- ggplot(q4,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_flip()
 q4_plot
 ```
@@ -476,7 +471,6 @@ q5_plot <- ggplot(q5,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
   coord_flip()
 q5_plot
 ```
@@ -488,6 +482,7 @@ Using **`patchwork`** package, the plots for Q1 2023 and Q1 2024 are stacked int
 
 ```{r}
 q1_plot / q5_plot
+
 ```
 
 ::: callout-tip
