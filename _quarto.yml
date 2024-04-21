@@ -2,7 +2,7 @@ project:
   type: website
 
 website:
-  title: <img src="lneblackbg" alt="Logo" style="height: 50px; margin-right: 20px;">
+  title: "ISSS608 - Visual Analytics and Applications"
   navbar:
     left: 
       - text: "Hands-on Exercise"
