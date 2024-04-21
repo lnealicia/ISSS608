@@ -350,7 +350,7 @@ The code chunk below plots the price distribution by property type for each quar
 ## All Quarters
 
 ```{r}
-ggplot(qa_pte, 
+qa_plot <- ggplot(qa_pte, 
        aes(x = `Property Type`, 
            y = `Unit Price ($ PSM)`)) +
   stat_halfeye(adjust = 0.5,
@@ -366,12 +366,13 @@ ggplot(qa_pte,
   scale_y_continuous(labels = scales::number_format()) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+qa_plot
 ```
 
 ## 2023 Q1
 
 ```{r}
-ggplot(q1, 
+q1_plot <- ggplot(q1, 
        aes(x = `Property Type`, 
            y = `Unit Price ($ PSM)`)) +
   stat_halfeye(adjust = 0.5,
@@ -386,12 +387,14 @@ ggplot(q1,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+q1_plot
 ```
 
 ## 2023 Q2
 
 ```{r}
-ggplot(q2, 
+q2_plot <- ggplot(q2, 
        aes(x = `Property Type`, 
            y = `Unit Price ($ PSM)`)) +
   stat_halfeye(adjust = 0.5,
@@ -406,12 +409,13 @@ ggplot(q2,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+q2_plot
 ```
 
 ## 2023 Q3
 
 ```{r}
-ggplot(q3, 
+q3_plot <- ggplot(q3, 
        aes(x = `Property Type`, 
            y = `Unit Price ($ PSM)`)) +
   stat_halfeye(adjust = 0.5,
@@ -426,12 +430,13 @@ ggplot(q3,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+q3_plot
 ```
 
 ## 2023 Q4
 
 ```{r}
-ggplot(q4, 
+q4_plot <- ggplot(q4, 
        aes(x = `Property Type`, 
            y = `Unit Price ($ PSM)`)) +
   stat_halfeye(adjust = 0.5,
@@ -446,12 +451,13 @@ ggplot(q4,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+q4_plot
 ```
 
 ## 2024 Q1
 
 ```{r}
-ggplot(q5, 
+q5_plot <- ggplot(q5, 
        aes(x = `Property Type`, 
            y = `Unit Price ($ PSM)`)) +
   stat_halfeye(adjust = 0.5,
@@ -466,8 +472,18 @@ ggplot(q5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+q5_plot
 ```
 :::
+
+### Composite Plot
+
+Using **`patchwork`** package, the above plots are stacked into 1 composite plot.
+
+```{r}
+(q1_plot | q2_plot) / 
+  (q3_plot / q4_plot) / q5_plot
+```
 
 ::: callout-tip
 ## Write Up
@@ -666,7 +682,7 @@ The overall plot shows both the average transacted price of the planning area an
 ```{r}
 tmap_mode("view")
 
-map <- tm_shape(mpsz_avg_txn_px) +
+tm_shape(mpsz_avg_txn_px) +
     tm_polygons(col = "Avg_Transacted_Price", 
                 palette = "YlOrRd", 
                 alpha = 0.3,
@@ -679,8 +695,6 @@ map <- tm_shape(mpsz_avg_txn_px) +
 
   tm_view(set.zoom.limits = c(11,14))
 
-map
-
 tmap_mode("plot")
 ```
 
@@ -689,7 +703,7 @@ tmap_mode("plot")
 ```{r}
 tmap_mode("view")
 
-map2 <- tm_shape(mpsz_avg_txn_px) +
+tm_shape(mpsz_avg_txn_px) +
     tm_polygons(col = "Avg_Transacted_Price", 
                 palette = "YlOrRd", 
                 alpha = 0.3,
@@ -697,8 +711,6 @@ map2 <- tm_shape(mpsz_avg_txn_px) +
                 n = 7) +
     tmap_options(check.and.fix = TRUE) +
   tm_view(set.zoom.limits = c(11,14))
-
-map2
 
 tmap_mode("plot")
 ```
@@ -708,14 +720,12 @@ tmap_mode("plot")
 ```{r}
 tmap_mode("view")
 
-map3 <- tm_shape(mpsz_avg_txn_px) +
+tm_shape(mpsz_avg_txn_px) +
     tm_polygons() +
     tm_shape(q5_sf_plot) +
     tm_dots(col = "Property Type") +
 
   tm_view(set.zoom.limits = c(11,14))
-
-map3
 
 tmap_mode("plot")
 ```
