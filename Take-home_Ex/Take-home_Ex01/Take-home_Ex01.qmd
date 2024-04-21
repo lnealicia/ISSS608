@@ -364,6 +364,7 @@ qa_plot <- ggplot(qa_pte,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
+  ylim(0, 70000) +
   coord_flip()
 
 qa_plot
@@ -386,6 +387,7 @@ q1_plot <- ggplot(q1,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
+  ylim(0, 70000) +
   coord_flip()
 
 q1_plot
@@ -408,6 +410,7 @@ q2_plot <- ggplot(q2,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
+  ylim(0, 70000) +
   coord_flip()
 q2_plot
 ```
@@ -429,6 +432,7 @@ q3_plot <- ggplot(q3,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
+  ylim(0, 70000) +
   coord_flip()
 q3_plot
 ```
@@ -450,6 +454,7 @@ q4_plot <- ggplot(q4,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
+  ylim(0, 70000) +
   coord_flip()
 q4_plot
 ```
@@ -471,6 +476,7 @@ q5_plot <- ggplot(q5,
             binwidth = .5,
             dotsize = 1.5) +
   scale_y_continuous(labels = scales::number_format()) +
+  ylim(0, 70000) +
   coord_flip()
 q5_plot
 ```
@@ -481,6 +487,9 @@ q5_plot
 Using **`patchwork`** package, the plots for Q1 2023 and Q1 2024 are stacked into 1 composite plot.
 
 ```{r}
+q1_plot <- q1_plot + labs(title = "Q1 2023")
+q5_plot <- q5_plot + labs(title = "Q1 2024")
+
 q1_plot / q5_plot
 
 ```
@@ -488,15 +497,13 @@ q1_plot / q5_plot
 ::: callout-tip
 ## Write Up
 
-Comparing the raincloud
+Comparing raincloud plots for Q1 2023 and Q1 2024 reveals trends in unit price (\$ PSM) across property types. Minimum prices rose across property types, except for condos, while maximum prices decreased with the exception of executive condos, suggesting overall reduced variability.
 
-The boxplot shows Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status. Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers.
+In 2023, terrace houses showed the highest variability, followed by condos and apartments. In 2024, apartments exhibited the highest variability, followed by condos and terrace houses. For both quarters, executive condos consistently displayed the least variability.
 
-In contrast, both Executive Condominiums and Terrace Houses demonstrate the least variability in transacted prices, with their interquartile ranges (IQR) closely aligning with their medians. This suggests a stable and consistent pricing trend for these property types.
+Median prices for all properties are generally below 20,000, except for apartments in both years.
 
-Executive Condominiums have the lowest transacted prices, indicating their appeal as an affordable option within the private housing market.
-
-Apartments and Condominiums, on the other hand, show a significant number of outliers in their transacted prices, suggesting a wider range of pricing and potentially more diversity in market conditions for these property types.
+Interestingly, while price variability remained low for executive condos, in 2023, it clustered around the median and peaked near the 75th quartile. However, in 2024, two main clusters emerged, one between 25^th^ quartile and the median, and another around the 75th quartile.
 :::
 
 ## Geographical Distribution - Choropleth Map
