@@ -64,8 +64,10 @@ The code chunk below loads the following packages using uses `p_load()` of pacma
 
 -   [**ggdist**](https://mjskay.github.io/ggdist/): a ggplot2 extension specially designed for visualising distribution and uncertainty
 
+-   [**patchwork**](https://patchwork.data-imaginist.com/articles/guides/assembly.html): an R package for preparing composite figure created using ggplot2.
+
 ```{r}
-pacman::p_load(tidyverse, reshape2, ggthemes, ggdist)
+pacman::p_load(tidyverse, reshape2, ggthemes, ggdist, patchwork)
 ```
 
 ## Importing the Data
