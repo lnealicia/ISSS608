@@ -506,6 +506,222 @@ Median prices for all properties are generally below 20,000, except for apartmen
 Interestingly, while price variability remained low for executive condos, in 2023, it clustered around the median and peaked near the 75th quartile. However, in 2024, two main clusters emerged, one between 25^th^ quartile and the median, and another around the 75th quartile.
 :::
 
+## Number of Units Sold - Bar Chart
+
+For each quarter, the data is grouped by property type, then summed by the number of units, in order to obtain the number of units sold per quarter.
+
+::: panel-tabset
+## 2023 Q1
+
+```{r}
+
+q1_sold <- q1 %>%
+  group_by(`Property Type`) %>%
+  summarise(Total_Units_Sold = sum(`Number of Units`))
+
+q1_sold
+```
+
+## 2023 Q2
+
+```{r}
+
+q2_sold <- q2 %>%
+  group_by(`Property Type`) %>%
+  summarise(Total_Units_Sold = sum(`Number of Units`))
+
+q2_sold
+```
+
+## 2023 Q3
+
+```{r}
+
+q3_sold <- q3 %>%
+  group_by(`Property Type`) %>%
+  summarise(Total_Units_Sold = sum(`Number of Units`))
+
+q3_sold
+```
+
+## 2023 Q4
+
+```{r}
+
+q4_sold <- q4 %>%
+  group_by(`Property Type`) %>%
+  summarise(Total_Units_Sold = sum(`Number of Units`))
+
+q4_sold
+```
+
+## 2024 Q1
+
+```{r}
+
+q5_sold <- q5 %>%
+  group_by(`Property Type`) %>%
+  summarise(Total_Units_Sold = sum(`Number of Units`))
+
+q5_sold
+```
+:::
+
+### Bar Chart
+
+Bar chart plots for each quarter is plotted
+
+::: panel-tabset
+## 2023 Q1
+
+```{r}
+mean_q1 <- mean(q1_sold$Total_Units_Sold)
+
+q1_bar <- ggplot(q1_sold, aes(x = `Property Type`, y = `Total_Units_Sold`)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Property Type", y = "Number of Units Sold") +
+  theme_minimal() +
+  ylim(0,2700) +
+geom_hline(
+    aes(yintercept = mean_q1),
+    colour = "darkgreen",
+    linewidth = .6,
+    linetype = "dashed") +
+  annotate(geom = "text",
+           x = min(q1_sold$`Property Type`), 
+           y = mean_q1 *1.25,
+           label = paste0("Mean: ", round(mean_q1, 2)),
+           colour = "darkgreen") +
+  ggtitle("2023 Q1")
+
+q1_bar
+```
+
+## 2023 Q2
+
+```{r}
+mean_q2 <- mean(q2_sold$Total_Units_Sold)
+
+q2_bar <- ggplot(q2_sold, aes(x = `Property Type`, y = `Total_Units_Sold`)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Property Type", y = "Number of Units Sold") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(0,2700) +
+geom_hline(
+    aes(yintercept = mean_q2),
+    colour = "darkgreen",
+    linewidth = .6,
+    linetype = "dashed") +
+  annotate(geom = "text",
+           x = min(q2_sold$`Property Type`), 
+           y = mean_q2 *1.25,
+           label = paste0("Mean: ", round(mean_q2, 2)),
+           colour = "darkgreen") +
+  ggtitle("2023 Q2")
+ q2_bar
+```
+
+## 2023 Q3
+
+```{r}
+mean_q3 <- mean(q3_sold$Total_Units_Sold)
+
+q3_bar <- ggplot(q3_sold, aes(x = `Property Type`, y = `Total_Units_Sold`)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Property Type", y = "Number of Units Sold") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(0,2700) +
+geom_hline(
+    aes(yintercept = mean_q3),
+    colour = "darkgreen",
+    linewidth = .6,
+    linetype = "dashed") +
+  annotate(geom = "text",
+           x = min(q3_sold$`Property Type`), 
+           y = mean_q3 *1.25,
+           label = paste0("Mean: ", round(mean_q3, 2)),
+           colour = "darkgreen") +
+  ggtitle("2023 Q3")
+ q3_bar
+```
+
+## 2023 Q4
+
+```{r}
+mean_q4 <- mean(q4_sold$Total_Units_Sold)
+
+q4_bar <- ggplot(q4_sold, aes(x = `Property Type`, y = `Total_Units_Sold`)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Property Type", y = "Number of Units Sold") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(0,2700) +
+geom_hline(
+    aes(yintercept = mean_q4),
+    colour = "darkgreen",
+    linewidth = .6,
+    linetype = "dashed") +
+  annotate(geom = "text",
+           x = min(q4_sold$`Property Type`), 
+           y = mean_q4 *1.25,
+           label = paste0("Mean: ", round(mean_q4, 2)),
+           colour = "darkgreen") +
+  ggtitle("2023 Q4")
+ q4_bar
+```
+
+## 2024 Q1
+
+```{r}
+mean_q5 <- mean(q5_sold$Total_Units_Sold)
+
+q5_bar <- ggplot(q5_sold, aes(x = `Property Type`, y = `Total_Units_Sold`)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(x = "Property Type", y = "Number of Units Sold") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylim(0,2700) +
+geom_hline(
+    aes(yintercept = mean_q5),
+    colour = "darkgreen",
+    linewidth = .6,
+    linetype = "dashed") +
+  annotate(geom = "text",
+           x = min(q5_sold$`Property Type`), 
+           y = mean_q5 *1.25,
+           label = paste0("Mean: ", round(mean_q5, 2)),
+           colour = "darkgreen") +
+  ggtitle("2024 Q1")
+ q5_bar
+```
+:::
+
+### Composite Plot
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
+
+q1_bar + q2_bar + q3_bar + q4_bar + q5_bar
+```
+
+## Code
+
+```{r}
+#| eval: false
+
+q1_bar + q2_bar + q3_bar + q4_bar + q5_bar
+```
+:::
+
+::: callout-note
+## Write Up
+:::
+
 ## Geographical Distribution - Choropleth Map
 
 ::: callout-note
