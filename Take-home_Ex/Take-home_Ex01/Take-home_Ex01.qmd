@@ -115,12 +115,10 @@ glimpse(realis_all)
 
 -   Public and Private residential property transaction data from 1st January 2023 to 31st March 2024.
 
--   There are 26806 rows and 21 columns.
+-   There are 26,806 rows and 21 columns.
 :::
 
 ## Data Preparation
-
-The task only requires data from the private residential market and sub-markets of Singapore for the 1st quarter of 2024.
 
 ### Standardise Date Format
 
@@ -128,30 +126,26 @@ The "Sales Date" column is currently a *cha* type. It needs to be converted into
 
 **`dmy()`** is a function from the [**lubridate**](https://lubridate.tidyverse.org/) package that converts character strings to date format in the day-month-year (DMY) order.
 
-```{r}
+::: panel-tabset
+## Standardise Date Format
 
+```{r}
 realis_all$`Sale Date` <- dmy(realis_all$`Sale Date`)
 ```
 
-#### View Data
+## View Data
 
 ```{r}
-
 head(realis_all$`Sale Date`)
 ```
+:::
 
 ### Keep Relevant Rows
 
-Filter and keep only rows that:
-
--   Sales Date occur within Q1 2024 i.e. between 01 Jan 2024 to 31 Mar 2024 inclusive.
-
-In addition, duplicate and empty rows are also removed.
+Duplicate and empty rows are removed.
 
 ```{r}
 q1_pte_raw <- realis_all %>%
-    filter(`Sale Date` >= as.Date("2024-01-01") & 
-          `Sale Date` <= as.Date("2024-03-31")) %>%
     distinct() %>%
     drop_na()
 ```
@@ -165,56 +159,89 @@ glimpse(q1_pte_raw)
 ::: callout-note
 **q1_pte_raw contains:**
 
--   Private residential property transaction data from 1st January 2024 to 31st March 2024
+-   Private residential property transaction data from 1st January 2023 to 31st March 2024
 
--   There are 4902 rows and 21 columns.
+-   There are 26,800 rows and 21 columns.
 :::
 
 ### Keep Relevant Columns
 
-Not all 21 columns will be used for analysis e.g. irrelevant, contains overlapping information as another column. Only relevant columns will be kept.
+Not all 21 columns will be used for analysis e.g. contains overlapping information as another column. Only relevant columns will be kept.
 
 Columns to drop:
 
--   Type of Area: Not used in analysis
+-   Area (SQFT): Similar information as Area (SQM)
 
--   Area (SQM): Similar information as Area (SQFT)
-
--   Unit Price (\$ PSM): Similar information as Unit Price (\$ PSF)
+-   Unit Price (\$ PSF): Similar information as Unit Price (\$ PSM)
 
 -   Nett Price (\$): Similar information as Transacted Price (\$)
-
--   Purchaser Address Indicator: Not used in analysis
 
 -   Postal District and Postal Sector: Overlapping information as Postal Code
 
 Columns to be dropped can be specified by prefixing the column names with a minus sign (-) when using the **`select()`** function from the **`dplyr`** package.
 
+::: panel-tabset
+## Keep Relevant Columns
+
 ```{r}
 q1_pte <- q1_pte_raw %>%
     select(
-        -`Type of Area`,
-        -`Area (SQM)`,
-        -`Unit Price ($ PSM)`,
-        -`Nett Price($)`,
-        -`Purchaser Address Indicator`,
+        -`Area (SQFT)`,
+        -`Unit Price ($ PSF)`,
         -`Postal District`,
         -`Postal Sector`
     )
 ```
 
-#### View Data
+## View Data
 
 ```{r}
 glimpse(q1_pte)
 ```
+:::
 
 ::: callout-note
 **q1_pte contains:**
 
 -   Private residential property transaction data from 1st January 2024 to 31st March 2024
 
--   There are 4902 rows and 14 columns.
+-   There are 26,800 rows and 14 columns.
+
+-   Columns:
+
+    -   Project Name
+
+    -   Transacted Price (\$)
+
+    -   Sale Date
+
+    -   Address
+
+    -   Type of Sale
+
+    -   Type of Area
+
+    -   Area (SQM)
+
+    -   Unit Price (\$PSM)
+
+    -   Nett Price
+
+    -   Property Type
+
+    -   Number of Units
+
+    -   Tensure
+
+    -   Completion Date
+
+    -   Purchaser Address Indicator
+
+    -   Postal Code
+
+    -   Planning Region
+
+    -   Planning Area
 :::
 
 # Visualisation
