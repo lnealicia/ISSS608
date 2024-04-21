@@ -264,26 +264,20 @@ The dataset contains 5 quarters:
 To allow for comparison between quarters, qa_pte will be split into the respective quarters by `Sale Date`.
 
 ```{r}
-qa_pte <- qa_pte %>%
-  mutate(Quarter = cut(`Sale Date`,
-                       breaks = as.Date(c("2023-01-01", "2023-04-01", "2023-07-01", "2023-10-01", "2024-01-01")),
-                       labels = c("Q1", "Q2", "Q3", "Q4", "Q5")))
-
-# Split the dataset into quarters
 q1 <- qa_pte %>%
-  filter(Quarter == "Q1")
+  filter(`Sale Date` <= "2023-03-31")
 
 q2 <- qa_pte %>%
-  filter(Quarter == "Q2")
+  filter(`Sale Date` > "2023-03-31" & `Sale Date` <= "2023-06-30")
 
 q3 <- qa_pte %>%
-  filter(Quarter == "Q3")
+  filter(`Sale Date` > "2023-06-30" & `Sale Date` <= "2023-09-30")
 
 q4 <- qa_pte %>%
-  filter(Quarter == "Q4")
+  filter(`Sale Date` > "2023-09-30" & `Sale Date` <= "2023-12-31")
 
 q5 <- qa_pte %>%
-  filter(Quarter == "Q5")
+  filter(`Sale Date` > "2023-12-31")
 ```
 
 ### View Data
@@ -292,7 +286,7 @@ q5 <- qa_pte %>%
 ## Q1
 
 ```{r}
-summary(q1)
+glimpse(q1)
 ```
 
 ## Q2
@@ -348,6 +342,8 @@ A raincloud plot produces a half-density to a distribution plot. It got its name
 
 For better visibility, **`labels`** parameter with the function **`scales::number`**, formats the y-axis labels to include thousands separators.
 
+The code chunk below plots the price distribution by property type for each quarter and overall.
+
 ::: panel-tabset
 ## All Quarters
 
@@ -373,9 +369,87 @@ ggplot(qa_pte,
 ## 2023 Q1
 
 ```{r}
-#| eval: false
+ggplot(q1, 
+       aes(x = `Property Type`, 
+           y = `Unit Price ($ PSM)`)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  stat_dots(side = "left", 
+            justification = 1.2, 
+            binwidth = .5,
+            dotsize = 1.5) +
+  scale_y_continuous(labels = scales::number_format()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
 
-ggplot(qa_pte, 
+## 2023 Q2
+
+```{r}
+ggplot(q2, 
+       aes(x = `Property Type`, 
+           y = `Unit Price ($ PSM)`)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  stat_dots(side = "left", 
+            justification = 1.2, 
+            binwidth = .5,
+            dotsize = 1.5) +
+  scale_y_continuous(labels = scales::number_format()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## 2023 Q3
+
+```{r}
+ggplot(q3, 
+       aes(x = `Property Type`, 
+           y = `Unit Price ($ PSM)`)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  stat_dots(side = "left", 
+            justification = 1.2, 
+            binwidth = .5,
+            dotsize = 1.5) +
+  scale_y_continuous(labels = scales::number_format()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## 2023 Q4
+
+```{r}
+ggplot(q4, 
+       aes(x = `Property Type`, 
+           y = `Unit Price ($ PSM)`)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  stat_dots(side = "left", 
+            justification = 1.2, 
+            binwidth = .5,
+            dotsize = 1.5) +
+  scale_y_continuous(labels = scales::number_format()) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+## 2024 Q1
+
+```{r}
+ggplot(q5, 
        aes(x = `Property Type`, 
            y = `Unit Price ($ PSM)`)) +
   stat_halfeye(adjust = 0.5,
