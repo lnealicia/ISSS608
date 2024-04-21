@@ -223,7 +223,7 @@ glimpse(q1_pte)
 
     -   Area (SQM)
 
-    -   Unit Price (\$PSM)
+    -   Unit Price (\$ PSM)
 
     -   Nett Price
 
@@ -266,9 +266,9 @@ The different types in the dataset are:
 
 -   Detached House
 
-## Price Distribution
+## Price Distribution - Raincloud Plot
 
-A box plot is used to visualize the distribution of transacted prices for each private residence property type using [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html). This type of plot shows five summary statistics: the median, two hinges (interquartile range), and two whiskers (extreme data points within 1.5 times the IQR). Additionally, all individual "outlier" points outside the whiskers are displayed, providing insight into the spread and variability of prices across different property types.
+A rainbloud plot produces a half-density to a distribution plot. It got its name due to the likeness of its density plot to a shape of a "raincloud". The raincloud (half-density) plot enhances the traditional box-plot by highlighting multiple modalities. The raincloud plot shows where densities are clustered.
 
 For better visibility, **`labels`** parameter with the function **`scales::number`**, formats the y-axis labels to include thousands separators.
 
@@ -278,17 +278,23 @@ For better visibility, **`labels`** parameter with the function **`scales::numbe
 ```{r}
 #| echo: false
 
-box_plot <- ggplot(data = q1_pte, 
-                   aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
-            geom_boxplot() +
-            labs(title = "Box Plot of Transacted Price ($) by Property Type",
-                x = "Property Type",
-                y = "Transacted Price ($)") +
-            scale_y_continuous(labels = scales::number) + 
-            theme_gray() + theme(axis.text.x = element_text(angle = 45, 
-                                                            hjust = 1,
-                                                            vjust=1))
-box_plot
+ggplot(q1_pte, 
+       aes(x = `Property Type`, 
+           y = `Unit Price ($ PSM)`)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  stat_dots(side = "left", 
+            justification = 1.2, 
+            binwidth = .5,
+            dotsize = 1.5) +
+  scale_y_continuous(labels = scales::number_format()) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme_economist()
+
 ```
 
 ## Code
@@ -296,18 +302,21 @@ box_plot
 ```{r}
 #| eval: false
 
-box_plot <- ggplot(data = q1_pte, 
-                   aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
-            geom_boxplot() +
-            labs(title = "Box Plot of Transacted Price ($) by Property Type",
-                x = "Property Type",
-                y = "Transacted Price ($)") +
-            scale_y_continuous(labels = scales::number) + 
-            theme_gray() + theme(axis.text.x = element_text(angle = 45, 
-                                                            hjust = 1,
-                                                            vjust=1))
-box_plot
-
+ggplot(q1_pte, 
+       aes(x = RACE, 
+           y = ENGLISH)) +
+  stat_halfeye(adjust = 0.5,
+               justification = -0.2,
+               .width = 0,
+               point_colour = NA) +
+  geom_boxplot(width = .20,
+               outlier.shape = NA) +
+  stat_dots(side = "left", 
+            justification = 1.2, 
+            binwidth = .5,
+            dotsize = 1.5) +
+  coord_flip() +
+  theme_economist()
 ```
 :::
 

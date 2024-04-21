@@ -534,7 +534,7 @@ ggplot(exam_df,
 Remove the slab interval by setting .width = 0 and point_colour = NA.
 :::
 
-## **Adding the boxplot** 
+## **Adding the boxplot**
 
 The second geometry layer i.e. a narrow boxplot is produced using [`geom_boxplot()`](https://r4va.netlify.app/chap09) of ggplot2 This produces a narrow boxplot.
 
