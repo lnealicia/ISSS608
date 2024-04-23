@@ -286,7 +286,7 @@ Create an animated bubble plot by using `plot_ly()` method.
 ::: panel-tabset
 ## Plot
 
-```{r}
+```{r,eval=FALSE}
 #| echo: false
 
 bp <- globalPop %>%
