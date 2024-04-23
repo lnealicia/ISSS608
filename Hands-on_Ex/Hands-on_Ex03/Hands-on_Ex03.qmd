@@ -12,32 +12,29 @@ execute:
 
 Learning Objectives:
 
--   Control the placement of annotation on a graph by using functions provided in ggrepel package,
-
--   Create professional publication quality figure by using functions provided in ggthemes and hrbrthemes packages,
-
--   Plot composite figure by combining ggplot2 graphs by using patchwork package.
+-   Create interactive data visualisation by using functions provided by **ggiraph** and **plotlyr** packages
 
 # Getting Started
 
 ## Installing and loading the required libraries
 
-Besides tidyverse, the following R packages will be used.
+The following R packages will be used:
 
--   ggrepel: an R package provides geoms for ggplot2 to repel overlapping text labels.
+-   [**ggiraph**](https://davidgohel.github.io/ggiraph/) for making ‘ggplot’ graphics interactive.
 
--   ggthemes: an R package provides some extra themes, geoms, and scales for ‘ggplot2’.
+-   [**plotly**](https://plotly.com/r/), R library for plotting interactive statistical graphs.
 
--   hrbrthemes: an R package provides typography-centric themes and theme components for ggplot2.
+-   [**DT**](https://rstudio.github.io/DT/) provides an R interface to the JavaScript library [DataTables](https://datatables.net/) that create interactive table on html page.
 
--   patchwork: an R package for preparing composite figure created using ggplot2.
+-   [**tidyverse**](https://www.tidyverse.org/), a family of modern R packages specially designed to support data science, analysis and communication task including creating static statistical graphs.
+
+-   [**patchwork**](https://patchwork.data-imaginist.com/) for combining multiple ggplot2 graphs into one figure.
 
 Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
 
-```{r,eval=FALSE}
-pacman::p_load(ggrepel, patchwork, 
-               ggthemes, hrbrthemes,
-               tidyverse)
+```{r}
+pacman::p_load(ggiraph, plotly, 
+               patchwork, DT, tidyverse)
 ```
 
 ## Importing the Data
@@ -60,536 +57,693 @@ exam_data <- read_csv("data/Exam_data.csv")
 
     -   The continuous attributes are: MATHS, ENGLISH and SCIENCE.
 
-# **Beyond ggplot2 Annotation: ggrepel**
+# **Interactive Data Visualisation - ggiraph methods**
 
-One of the challenge in plotting statistical graph is annotation, especially with large number of data points.
+[ggiraph](https://davidgohel.github.io/ggiraph/) is a html widget and a ggplot2 extension. It allows ggplot graphics to be interactive.
+
+Interactive elements are made possible with [**ggplot geometries**](https://davidgohel.github.io/ggiraph/reference/#section-interactive-geometries) that understands three arguments:
+
+-   **Tooltip**: a column of data-sets that contain tooltips to be displayed when the mouse is over elements.
+
+-   **Onclick**: a column of data-sets that contain a JavaScript function to be executed when elements are clicked.
+
+-   **Data_id**: a column of data-sets that contain an id to be associated with elements.
+
+## **Tooltip effect with *tooltip* aesthetic**
+
+Below shows a typical code chunk to plot an interactive statistical graph by using **ggiraph** package. 
+
+First, an interactive version of ggplot2 geom (i.e. [`geom_dotplot_interactive()`](https://davidgohel.github.io/ggiraph/reference/geom_dotplot_interactive.html)) will be used to create the basic graph. Then, [`girafe()`](https://davidgohel.github.io/ggiraph/reference/girafe.html) will be used to generate an svg object to be displayed on an html page.
 
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r}
 #| echo: false
 
-ggplot(data=exam_data, 
-       aes(x= MATHS, 
-           y=ENGLISH)) +
-  geom_point() +
-  geom_smooth(method=lm, 
-              size=0.5) +  
-  geom_label(aes(label = ID), 
-             hjust = .5, 
-             vjust = -.5) +
-  coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100)) +
-  ggtitle("English scores versus Maths scores for Primary 3")
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(
+    aes(tooltip = ID),
+    stackgroups = TRUE, 
+    binwidth = 1, 
+    method = "histodot") +
+  scale_y_continuous(NULL, 
+                     breaks = NULL)
+girafe(
+  ggobj = p,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
 ```
 
 ## Code
 
-```{r,eval=FALSE}
+```{r}
 #| eval: false
 
-ggplot(data=exam_data, 
-       aes(x= MATHS, 
-           y=ENGLISH)) +
-  geom_point() +
-  geom_smooth(method=lm, 
-              size=0.5) +  
-  geom_label(aes(label = ID), 
-             hjust = .5, 
-             vjust = -.5) +
-  coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100)) +
-  ggtitle("English scores versus Maths scores for Primary 3")
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(
+    aes(tooltip = ID),
+    stackgroups = TRUE, 
+    binwidth = 1, 
+    method = "histodot") +
+  scale_y_continuous(NULL, 
+                     breaks = NULL)
+girafe(
+  ggobj = p,
+  width_svg = 6,
+  height_svg = 6*0.618
+)
 ```
 :::
 
-## **Working with ggrepel**
+## **Displaying multiple information on tooltip**
 
-[**ggrepel**](https://ggrepel.slowkow.com/) is an extension of **ggplot2** package which provides `geoms` for **ggplot2** to repel overlapping text seen below. Simply replace `geom_text()` by [`geom_text_repel()`](https://ggrepel.slowkow.com/reference/geom_text_repel.html) and `geom_label()` by [`geom_label_repel`](https://ggrepel.slowkow.com/reference/geom_text_repel.html).
+The first three lines of codes in the code chunk create a new field called *tooltip*. At the same time, it populates text in ID and CLASS fields into the newly created field. Next, this newly created field is used as tooltip field as shown in the code of line 7. By hovering the mouse pointer on an data point of interest, the student’s ID will be displayed.
 
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r}
 #| echo: false
 
-ggplot(data=exam_data, 
-       aes(x= MATHS, 
-           y=ENGLISH)) +
-  geom_point() +
-  geom_smooth(method=lm, 
-              size=0.5) +  
-  geom_label_repel(aes(label = ID), 
-                   fontface = "bold") +
-  coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100)) +
-  ggtitle("English scores versus Maths scores for Primary 3")
+exam_data$tooltip <- c(paste0(     
+  "Name = ", exam_data$ID,         
+  "\n Class = ", exam_data$CLASS)) 
+
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(
+    aes(tooltip = exam_data$tooltip), 
+    stackgroups = TRUE,
+    binwidth = 1,
+    method = "histodot") +
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(
+  ggobj = p,
+  width_svg = 8,
+  height_svg = 8*0.618
+)
 ```
 
 ## Code
 
-```{r,eval=FALSE}
+```{r}
 #| eval: false
 
-ggplot(data=exam_data, 
-       aes(x= MATHS, 
-           y=ENGLISH)) +
-  geom_point() +
-  geom_smooth(method=lm, 
-              size=0.5) +  
-  geom_label_repel(aes(label = ID), 
-                   fontface = "bold") +
-  coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100)) +
-  ggtitle("English scores versus Maths scores for Primary 3")
+exam_data$tooltip <- c(paste0(     
+  "Name = ", exam_data$ID,         
+  "\n Class = ", exam_data$CLASS)) 
+
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(
+    aes(tooltip = exam_data$tooltip), 
+    stackgroups = TRUE,
+    binwidth = 1,
+    method = "histodot") +
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(
+  ggobj = p,
+  width_svg = 8,
+  height_svg = 8*0.618
+)
 ```
 :::
 
-::: callout-note
-Benefits of ggplot2 over in-built R graphics
+## Customising Tooltop style
 
--   Automated Legends: Unlike built-in plotting which requires manual legend creation, ggplot2 automatically generates legends based on the data's aesthetics. This streamlines the process, especially for beginners who may find managing legends challenging.
+Code chunk below uses [`opts_tooltip()`](https://davidgohel.github.io/ggiraph/reference/opts_tooltip.html) of **ggiraph** to customize tooltip rendering by add css declarations.
 
--   Simplified Faceting: ggplot2 simplifies the creation of faceted plots (multiple subplots) compared to base R plotting. The latter can be quite complex, requiring setup with par() and potentially confusing for loops, which might be overwhelming for beginners.
-
--   Tidy Data Integration: ggplot2 encourages the use of 'tidy data' principles, aligning with how other R tools and packages handle data. This practice helps beginners learn a consistent and widely-adopted approach to data analysis in R.
-:::
-
-# **Beyond ggplot2 [Themes](https://ggplot2.tidyverse.org/reference/#themes)**
-
-ggplot2 has eight [built-in themes](https://ggplot2.tidyverse.org/reference/ggtheme.html):
-
--   `theme_gray()`
-
--   `theme_bw()`
-
--   `theme_classic()`
-
--   `theme_dark()`
-
--   `theme_light()`
-
--   `theme_linedraw()`
-
--   `theme_minimal()`
-
--   `theme_void()`
+Notice that the background colour of the tooltip is black and the font colour is white and bold.
 
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r}
 #| echo: false
 
-ggplot(data=exam_data, 
-             aes(x = MATHS)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") +
-  theme_gray() +
-  ggtitle("Distribution of Maths scores") 
+tooltip_css <- "background-color:white; #<<
+font-style:bold; color:black;" #<<
 
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(              
+    aes(tooltip = ID),                   
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618,
+  options = list(    #<<
+    opts_tooltip(    #<<
+      css = tooltip_css)) #<<
+)                                        
 ```
 
 ## Code
 
-```{r,eval=FALSE}
+```{r}
 #| eval: false
 
-ggplot(data=exam_data, 
-             aes(x = MATHS)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") +
-  theme_gray() +
-  ggtitle("Distribution of Maths scores") 
+tooltip_css <- "background-color:white; #<<
+font-style:bold; color:black;" #<<
+
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(              
+    aes(tooltip = ID),                   
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618,
+  options = list(    #<<
+    opts_tooltip(    #<<
+      css = tooltip_css)) #<<
+)                                        
 
 ```
 :::
 
-## **Working with ggtheme package**
+::: callout-tip
+For more customisations, refer to [Customizing girafe objects](https://davidgohel.github.io/ggiraph/articles/offcran/customizing.html)
+:::
 
-[**ggthemes**](https://cran.r-project.org/web/packages/ggthemes/) provides [‘ggplot2’ themes](https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/) that replicate the look of plots made by:
+## **Displaying statistics on tooltip**
 
--   [Fivethirtyeight](https://fivethirtyeight.com/)
-
--   [The Economist](https://www.economist.com/graphic-detail)
-
--   [The Wall Street Journal](https://www.pinterest.com/wsjgraphics/wsj-graphics/)
-
--   among others
-
-[*The Economist* theme](https://jrnold.github.io/ggthemes/reference/theme_economist.html) is used below.
+Code chunk below shows an advanced way to customise tooltip. In this example, a function is used to compute 90% confident interval of the mean. The derived statistics are then displayed in the tooltip.
 
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r}
 #| echo: false
 
-ggplot(data=exam_data, 
-             aes(x = MATHS)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") +
-  ggtitle("Distribution of Maths scores") +
-  theme_economist()
+tooltip <- function(y, ymax, accuracy = .01) {
+  mean <- scales::number(y, accuracy = accuracy)
+  sem <- scales::number(ymax - y, accuracy = accuracy)
+  paste("Mean maths scores:", mean, "+/-", sem)
+}
+
+gg_point <- ggplot(data=exam_data, 
+                   aes(x = RACE),
+) +
+  stat_summary(aes(y = MATHS, 
+                   tooltip = after_stat(  
+                     tooltip(y, ymax))),  
+    fun.data = "mean_se", 
+    geom = GeomInteractiveCol,  
+    fill = "light blue"
+  ) +
+  stat_summary(aes(y = MATHS),
+    fun.data = mean_se,
+    geom = "errorbar", width = 0.2, size = 0.2
+  )
+
+girafe(ggobj = gg_point,
+       width_svg = 8,
+       height_svg = 8*0.618)
 ```
 
 ## Code
 
-```{r,eval=FALSE}
+```{r}
 #| eval: false
 
-ggplot(data=exam_data, 
-             aes(x = MATHS)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") +
-  ggtitle("Distribution of Maths scores") +
-  theme_economist()
+tooltip <- function(y, ymax, accuracy = .01) {
+  mean <- scales::number(y, accuracy = accuracy)
+  sem <- scales::number(ymax - y, accuracy = accuracy)
+  paste("Mean maths scores:", mean, "+/-", sem)
+}
+
+gg_point <- ggplot(data=exam_data, 
+                   aes(x = RACE),
+) +
+  stat_summary(aes(y = MATHS, 
+                   tooltip = after_stat(  
+                     tooltip(y, ymax))),  
+    fun.data = "mean_se", 
+    geom = GeomInteractiveCol,  
+    fill = "light blue"
+  ) +
+  stat_summary(aes(y = MATHS),
+    fun.data = mean_se,
+    geom = "errorbar", width = 0.2, size = 0.2
+  )
+
+girafe(ggobj = gg_point,
+       width_svg = 8,
+       height_svg = 8*0.618)
 ```
 :::
 
-## **Working with hrbthems package**
+## **Hover effect with *data_id* aesthetic**
 
-[**hrbrthemes**](https://cinc.rud.is/web/packages/hrbrthemes/) package provides a base theme that focuses on typographic elements, including where various labels are placed as well as the fonts that are used.
+Code chunk below shows the second interactive feature of ggiraph, namely `data_id`.
+
+Elements associated with a *data_id* (i.e CLASS) will be highlighted upon mouse over.
 
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r}
 #| echo: false
 
-ggplot(data=exam_data, 
-             aes(x = MATHS)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") +
-  ggtitle("Distribution of Maths scores") +
-  theme_ipsum()
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(           
+    aes(data_id = CLASS),             
+    stackgroups = TRUE,               
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618                      
+)                                        
 ```
 
 ## Code
 
-```{r,eval=FALSE}
+```{r}
 #| eval: false
 
-ggplot(data=exam_data, 
-             aes(x = MATHS)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") +
-  ggtitle("Distribution of Maths scores") +
-  theme_ipsum()
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(           
+    aes(data_id = CLASS),             
+    stackgroups = TRUE,               
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618                      
+)                                        
 ```
 :::
 
-::: callout-note
-The second goal centers around productivity for a production workflow, which is the context for where the elements of hrbrthemes should be used.
+::: callout-tip
+The default value of the hover css is *hover_css = “fill:orange;”*.
 :::
+
+## Styling hover effect
+
+In the code chunk below, css codes are used to change the highlighting effect.
+
+Elements associated with a *data_id* (i.e CLASS) will be highlighted upon mouse over.
 
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r}
 #| echo: false
 
-ggplot(data=exam_data, 
-             aes(x = MATHS)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") +
-  ggtitle("Distribution of Maths scores") +
-  theme_ipsum(axis_title_size = 18,
-              base_size = 15,
-              grid = "Y")
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(              
+    aes(data_id = CLASS),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618,
+  options = list(                        
+    opts_hover(css = "fill: #202020;"),  
+    opts_hover_inv(css = "opacity:0.2;") 
+  )                                        
+)                                        
 ```
 
 ## Code
 
-```{r,eval=FALSE}
+```{r}
 #| eval: false
 
-ggplot(data=exam_data, 
-             aes(x = MATHS)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") +
-  ggtitle("Distribution of Maths scores") +
-  theme_ipsum(axis_title_size = 18,
-              base_size = 15,
-              grid = "Y")
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(              
+    aes(data_id = CLASS),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618,
+  options = list(                        
+    opts_hover(css = "fill: #202020;"),  
+    opts_hover_inv(css = "opacity:0.2;") 
+  )                                        
+)                                        
 ```
 :::
 
-::: callout-note
--   `axis_title_size` argument is used to increase the font size of the axis title to 18,
+## Plot 1: **Combining tooltip and hover effect**
 
--   `base_size` argument is used to increase the default axis label to 15
+The tooltip and hover effects are combined in the interactive statistical graph in the code chunk below.
 
--   `grid` argument is used to remove the x-axis grid lines
-:::
-
-# **Beyond Single Graph**
-
-Multiple graphs are sometimes required to tell a compelling visual story. There are several ggplot2 extensions provide functions to compose figure with multiple graphs. In this section, a composite plot will be created by combining multiple graphs.
-
-Three statistical graphics are first created via the code chunk below.
-
-## Plot 1: Distribution of Math Scores (Histogram)
+Elements associated with a *data_id* (i.e CLASS) will be highlighted upon mouse over. At the same time, the tooltip will show the CLASS.
 
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r}
+#| echo: false
+
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(              
+    aes(tooltip = CLASS, 
+        data_id = CLASS),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618,
+  options = list(                        
+    opts_hover(css = "fill: #202020;"),  
+    opts_hover_inv(css = "opacity:0.2;") 
+  )                                        
+)                                        
+```
+
+## Code
+
+```{r}
+#| eval: false
+
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(              
+    aes(tooltip = CLASS, 
+        data_id = CLASS),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618,
+  options = list(                        
+    opts_hover(css = "fill: #202020;"),  
+    opts_hover_inv(css = "opacity:0.2;") 
+  )                                        
+)                                        
+```
+:::
+
+## **Click effect with onclick**
+
+`onclick` argument of ggiraph provides hotlink interactivity on the web. Web document link with a data object will be displayed on the web browser upon mouse click.
+
+The code chunk below shown an example of `onclick`.
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
+
+exam_data$onclick <- sprintf("window.open(\"%s%s\")",
+"https://www.moe.gov.sg/schoolfinder?journey=Primary%20school",
+as.character(exam_data$ID))
+
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(              
+    aes(onclick = onclick),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618)                                        
+```
+
+## Code
+
+```{r}
+#| eval: false
+
+exam_data$onclick <- sprintf("window.open(\"%s%s\")",
+"https://www.moe.gov.sg/schoolfinder?journey=Primary%20school",
+as.character(exam_data$ID))
+
+p <- ggplot(data=exam_data, 
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(              
+    aes(onclick = onclick),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") +               
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+girafe(                                  
+  ggobj = p,                             
+  width_svg = 6,                         
+  height_svg = 6*0.618)                                        
+```
+:::
+
+::: callout-tip
+Click actions must be a string column in the dataset containing valid javascript instructions.
+:::
+
+## **Coordinated Multiple Views with ggiraph**
+
+When a data point of one of the dotplot is selected, the corresponding data point ID on the second data visualisation will be highlighted too.
+
+In order to build a coordinated multiple views, the following programming strategy will be used:
+
+1.  Appropriate interactive functions of **ggiraph** will be used to create the multiple views.
+
+2.  *patchwork* function of [patchwork](https://patchwork.data-imaginist.com/) package will be used inside girafe function to create the interactive coordinated multiple views.
+
+The *data_id* aesthetic is critical to link observations between plots and the tooltip aesthetic is optional but nice to have when mouse over a point.
+
+::: panel-tabset
+## Plot
+
+```{r}
 #| echo: false
 
 p1 <- ggplot(data=exam_data, 
-             aes(x = MATHS)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") + 
-  coord_cartesian(xlim=c(0,100)) +
-  ggtitle("Distribution of Maths scores")
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(              
+    aes(data_id = ID),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") +  
+  coord_cartesian(xlim=c(0,100)) + 
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
 
-p1
+p2 <- ggplot(data=exam_data, 
+       aes(x = ENGLISH)) +
+  geom_dotplot_interactive(              
+    aes(data_id = ID),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") + 
+  coord_cartesian(xlim=c(0,100)) + 
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
+
+girafe(code = print(p1 + p2), 
+       width_svg = 6,
+       height_svg = 3,
+       options = list(
+         opts_hover(css = "fill: #202020;"),
+         opts_hover_inv(css = "opacity:0.2;")
+         )
+       ) 
 ```
 
 ## Code
 
-```{r,eval=FALSE}
+```{r}
 #| eval: false
 
 p1 <- ggplot(data=exam_data, 
-             aes(x = MATHS)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") + 
-  coord_cartesian(xlim=c(0,100)) +
-  ggtitle("Distribution of Maths scores")
-
-p1
-```
-:::
-
-## Plot 2: Distribution of English Scores (Histogram)
-
-::: panel-tabset
-## Plot
-
-```{r,eval=FALSE}
-#| echo: false
+       aes(x = MATHS)) +
+  geom_dotplot_interactive(              
+    aes(data_id = ID),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") +  
+  coord_cartesian(xlim=c(0,100)) + 
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
 
 p2 <- ggplot(data=exam_data, 
-             aes(x = ENGLISH)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") + 
-  coord_cartesian(xlim=c(0,100)) +
-  ggtitle("Distribution of Maths scores")
+       aes(x = ENGLISH)) +
+  geom_dotplot_interactive(              
+    aes(data_id = ID),              
+    stackgroups = TRUE,                  
+    binwidth = 1,                        
+    method = "histodot") + 
+  coord_cartesian(xlim=c(0,100)) + 
+  scale_y_continuous(NULL,               
+                     breaks = NULL)
 
-p2
-```
-
-## Code
-
-```{r,eval=FALSE}
-#| eval: false
-
-p2 <- ggplot(data=exam_data, 
-             aes(x = ENGLISH)) +
-  geom_histogram(bins=20, 
-                 boundary = 100,
-                 color="grey25", 
-                 fill="grey90") + 
-  coord_cartesian(xlim=c(0,100)) +
-  ggtitle("Distribution of Maths scores")
-
-p2
+girafe(code = print(p1 + p2), 
+       width_svg = 6,
+       height_svg = 3,
+       options = list(
+         opts_hover(css = "fill: #202020;"),
+         opts_hover_inv(css = "opacity:0.2;")
+         )
+       ) 
 ```
 :::
 
-## Plot 3: English vs Maths score (Scatterplot)
+# **Interactive Data Visualisation - plotly methods!**
+
+Plotly’s R graphing library create interactive web graphics from **ggplot2** graphs and/or a custom interface to the (MIT-licensed) JavaScript library [**plotly.js**](https://plotly.com/javascript/) inspired by the grammar of graphics. Different from other plotly platform, plot.R is free and open source.
+
+## There are two ways to create interactive graph by using plotly, they are:
+
+-   by using *plot_ly()*, and
+
+-   by using *ggplotly()*
+
+## **Creating an interactive scatter plot: plot_ly() method**
+
+The code chunk below shows an example a basic interactive plot created by using *plot_ly()*.
 
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r}
 #| echo: false
 
-p3 <- ggplot(data=exam_data, 
-             aes(x= MATHS, 
-                 y=ENGLISH)) +
-  geom_point() +
-  geom_smooth(method=lm, 
-              size=0.5) +  
+plot_ly(data = exam_data, 
+             x = ~MATHS, 
+             y = ~ENGLISH)
+```
+
+## Code
+
+```{r}
+#| eval: false
+
+plot_ly(data = exam_data, 
+             x = ~MATHS, 
+             y = ~ENGLISH)
+```
+:::
+
+## **Working with visual variable: plot_ly() method**
+
+In the code chunk below, *color* argument is mapped to a qualitative visual variable (i.e. RACE).
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
+
+plot_ly(data = exam_data, 
+        x = ~ENGLISH, 
+        y = ~MATHS, 
+        color = ~RACE)
+```
+
+## Code
+
+```{r}
+#| eval: false
+
+plot_ly(data = exam_data, 
+        x = ~ENGLISH, 
+        y = ~MATHS, 
+        color = ~RACE)
+```
+:::
+
+## **Creating an interactive scatter plot: ggplotly() method**
+
+The code chunk below plots an interactive scatter plot by using *ggplotly()*.
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
+
+p <- ggplot(data=exam_data, 
+            aes(x = MATHS,
+                y = ENGLISH)) +
+  geom_point(size=1) +
   coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100)) +
-  ggtitle("English vs Maths scores for Primary 3")
-
-p3
+                  ylim=c(0,100))
+ggplotly(p)
 ```
 
 ## Code
 
-```{r,eval=FALSE}
+```{r}
 #| eval: false
-
-p3 <- ggplot(data=exam_data, 
-             aes(x= MATHS, 
-                 y=ENGLISH)) +
-  geom_point() +
-  geom_smooth(method=lm, 
-              size=0.5) +  
+p <- ggplot(data=exam_data, 
+            aes(x = MATHS,
+                y = ENGLISH)) +
+  geom_point(size=1) +
   coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100)) +
-  ggtitle("English vs Maths scores for Primary 3")
-
-p3
+                  ylim=c(0,100))
+ggplotly(p)
 ```
 :::
 
-## **Creating Composite Graphics: pathwork methods**
-
-ggplot2 extension’s functions support composite figures by combining several graphs e.g., [`grid.arrange()`](https://cran.r-project.org/web/packages/gridExtra/vignettes/arrangeGrob.html) of **gridExtra** package and [`plot_grid()`](https://wilkelab.org/cowplot/reference/plot_grid.html) of [**cowplot**](https://wilkelab.org/cowplot/) package.
-
-This section uses a ggplot2 extension called [**patchwork**](https://patchwork.data-imaginist.com/)**,** specially designed for combining separate ggplot2 graphs into a single figure.
-
-Patchwork package has a very simple syntax to create layouts. General syntax:
-
--   Plus Sign "+" - Two-Column Layout
-
--   Parenthesis "( )" - Create a subplot group.
-
--   Division Sign "/" - Two-Row Layout
-
-## **Combining two ggplot2 graphs**
-
-Figure in the tabset below shows a composite of two histograms (p1 & p2 from above) created using patchwork.
-
-::: panel-tabset
-## Plot
-
-```{r,eval=FALSE}
-#| echo: false
-
-p1 + p2
-```
-
-## Code
-
-```{r,eval=FALSE}
-#| eval: false
-
-p1 + p2
-```
+::: callout-tip
+The only extra line you need to include in the code chunk is *ggplotly()*.
 :::
 
-::: callout-note
-Note the syntax simplicity. i.e. `p1 + p2`
-:::
+## **Interactive Data Visualisation - crosstalk methods**
 
-## **Combining three ggplot2 graphs**
+[Crosstalk](https://rstudio.github.io/crosstalk/) is an add-on to the htmlwidgets package. It extends htmlwidgets with a set of classes, functions, and conventions for implementing cross-widget interactions (currently, linked brushing and filtering).
 
-More complex composites can be achieved by using appropriate operators. For example, the composite figure below uses:
-
--   “/” - stack two ggplot2 graphs on top of another
-
--   “\|” - place the plots adjacent to each other
-
--   “( )” - define plot sequence
-
-::: panel-tabset
-## Plot
-
-```{r,eval=FALSE}
-#| echo: false
-
-(p1 / p2) | p3
+```{r}
+DT::datatable(exam_data, class= "compact")
 ```
 
-## Code
+## **Interactive Data Table: DT package**
 
-```{r,eval=FALSE}
-#| eval: false
+-   A wrapper of the JavaScript Library [DataTables](https://datatables.net/)
 
-(p1 / p2) | p3
-```
-:::
-
-::: callout-note
-Refer to [Plot Assembly](https://patchwork.data-imaginist.com/articles/guides/assembly.html). for more modification and layout controls
-:::
-
-## **Creating a composite figure with tag**
-
-**patchwork** also provides auto-tagging capabilities to identify subplots in text, as shown in the figure below.
-
-::: panel-tabset
-## Plot
-
-```{r,eval=FALSE}
-#| echo: false
-
-((p1 / p2) | p3) + 
-  plot_annotation(tag_levels = 'I')
-```
-
-## Code
-
-```{r,eval=FALSE}
-#| eval: false
-((p1 / p2) | p3) + 
-  plot_annotation(tag_levels = 'I')
-```
-:::
-
-::: callout-note
-Note the I, II, III labels in the subplots have been automatically labelled.
-:::
-
-## **Creating figure with insert**
-
- [`inset_element()`](https://patchwork.data-imaginist.com/reference/inset_element.html) of **patchwork**, allows the placement of one or several plots or graphic elements freely on top or below another plot.
-
-::: panel-tabset
-## Plot
-
-```{r,eval=FALSE}
-#| echo: false
-
-p3 + inset_element(p2, 
-                   left = 0.02, 
-                   bottom = 0.7, 
-                   right = 0.5, 
-                   top = 1)
-```
-
-## Code
-
-```{r,eval=FALSE}
-#| eval: false
-
-p3 + inset_element(p2, 
-                   left = 0.02, 
-                   bottom = 0.7, 
-                   right = 0.5, 
-                   top = 1)
-```
-:::
+-   Data objects in R can be rendered as HTML tables using the JavaScript library ‘DataTables’ (typically via R Markdown or Shiny).
 
 ## **Creating a composite figure by using patchwork and ggtheme**
 
