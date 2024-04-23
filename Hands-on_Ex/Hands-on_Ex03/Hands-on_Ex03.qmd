@@ -739,7 +739,7 @@ The only extra line you need to include in the code chunk is *ggplotly()*.
 DT::datatable(exam_data, class= "compact")
 ```
 
-## **Interactive Data Table: DT package**
+## **XInteractive Data Table: DT package**
 
 -   A wrapper of the JavaScript Library [DataTables](https://datatables.net/)
 
