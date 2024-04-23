@@ -43,7 +43,7 @@ pacman::p_load(ggiraph, plotly,
 
 -   **readr** is a pacakge within tidyverse.
 
-```{r,eval=FALSE}
+```{r}
 exam_data <- read_csv("data/Exam_data.csv")
 ```
 
