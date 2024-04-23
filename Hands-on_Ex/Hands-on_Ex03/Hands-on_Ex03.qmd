@@ -739,32 +739,50 @@ The only extra line you need to include in the code chunk is *ggplotly()*.
 DT::datatable(exam_data, class= "compact")
 ```
 
-## **XInteractive Data Table: DT package**
+## **Linked brushing: crosstalk method**
 
--   A wrapper of the JavaScript Library [DataTables](https://datatables.net/)
-
--   Data objects in R can be rendered as HTML tables using the JavaScript library ‘DataTables’ (typically via R Markdown or Shiny).
-
-## **Creating a composite figure by using patchwork and ggtheme**
-
-**patchwork** and *theme_economist()* of **ggthemes** package are used to create the figure below
+Code chunk below is used to implement coordinated brushing.
 
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r}
 #| echo: false
 
-patchwork <- (p1 / p2) | p3
-patchwork & theme_economist()
+d <- highlight_key(exam_data) 
+p <- ggplot(d, 
+            aes(ENGLISH, 
+                MATHS)) + 
+  geom_point(size=1) +
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100))
+
+gg <- highlight(ggplotly(p),        
+                "plotly_selected")  
+
+crosstalk::bscols(gg,               
+                  DT::datatable(d), 
+                  widths = 5)        
 ```
 
 ## Code
 
-```{r,eval=FALSE}
+```{r}
 #| eval: false
 
-patchwork <- (p1 / p2) | p3
-patchwork & theme_economist()
+d <- highlight_key(exam_data) 
+p <- ggplot(d, 
+            aes(ENGLISH, 
+                MATHS)) + 
+  geom_point(size=1) +
+  coord_cartesian(xlim=c(0,100),
+                  ylim=c(0,100))
+
+gg <- highlight(ggplotly(p),        
+                "plotly_selected")  
+
+crosstalk::bscols(gg,               
+                  DT::datatable(d), 
+                  widths = 5)        
 ```
 :::
