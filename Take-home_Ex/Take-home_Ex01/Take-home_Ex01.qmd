@@ -236,7 +236,7 @@ glimpse(qa_pte)
 
     -   Number of Units
 
-    -   Tensure
+    -   Tenure
 
     -   Completion Date
 
