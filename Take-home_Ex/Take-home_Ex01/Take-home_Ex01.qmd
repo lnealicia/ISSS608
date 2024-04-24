@@ -409,7 +409,7 @@ q1_plot <- ggplot(q1_units, aes(x = `Property Type`, y = `Total Units`)) +
   ylim(0, 2700) +
   theme_economist() +
   theme(axis.text.x = element_text(angle = 90)) +
-  geom_hline(yintercept = q1_mean, color = "navy") +
+  geom_hline(yintercept = q1_mean, color = "navy", linetype = "dashed") +
   annotate(geom = "text", x = 5, y = q1_mean + 100, 
            label = paste("Mean:", round(q1_mean, 2)), color = "navy")
 
@@ -429,7 +429,7 @@ q2_plot <- ggplot(q2_units, aes(x = `Property Type`, y = `Total Units`)) +
   ylim(0, 2700) +
   theme_economist() +
   theme(axis.text.x = element_text(angle = 90)) +
-  geom_hline(yintercept = q2_mean, color = "navy") +
+  geom_hline(yintercept = q2_mean, color = "navy", linetype = "dashed") +
   annotate(geom = "text", x = 5, y = q2_mean + 100, 
            label = paste("Mean:", round(q2_mean, 2)), color = "navy")
 
@@ -448,7 +448,7 @@ q3_plot <- ggplot(q3_units, aes(x = `Property Type`, y = `Total Units`)) +
   ylim(0, 2700) +
   theme_economist() +
   theme(axis.text.x = element_text(angle = 90)) +
-  geom_hline(yintercept = q3_mean, color = "navy") +
+  geom_hline(yintercept = q3_mean, color = "navy", linetype = "dashed") +
   annotate(geom = "text", x = 5, y = q3_mean + 100, 
            label = paste("Mean:", round(q3_mean, 2)), color = "navy")
 
@@ -467,7 +467,7 @@ q4_plot <- ggplot(q4_units, aes(x = `Property Type`, y = `Total Units`)) +
   ylim(0, 2700) +
   theme_economist() +
   theme(axis.text.x = element_text(angle = 90)) +
-  geom_hline(yintercept = q4_mean, color = "navy") +
+  geom_hline(yintercept = q4_mean, color = "navy", linetype = "dashed") +
   annotate(geom = "text", x = 5, y = q4_mean + 100, 
            label = paste("Mean:", round(q4_mean, 2)), color = "navy")
 
@@ -486,7 +486,7 @@ q5_plot <- ggplot(q5_units, aes(x = `Property Type`, y = `Total Units`)) +
   ylim(0, 2700) +
   theme_economist() +
   theme(axis.text.x = element_text(angle = 90)) +
-  geom_hline(yintercept = q5_mean, color = "navy") +
+  geom_hline(yintercept = q5_mean, color = "navy", linetype = "dashed") +
   annotate(geom = "text", x = 5, y = q5_mean + 100, 
            label = paste("Mean:", round(q5_mean, 2)), color = "navy")
 
@@ -515,46 +515,194 @@ Notably, Apartments and Condominiums, the predominant property types, experience
 
 ## Price Distribution
 
-Create box plots for the price distribution of each private residence property type. [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html) displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually. Note: For better visibility, **`labels`** parameter with the function **`scales::number`**, formats the y-axis labels to include thousands separators.
+Create box plots for the price distribution of each private residence property type. [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html) displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually.
+
+Note: For better visibility, **`labels`** parameter with the function **`scales::number`**, formats the y-axis labels to include thousands separators.
+
+The code chunk below shows that in Q1 2023 for Condominiums, there are two points with value above 900 million that is affecting the rest of the box plot. Thus, the decision was made to remove that point, and replot the data without the extreme outliers.
 
 ::: panel-tabset
 ## Plot
 
 ```{r}
 #| echo: false
-box_plot <- ggplot(data = q1, 
-                   aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
-            geom_boxplot() +
-            labs(title = "Box Plot of Transacted Price ($) by Property Type",
-                x = "Property Type",
-                y = "Transacted Price ($)") +
-            scale_y_continuous(labels = scales::number) + 
-            theme(axis.text.x = element_text(angle = 90)) 
-box_plot
+ggplot(data = q1, 
+       aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+geom_boxplot() +
+labs(title = "Q1 2023",
+     x = "Property Type",
+     y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number) + 
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
 ```
 
 ## Code
 
 ```{r}
 #| eval: false
-box_plot <- ggplot(data = q1, 
-                   aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
-            geom_boxplot() +
-            labs(title = "Box Plot of Transacted Price ($) by Property Type",
-                x = "Property Type",
-                y = "Transacted Price ($)") +
-            scale_y_continuous(labels = scales::number) + 
-            theme_gray() + theme(axis.text.x = element_text(angle = 45, 
-                                                            hjust = 1,
-                                                            vjust=1))
-box_plot
+ggplot(data = q1, 
+       aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+geom_boxplot() +
+labs(title = "Q1 2023",
+     x = "Property Type",
+     y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number) + 
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
 ```
 :::
+
+### Drop Extreme Outlier
+
+```{r}
+q1_filtered <- q1 %>%
+  filter(`Transacted Price ($)` <= 90000000)
+```
+
+### Price Distribution by Property Type
+
+Note: For better visibility, **`labels`** parameter with the function **`scales::number(scale = 1e-6, suffix = "M")`**, formats the y-axis labels to display in the millions unit, instead of the default scientific notation.
+
+::: panel-tabset
+## Q1 2023
+
+```{r}
+q1_median <- median(q1_filtered$`Transacted Price ($)`, na.rm = TRUE)
+
+q1_box <- ggplot(data = q1_filtered, 
+                aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+          geom_boxplot() +
+          labs(title = "Q1 2023",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M"),
+                  limits = c(0, 67000000)) +
+geom_hline(yintercept = q1_median,
+             linetype = "dashed", color = "navy") +
+  annotate(geom = "text",
+           x = 4, y = q1_median *10, 
+           label = paste("Median:", scales::number(q1_median, color = "navy"))) +
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+
+q1_box
+```
+
+## Q2 2023
+
+```{r}
+q2_median <- median(q2$`Transacted Price ($)`, na.rm = TRUE)
+
+q2_box <- ggplot(data = q2, 
+                aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+          geom_boxplot() +
+          labs(title = "Q2 2023",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M"),
+                  limits = c(0, 67000000)) +
+geom_hline(yintercept = q2_median,
+             linetype = "dashed", color = "navy") +
+  annotate(geom = "text",
+           x = 4, y = q2_median *10, 
+           label = paste("Median:", scales::number(q2_median, color = "navy"))) +
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+
+q2_box
+```
+
+## Q3 2023
+
+```{r}
+q3_median <- median(q3$`Transacted Price ($)`, na.rm = TRUE)
+
+q3_box <- ggplot(data = q3, 
+                aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+          geom_boxplot() +
+          labs(title = "Q3 2023",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M"),
+                  limits = c(0, 67000000)) +
+geom_hline(yintercept = q3_median,
+             linetype = "dashed", color = "navy") +
+  annotate(geom = "text",
+           x = 4, y = q3_median *10, 
+           label = paste("Median:", scales::number(q3_median, color = "navy"))) +
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+
+q3_box
+```
+
+## Q4 2023
+
+```{r}
+q4_median <- median(q4$`Transacted Price ($)`, na.rm = TRUE)
+
+q4_box <- ggplot(data = q4, 
+                aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+          geom_boxplot() +
+          labs(title = "Q4 2023",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M"),
+                  limits = c(0, 67000000)) +
+geom_hline(yintercept = q4_median,
+             linetype = "dashed", color = "navy") +
+  annotate(geom = "text",
+           x = 4, y = q4_median *10, 
+          label = paste("Median:", scales::number(q4_median, color = "navy"))) +
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+
+q4_box
+```
+
+## Q1 2024
+
+```{r}
+q5_median <- median(q5$`Transacted Price ($)`, na.rm = TRUE)
+
+q5_box <- ggplot(data = q5, 
+                aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+          geom_boxplot() +
+          labs(title = "Q1 2024",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M"),
+                  limits = c(0, 67000000)) +
+geom_hline(yintercept = q5_median,
+             linetype = "dashed", color = "navy") +
+  annotate(geom = "text",
+           x = 4, y = q5_median *10, 
+          label = paste("Median:", scales::number(q5_median, color = "navy"))) +
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+
+q5_box
+```
+:::
+
+### Composite Plot
+
+Using **`patchwork`** package, the plots for Q1 2023 and Q1 2024 are stacked into 1 composite plot for a quarter on quarter analysis.
+
+```{r}
+q1_box | q5_box
+
+```
 
 ::: callout-tip
 ## Write Up
 
-There are six private property types in the dataset.
+Overall, there is an increase in overall prices from 1.63 million to 1.69 million. However, the price variability for all property types have decreased, with fewer outliers present.
 
-The boxplot shows Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status. Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers. In contrast, both Executive Condominiums and Terrace Houses demonstrate the least variability in transacted prices, with their interquartile ranges (IQR) closely aligning with their medians. This suggests a stable and consistent pricing trend for these property types. Executive Condominiums have the lowest transacted prices, indicating their appeal as an affordable option within the private housing market. Apartments and Condominiums, on the other hand, show a significant number of outliers in their transacted prices, suggesting a wider range of pricing and potentially more diversity in market conditions for these property types.
+The boxplot shows Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status.
+
+Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers. In contrast, Executive Condominiums demonstrate the least variability in transacted prices, with their interquartile ranges (IQR) closely aligning with their medians. This suggests a stable and consistent pricing trend. Executive Condominiums have the lowest transacted prices, indicating their appeal as an affordable option within the private housing market.
+
+Apartments and Condominiums, on the other hand, show a significant number of outliers in their transacted prices, suggesting a wider range of pricing and potentially more diversity in market conditions for these property types.
 :::
