@@ -519,7 +519,7 @@ Create box plots for the price distribution of each private residence property t
 
 Note: For better visibility, **`labels`** parameter with the function **`scales::number`**, formats the y-axis labels to include thousands separators.
 
-The code chunk below shows that in Q1 2023 for Condominiums, there are two points with value above 900 million that is affecting the rest of the box plot. Thus, the decision was made to remove that point, and replot the data without the extreme outliers.
+The code chunk below shows that in Q1 2023 for Condominiums, there are two points with value above 900 million that is affecting the rest of the box plot. Thus, the decision was made to remove those points, and replot the data without the extreme outliers.
 
 ::: panel-tabset
 ## Plot
@@ -562,7 +562,7 @@ q1_filtered <- q1 %>%
 
 ### Price Distribution by Property Type
 
-Note: For better visibility, **`labels`** parameter with the function **`scales::number(scale = 1e-6, suffix = "M")`**, formats the y-axis labels to display in the millions unit, instead of the default scientific notation.
+Note: For better visibility, **`labels`** parameter with the function **`scales::number(scale = 1e-6, suffix = "M")`** formats the y-axis labels to display in the millions unit, instead of the default scientific notation.
 
 ::: panel-tabset
 ## Q1 2023
