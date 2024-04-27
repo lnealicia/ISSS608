@@ -63,67 +63,25 @@
     "text": "Welcome to ISSS608 Visual Analytics and Applications homepage. In this website, you will find my coursework.\n\nOverview:\nIntroduction to Visual Analytics\nDesigning Graphics to Enlighten\nInteractivity in Visual Analytics\nFundamentals of Visual Analytics\nDesigning Web-enabled Visual Analytics application with Shiny\nVisual Multivariate Analysis\nVisualising & Analysing Time Oriented Data\nNetwork Data Visualisation & Analysis\nInformation Dashboard Design"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html",
-    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html",
-    "title": "In-Class Exercise 2 - Visualising Distribution",
+    "objectID": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html",
+    "href": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html",
+    "title": "In-Class Exercise 1",
     "section": "",
-    "text": "Statistical graphic methods for visualising distribution using ggplot2 and its extensions for:\n\nRidgeline plot\nRaincloud plot"
+    "text": "Note: Ensure that the pacman package has already been installed.\nThe code chunk below uses p_load() of pacman package to load the tidyverse family of packages.\n\npacman::p_load(tidyverse)\n\n\n\n\n\nThe code chunk below imports realis2019.csv into R environment by using read_csv() function of readr package.\nreadr is one of the tidyverse package.\n\n\nrealis &lt;- read_csv(\"data/realis2019.csv\")"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#loading-r-packages",
-    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#loading-r-packages",
-    "title": "In-Class Exercise 2 - Visualising Distribution",
-    "section": "Loading R packages",
-    "text": "Loading R packages\nNote: Ensure that the pacman package has already been installed.\nThe code chunk below uses p_load() of pacman package to load the tidyverse family of packages.\n\nggridges, a ggplot2 extension specially designed for plotting ridgeline plots,\nggdist, a ggplot2 extension spacially desgin for visualising distribution and uncertainty,\ntidyverse, a family of R packages to meet the modern data science and visual communication needs,\nggthemes, a ggplot extension that provides the user additional themes, scales, and geoms for the ggplots package, and\ncolorspace, an R package provides a broad toolbox for selecting individual colors or color palettes, manipulating these colors, and employing them in various kinds of visualisations.\n\n\npacman::p_load(ggdist, ggridges, ggthemes, colorspace, tidyverse)"
+    "objectID": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html#loading-r-packages",
+    "href": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html#loading-r-packages",
+    "title": "In-Class Exercise 1",
+    "section": "",
+    "text": "Note: Ensure that the pacman package has already been installed.\nThe code chunk below uses p_load() of pacman package to load the tidyverse family of packages.\n\npacman::p_load(tidyverse)"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#importing-the-data",
-    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#importing-the-data",
-    "title": "In-Class Exercise 2 - Visualising Distribution",
-    "section": "Importing the Data",
-    "text": "Importing the Data\n\nThe code chunk below imports Exam_data.csv into R environment by using read_csv() function of readr package.\nreadr is one of the tidyverse package.\n\n\nexam_df &lt;- read_csv(\"data/Exam_data.csv\")\n\nexam_data contains:\n\nYear end examination grades of a cohort of primary 3 students from a local school.\nThere are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.\n\nThe categorical attributes are: ID, CLASS, GENDER and RACE.\nThe continuous attributes are: MATHS, ENGLISH and SCIENCE."
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#varying-fill-colours-along-the-x-axis",
-    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#varying-fill-colours-along-the-x-axis",
-    "title": "In-Class Exercise 2 - Visualising Distribution",
-    "section": "Varying Fill Colours along the X-axis",
-    "text": "Varying Fill Colours along the X-axis\nSometimes we would like to have the area under a ridgeline not filled with a single solid color but rather with colors that vary in some form along the x axis.\nTo achieve varying fill colours:\n\ngeom_ridgeline_gradient()\ngeom_density_ridges_gradient()\n\nHowever, they do not allow for alpha transparency.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df, \n       aes(x = ENGLISH, \n           y = CLASS,\n           fill = stat(x))) +\n  geom_density_ridges_gradient(\n    scale = 3,\n    rel_min_height = 0.01) +\n  scale_fill_viridis_c(name = \"Temp. [°C]\",\n                       option = \"C\") +\n  scale_x_continuous(\n    name = \"English Grades\",\n    expand = c(0, 0)\n  ) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#mapping-probabilities-directly-onto-colour",
-    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#mapping-probabilities-directly-onto-colour",
-    "title": "In-Class Exercise 2 - Visualising Distribution",
-    "section": "Mapping Probabilities directly onto colour",
-    "text": "Mapping Probabilities directly onto colour\nStat function called stat_density_ridges() replaces stat_density() of ggplot2.\nFigure below is plotted by mapping the probabilities calculated by using stat(ecdf) which represent the empirical cumulative density function for the distribution of English score.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = 0.5 - abs(0.5-stat(ecdf)))) +\n  stat_density_ridges(geom = \"density_ridges_gradient\", \n                      calc_ecdf = TRUE) +\n  scale_fill_viridis_c(name = \"Tail probability\",\n                       direction = -1) +\n  theme_ridges()\n\n\n\n\n\n\n\n\n\n\nImportant\n\n\n\nInclude the argument calc_ecdf = TRUE in stat_density_ridges()!\n\n\n\nRidgeline Plots with Quantile Lines\nRidgeline plots can be coloured by quantile using geom_density_ridges_gradient(), via the calculated stat(quantile) \n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = factor(stat(quantile))\n           )) +\n  stat_density_ridges(\n    geom = \"density_ridges_gradient\",\n    calc_ecdf = TRUE, \n    quantiles = 4,\n    quantile_lines = TRUE) +\n  scale_fill_viridis_d(name = \"Quartiles\") +\n  theme_ridges()\n\n\n\n\nQuantiles can also be specified by cut points e.g. 2.5% and 97.5% tails to colour the ridgeline plot.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = factor(stat(quantile))\n           )) +\n  stat_density_ridges(\n    geom = \"density_ridges_gradient\",\n    calc_ecdf = TRUE, \n    quantiles = c(0.025, 0.975)\n    ) +\n  scale_fill_manual(\n    name = \"Probability\",\n    values = c(\"#FF0000A0\", \"#A0A0A0A0\", \"#0000FFA0\"),\n    labels = c(\"(0, 0.025]\", \"(0.025, 0.975]\", \"(0.975, 1]\")\n  ) +\n  theme_ridges()"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#plotting-a-half-eye-graph",
-    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#plotting-a-half-eye-graph",
-    "title": "In-Class Exercise 2 - Visualising Distribution",
-    "section": "Plotting a Half Eye graph",
-    "text": "Plotting a Half Eye graph\nPlot a Half-Eye graph by using stat_halfeye() of ggdist package, producing a Half Eye visualization, which is contains a half-density and a slab-interval.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nRemove the slab interval by setting .width = 0 and point_colour = NA."
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#adding-the-boxplot",
-    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#adding-the-boxplot",
-    "title": "In-Class Exercise 2 - Visualising Distribution",
-    "section": "Adding the boxplot",
-    "text": "Adding the boxplot\nThe second geometry layer i.e. a narrow boxplot is produced using geom_boxplot() of ggplot2 This produces a narrow boxplot.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA) +\n  geom_boxplot(width = .20,\n               outlier.shape = NA)"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#adding-the-dot-plots",
-    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#adding-the-dot-plots",
-    "title": "In-Class Exercise 2 - Visualising Distribution",
-    "section": "Adding the Dot Plots",
-    "text": "Adding the Dot Plots\nThe third geometry layer is added using stat_dots() of ggdist package. This produces a half-dotplot, similar to a histogram that indicates the number of samples (number of dots) in each bin. Use side = “left” to specify the dot plots on the left-hand side.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA) +\n  geom_boxplot(width = .20,\n               outlier.shape = NA) +\n  stat_dots(side = \"left\", \n            justification = 1.2, \n            binwidth = .5,\n            dotsize = 2)"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#finishing-touch",
-    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#finishing-touch",
-    "title": "In-Class Exercise 2 - Visualising Distribution",
-    "section": "Finishing touch",
-    "text": "Finishing touch\n coord_flip() of ggplot2 package is used to flip the raincloud chart horizontally to give it the raincloud appearance. theme_economist() of ggthemes package is also used to give the raincloud chart a professional publishing standard look.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA) +\n  geom_boxplot(width = .20,\n               outlier.shape = NA) +\n  stat_dots(side = \"left\", \n            justification = 1.2, \n            binwidth = .5,\n            dotsize = 1.5) +\n  coord_flip() +\n  theme_economist()"
+    "objectID": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html#importing-the-data",
+    "href": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html#importing-the-data",
+    "title": "In-Class Exercise 1",
+    "section": "",
+    "text": "The code chunk below imports realis2019.csv into R environment by using read_csv() function of readr package.\nreadr is one of the tidyverse package.\n\n\nrealis &lt;- read_csv(\"data/realis2019.csv\")"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_2.html",
@@ -291,7 +249,7 @@
     "href": "about.html",
     "title": "About",
     "section": "",
-    "text": "Hello, my name is Alicia. Welcome to my Visual Analytics learning journey.\n\n\n\n\n\n\n\n\n\nMy motivations for MITB\n\n\n\nChat with me on UniBuddy\n\n\n\nLinkedin\n\n\n\nTableau\n\n\n\nGitHub"
+    "text": "Hello, my name is Alicia.\nHere is a quick introduction of me and my life.\n\n\n\n\n\n\n\n\n\nMy motivations for MITB\n\n\n\nChat with me on UniBuddy\n\n\n\nTableau"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html",
@@ -581,151 +539,193 @@
     "text": "Linked brushing: crosstalk method\nCode chunk below is used to implement coordinated brushing.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nd &lt;- highlight_key(exam_data) \np &lt;- ggplot(d, \n            aes(ENGLISH, \n                MATHS)) + \n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\n\ngg &lt;- highlight(ggplotly(p),        \n                \"plotly_selected\")  \n\ncrosstalk::bscols(gg,               \n                  DT::datatable(d), \n                  widths = 5)"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html",
-    "href": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html",
-    "title": "In-Class Exercise 1",
-    "section": "",
-    "text": "Note: Ensure that the pacman package has already been installed.\nThe code chunk below uses p_load() of pacman package to load the tidyverse family of packages.\n\npacman::p_load(tidyverse)\n\n\n\n\n\nThe code chunk below imports realis2019.csv into R environment by using read_csv() function of readr package.\nreadr is one of the tidyverse package.\n\n\nrealis &lt;- read_csv(\"data/realis2019.csv\")"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html#loading-r-packages",
-    "href": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html#loading-r-packages",
-    "title": "In-Class Exercise 1",
-    "section": "",
-    "text": "Note: Ensure that the pacman package has already been installed.\nThe code chunk below uses p_load() of pacman package to load the tidyverse family of packages.\n\npacman::p_load(tidyverse)"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html#importing-the-data",
-    "href": "In-class_Ex/In-class_Ex01/In-Class_Ex01.html#importing-the-data",
-    "title": "In-Class Exercise 1",
-    "section": "",
-    "text": "The code chunk below imports realis2019.csv into R environment by using read_csv() function of readr package.\nreadr is one of the tidyverse package.\n\n\nrealis &lt;- read_csv(\"data/realis2019.csv\")"
-  },
-  {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "",
     "text": "Learning Objectives:"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#installing-and-loading-the-required-libraries",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#installing-and-loading-the-required-libraries",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#installing-and-loading-the-required-libraries",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#installing-and-loading-the-required-libraries",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Installing and loading the required libraries",
     "text": "Installing and loading the required libraries\nThe following R packages will be used:\n\nggiraph for making ‘ggplot’ graphics interactive.\nplotly, R library for plotting interactive statistical graphs.\nDT provides an R interface to the JavaScript library DataTables that create interactive table on html page.\ntidyverse, a family of modern R packages specially designed to support data science, analysis and communication task including creating static statistical graphs.\npatchwork for combining multiple ggplot2 graphs into one figure.\n\nCode chunk below will be used to check if these packages have been installed and also will load them into the working R environment.\n\npacman::p_load(ggiraph, plotly, \n               patchwork, DT, tidyverse)"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#importing-the-data",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#importing-the-data",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#importing-the-data",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#importing-the-data",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Importing the Data",
     "text": "Importing the Data\n\nThe code chunk below imports exam_data.csv into R environment by using read_csv() function of readr package.\nreadr is a pacakge within tidyverse.\n\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nexam_data tibble data frame contains:\n\nYear end examination grades of a cohort of primary 3 students from a local school.\nThere are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.\n\nThe categorical attributes are: ID, CLASS, GENDER and RACE.\nThe continuous attributes are: MATHS, ENGLISH and SCIENCE."
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#tooltip-effect-with-tooltip-aesthetic",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#tooltip-effect-with-tooltip-aesthetic",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#tooltip-effect-with-tooltip-aesthetic",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#tooltip-effect-with-tooltip-aesthetic",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Tooltip effect with tooltip aesthetic",
     "text": "Tooltip effect with tooltip aesthetic\nBelow shows a typical code chunk to plot an interactive statistical graph by using ggiraph package. \nFirst, an interactive version of ggplot2 geom (i.e. geom_dotplot_interactive()) will be used to create the basic graph. Then, girafe() will be used to generate an svg object to be displayed on an html page.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(\n    aes(tooltip = ID),\n    stackgroups = TRUE, \n    binwidth = 1, \n    method = \"histodot\") +\n  scale_y_continuous(NULL, \n                     breaks = NULL)\ngirafe(\n  ggobj = p,\n  width_svg = 6,\n  height_svg = 6*0.618\n)"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#displaying-multiple-information-on-tooltip",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#displaying-multiple-information-on-tooltip",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#displaying-multiple-information-on-tooltip",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#displaying-multiple-information-on-tooltip",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Displaying multiple information on tooltip",
     "text": "Displaying multiple information on tooltip\nThe first three lines of codes in the code chunk create a new field called tooltip. At the same time, it populates text in ID and CLASS fields into the newly created field. Next, this newly created field is used as tooltip field as shown in the code of line 7. By hovering the mouse pointer on an data point of interest, the student’s ID will be displayed.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\nexam_data$tooltip &lt;- c(paste0(     \n  \"Name = \", exam_data$ID,         \n  \"\\n Class = \", exam_data$CLASS)) \n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(\n    aes(tooltip = exam_data$tooltip), \n    stackgroups = TRUE,\n    binwidth = 1,\n    method = \"histodot\") +\n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(\n  ggobj = p,\n  width_svg = 8,\n  height_svg = 8*0.618\n)"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#customising-tooltop-style",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#customising-tooltop-style",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#customising-tooltop-style",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#customising-tooltop-style",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Customising Tooltop style",
     "text": "Customising Tooltop style\nCode chunk below uses opts_tooltip() of ggiraph to customize tooltip rendering by add css declarations.\nNotice that the background colour of the tooltip is black and the font colour is white and bold.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\ntooltip_css &lt;- \"background-color:white; #&lt;&lt;\nfont-style:bold; color:black;\" #&lt;&lt;\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(tooltip = ID),                   \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618,\n  options = list(    #&lt;&lt;\n    opts_tooltip(    #&lt;&lt;\n      css = tooltip_css)) #&lt;&lt;\n)                                        \n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nFor more customisations, refer to Customizing girafe objects"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#displaying-statistics-on-tooltip",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#displaying-statistics-on-tooltip",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#displaying-statistics-on-tooltip",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#displaying-statistics-on-tooltip",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Displaying statistics on tooltip",
     "text": "Displaying statistics on tooltip\nCode chunk below shows an advanced way to customise tooltip. In this example, a function is used to compute 90% confident interval of the mean. The derived statistics are then displayed in the tooltip.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\ntooltip &lt;- function(y, ymax, accuracy = .01) {\n  mean &lt;- scales::number(y, accuracy = accuracy)\n  sem &lt;- scales::number(ymax - y, accuracy = accuracy)\n  paste(\"Mean maths scores:\", mean, \"+/-\", sem)\n}\n\ngg_point &lt;- ggplot(data=exam_data, \n                   aes(x = RACE),\n) +\n  stat_summary(aes(y = MATHS, \n                   tooltip = after_stat(  \n                     tooltip(y, ymax))),  \n    fun.data = \"mean_se\", \n    geom = GeomInteractiveCol,  \n    fill = \"light blue\"\n  ) +\n  stat_summary(aes(y = MATHS),\n    fun.data = mean_se,\n    geom = \"errorbar\", width = 0.2, size = 0.2\n  )\n\ngirafe(ggobj = gg_point,\n       width_svg = 8,\n       height_svg = 8*0.618)"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#hover-effect-with-data_id-aesthetic",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#hover-effect-with-data_id-aesthetic",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#hover-effect-with-data_id-aesthetic",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#hover-effect-with-data_id-aesthetic",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Hover effect with data_id aesthetic",
     "text": "Hover effect with data_id aesthetic\nCode chunk below shows the second interactive feature of ggiraph, namely data_id.\nElements associated with a data_id (i.e CLASS) will be highlighted upon mouse over.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(           \n    aes(data_id = CLASS),             \n    stackgroups = TRUE,               \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618                      \n)                                        \n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nThe default value of the hover css is hover_css = “fill:orange;”."
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#styling-hover-effect",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#styling-hover-effect",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#styling-hover-effect",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#styling-hover-effect",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Styling hover effect",
     "text": "Styling hover effect\nIn the code chunk below, css codes are used to change the highlighting effect.\nElements associated with a data_id (i.e CLASS) will be highlighted upon mouse over.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(data_id = CLASS),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618,\n  options = list(                        \n    opts_hover(css = \"fill: #202020;\"),  \n    opts_hover_inv(css = \"opacity:0.2;\") \n  )                                        \n)"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#plot-1-combining-tooltip-and-hover-effect",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#plot-1-combining-tooltip-and-hover-effect",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#plot-1-combining-tooltip-and-hover-effect",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#plot-1-combining-tooltip-and-hover-effect",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Plot 1: Combining tooltip and hover effect",
     "text": "Plot 1: Combining tooltip and hover effect\nThe tooltip and hover effects are combined in the interactive statistical graph in the code chunk below.\nElements associated with a data_id (i.e CLASS) will be highlighted upon mouse over. At the same time, the tooltip will show the CLASS.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(tooltip = CLASS, \n        data_id = CLASS),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618,\n  options = list(                        \n    opts_hover(css = \"fill: #202020;\"),  \n    opts_hover_inv(css = \"opacity:0.2;\") \n  )                                        \n)"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#click-effect-with-onclick",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#click-effect-with-onclick",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#click-effect-with-onclick",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#click-effect-with-onclick",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Click effect with onclick",
     "text": "Click effect with onclick\nonclick argument of ggiraph provides hotlink interactivity on the web. Web document link with a data object will be displayed on the web browser upon mouse click.\nThe code chunk below shown an example of onclick.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\nexam_data$onclick &lt;- sprintf(\"window.open(\\\"%s%s\\\")\",\n\"https://www.moe.gov.sg/schoolfinder?journey=Primary%20school\",\nas.character(exam_data$ID))\n\np &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(onclick = onclick),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +               \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\ngirafe(                                  \n  ggobj = p,                             \n  width_svg = 6,                         \n  height_svg = 6*0.618)                                        \n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nClick actions must be a string column in the dataset containing valid javascript instructions."
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#coordinated-multiple-views-with-ggiraph",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#coordinated-multiple-views-with-ggiraph",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#coordinated-multiple-views-with-ggiraph",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#coordinated-multiple-views-with-ggiraph",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Coordinated Multiple Views with ggiraph",
-    "text": "Coordinated Multiple Views with ggiraph\nWhen a data point of one of the dotplot is selected, the corresponding data point ID on the second data visualisation will be highlighted too.\nIn order to build a coordinated multiple views, the following programming strategy will be used:\n\nAppropriate interactive functions of ggiraph will be used to create the multiple views.\npatchwork function of patchwork package will be used inside girafe function to create the interactive coordinated multiple views.\n\nThe data_id aesthetic is critical to link observations between plots and the tooltip aesthetic is optional but nice to have when mouse over a point.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\np1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +  \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\np2 &lt;- ggplot(data=exam_data, \n       aes(x = ENGLISH)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") + \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\ngirafe(code = print(p1 + p2), \n       width_svg = 6,\n       height_svg = 3,\n       options = list(\n         opts_hover(css = \"fill: #202020;\"),\n         opts_hover_inv(css = \"opacity:0.2;\")\n         )\n       )"
+    "text": "Coordinated Multiple Views with ggiraph\nWhen a data point of one of the dotplot is selected, the corresponding data point ID on the second data visualisation will be highlighted too.\nIn order to build a coordinated multiple views, thse following programming strategy will be used:\n\nAppropriate interactive functions of ggiraph will be used to create the multiple views.\npatchwork function of patchwork package will be used inside girafe function to create the interactive coordinated multiple views.\n\nThe data_id aesthetic is critical to link observations between plots and the tooltip aesthetic is optional but nice to have when mouse over a point.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\np1 &lt;- ggplot(data=exam_data, \n       aes(x = MATHS)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") +  \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\np2 &lt;- ggplot(data=exam_data, \n       aes(x = ENGLISH)) +\n  geom_dotplot_interactive(              \n    aes(data_id = ID),              \n    stackgroups = TRUE,                  \n    binwidth = 1,                        \n    method = \"histodot\") + \n  coord_cartesian(xlim=c(0,100)) + \n  scale_y_continuous(NULL,               \n                     breaks = NULL)\n\ngirafe(code = print(p1 + p2), \n       width_svg = 6,\n       height_svg = 3,\n       options = list(\n         opts_hover(css = \"fill: #202020;\"),\n         opts_hover_inv(css = \"opacity:0.2;\")\n         )\n       )"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#there-are-two-ways-to-create-interactive-graph-by-using-plotly-they-are",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#there-are-two-ways-to-create-interactive-graph-by-using-plotly-they-are",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#there-are-two-ways-to-create-interactive-graph-by-using-plotly-they-are",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#there-are-two-ways-to-create-interactive-graph-by-using-plotly-they-are",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "There are two ways to create interactive graph by using plotly, they are:",
     "text": "There are two ways to create interactive graph by using plotly, they are:\n\nby using plot_ly(), and\nby using ggplotly()"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#creating-an-interactive-scatter-plot-plot_ly-method",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#creating-an-interactive-scatter-plot-plot_ly-method",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#creating-an-interactive-scatter-plot-plot_ly-method",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#creating-an-interactive-scatter-plot-plot_ly-method",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Creating an interactive scatter plot: plot_ly() method",
     "text": "Creating an interactive scatter plot: plot_ly() method\nThe code chunk below shows an example a basic interactive plot created by using plot_ly().\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(data = exam_data, \n             x = ~MATHS, \n             y = ~ENGLISH)"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#working-with-visual-variable-plot_ly-method",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#working-with-visual-variable-plot_ly-method",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#working-with-visual-variable-plot_ly-method",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#working-with-visual-variable-plot_ly-method",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Working with visual variable: plot_ly() method",
     "text": "Working with visual variable: plot_ly() method\nIn the code chunk below, color argument is mapped to a qualitative visual variable (i.e. RACE).\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\nplot_ly(data = exam_data, \n        x = ~ENGLISH, \n        y = ~MATHS, \n        color = ~RACE)"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#creating-an-interactive-scatter-plot-ggplotly-method",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#creating-an-interactive-scatter-plot-ggplotly-method",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#creating-an-interactive-scatter-plot-ggplotly-method",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#creating-an-interactive-scatter-plot-ggplotly-method",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Creating an interactive scatter plot: ggplotly() method",
     "text": "Creating an interactive scatter plot: ggplotly() method\nThe code chunk below plots an interactive scatter plot by using ggplotly().\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\np &lt;- ggplot(data=exam_data, \n            aes(x = MATHS,\n                y = ENGLISH)) +\n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\nggplotly(p)\n\n\n\n\n\n\n\n\n\n\nTip\n\n\n\nThe only extra line you need to include in the code chunk is ggplotly()."
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#interactive-data-visualisation---crosstalk-methods",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#interactive-data-visualisation---crosstalk-methods",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#interactive-data-visualisation---crosstalk-methods",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#interactive-data-visualisation---crosstalk-methods",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Interactive Data Visualisation - crosstalk methods",
     "text": "Interactive Data Visualisation - crosstalk methods\nCrosstalk is an add-on to the htmlwidgets package. It extends htmlwidgets with a set of classes, functions, and conventions for implementing cross-widget interactions (currently, linked brushing and filtering).\n\nDT::datatable(exam_data, class= \"compact\")"
   },
   {
-    "objectID": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#linked-brushing-crosstalk-method",
-    "href": "In-class_Ex/In-class_Ex03/In-class_Ex03.html#linked-brushing-crosstalk-method",
-    "title": "In-class Exercise 3 - Programming Interactive Data Visualisation with R",
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#linked-brushing-crosstalk-method",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#linked-brushing-crosstalk-method",
+    "title": "Hands-on Exercise 4 - Visualising Distribution",
     "section": "Linked brushing: crosstalk method",
     "text": "Linked brushing: crosstalk method\nCode chunk below is used to implement coordinated brushing.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nd &lt;- highlight_key(exam_data) \np &lt;- ggplot(d, \n            aes(ENGLISH, \n                MATHS)) + \n  geom_point(size=1) +\n  coord_cartesian(xlim=c(0,100),\n                  ylim=c(0,100))\n\ngg &lt;- highlight(ggplotly(p),        \n                \"plotly_selected\")  \n\ncrosstalk::bscols(gg,               \n                  DT::datatable(d), \n                  widths = 5)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html",
+    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html",
+    "title": "In-Class Exercise 2 - Visualising Distribution",
+    "section": "",
+    "text": "Statistical graphic methods for visualising distribution using ggplot2 and its extensions for:\n\nRidgeline plot\nRaincloud plot"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#loading-r-packages",
+    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#loading-r-packages",
+    "title": "In-Class Exercise 2 - Visualising Distribution",
+    "section": "Loading R packages",
+    "text": "Loading R packages\nNote: Ensure that the pacman package has already been installed.\nThe code chunk below uses p_load() of pacman package to load the tidyverse family of packages.\n\nggridges, a ggplot2 extension specially designed for plotting ridgeline plots,\nggdist, a ggplot2 extension spacially desgin for visualising distribution and uncertainty,\ntidyverse, a family of R packages to meet the modern data science and visual communication needs,\nggthemes, a ggplot extension that provides the user additional themes, scales, and geoms for the ggplots package, and\ncolorspace, an R package provides a broad toolbox for selecting individual colors or color palettes, manipulating these colors, and employing them in various kinds of visualisations.\n\n\npacman::p_load(ggdist, ggridges, ggthemes, colorspace, tidyverse)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#importing-the-data",
+    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#importing-the-data",
+    "title": "In-Class Exercise 2 - Visualising Distribution",
+    "section": "Importing the Data",
+    "text": "Importing the Data\n\nThe code chunk below imports Exam_data.csv into R environment by using read_csv() function of readr package.\nreadr is one of the tidyverse package.\n\n\nexam_df &lt;- read_csv(\"data/Exam_data.csv\")\n\nexam_data contains:\n\nYear end examination grades of a cohort of primary 3 students from a local school.\nThere are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.\n\nThe categorical attributes are: ID, CLASS, GENDER and RACE.\nThe continuous attributes are: MATHS, ENGLISH and SCIENCE."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#varying-fill-colours-along-the-x-axis",
+    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#varying-fill-colours-along-the-x-axis",
+    "title": "In-Class Exercise 2 - Visualising Distribution",
+    "section": "Varying Fill Colours along the X-axis",
+    "text": "Varying Fill Colours along the X-axis\nSometimes we would like to have the area under a ridgeline not filled with a single solid color but rather with colors that vary in some form along the x axis.\nTo achieve varying fill colours:\n\ngeom_ridgeline_gradient()\ngeom_density_ridges_gradient()\n\nHowever, they do not allow for alpha transparency.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df, \n       aes(x = ENGLISH, \n           y = CLASS,\n           fill = stat(x))) +\n  geom_density_ridges_gradient(\n    scale = 3,\n    rel_min_height = 0.01) +\n  scale_fill_viridis_c(name = \"Temp. [°C]\",\n                       option = \"C\") +\n  scale_x_continuous(\n    name = \"English Grades\",\n    expand = c(0, 0)\n  ) +\n  scale_y_discrete(name = NULL, expand = expansion(add = c(0.2, 2.6))) +\n  theme_ridges()"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#mapping-probabilities-directly-onto-colour",
+    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#mapping-probabilities-directly-onto-colour",
+    "title": "In-Class Exercise 2 - Visualising Distribution",
+    "section": "Mapping Probabilities directly onto colour",
+    "text": "Mapping Probabilities directly onto colour\nStat function called stat_density_ridges() replaces stat_density() of ggplot2.\nFigure below is plotted by mapping the probabilities calculated by using stat(ecdf) which represent the empirical cumulative density function for the distribution of English score.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = 0.5 - abs(0.5-stat(ecdf)))) +\n  stat_density_ridges(geom = \"density_ridges_gradient\", \n                      calc_ecdf = TRUE) +\n  scale_fill_viridis_c(name = \"Tail probability\",\n                       direction = -1) +\n  theme_ridges()\n\n\n\n\n\n\n\n\n\n\nImportant\n\n\n\nInclude the argument calc_ecdf = TRUE in stat_density_ridges()!\n\n\n\nRidgeline Plots with Quantile Lines\nRidgeline plots can be coloured by quantile using geom_density_ridges_gradient(), via the calculated stat(quantile) \n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = factor(stat(quantile))\n           )) +\n  stat_density_ridges(\n    geom = \"density_ridges_gradient\",\n    calc_ecdf = TRUE, \n    quantiles = 4,\n    quantile_lines = TRUE) +\n  scale_fill_viridis_d(name = \"Quartiles\") +\n  theme_ridges()\n\n\n\n\nQuantiles can also be specified by cut points e.g. 2.5% and 97.5% tails to colour the ridgeline plot.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df,\n       aes(x = ENGLISH, \n           y = CLASS, \n           fill = factor(stat(quantile))\n           )) +\n  stat_density_ridges(\n    geom = \"density_ridges_gradient\",\n    calc_ecdf = TRUE, \n    quantiles = c(0.025, 0.975)\n    ) +\n  scale_fill_manual(\n    name = \"Probability\",\n    values = c(\"#FF0000A0\", \"#A0A0A0A0\", \"#0000FFA0\"),\n    labels = c(\"(0, 0.025]\", \"(0.025, 0.975]\", \"(0.975, 1]\")\n  ) +\n  theme_ridges()"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#plotting-a-half-eye-graph",
+    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#plotting-a-half-eye-graph",
+    "title": "In-Class Exercise 2 - Visualising Distribution",
+    "section": "Plotting a Half Eye graph",
+    "text": "Plotting a Half Eye graph\nPlot a Half-Eye graph by using stat_halfeye() of ggdist package, producing a Half Eye visualization, which is contains a half-density and a slab-interval.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nRemove the slab interval by setting .width = 0 and point_colour = NA."
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#adding-the-boxplot",
+    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#adding-the-boxplot",
+    "title": "In-Class Exercise 2 - Visualising Distribution",
+    "section": "Adding the boxplot",
+    "text": "Adding the boxplot\nThe second geometry layer i.e. a narrow boxplot is produced using geom_boxplot() of ggplot2 This produces a narrow boxplot.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA) +\n  geom_boxplot(width = .20,\n               outlier.shape = NA)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#adding-the-dot-plots",
+    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#adding-the-dot-plots",
+    "title": "In-Class Exercise 2 - Visualising Distribution",
+    "section": "Adding the Dot Plots",
+    "text": "Adding the Dot Plots\nThe third geometry layer is added using stat_dots() of ggdist package. This produces a half-dotplot, similar to a histogram that indicates the number of samples (number of dots) in each bin. Use side = “left” to specify the dot plots on the left-hand side.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA) +\n  geom_boxplot(width = .20,\n               outlier.shape = NA) +\n  stat_dots(side = \"left\", \n            justification = 1.2, \n            binwidth = .5,\n            dotsize = 2)"
+  },
+  {
+    "objectID": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#finishing-touch",
+    "href": "In-class_Ex/In-class_Ex02/In-Class_Ex02.html#finishing-touch",
+    "title": "In-Class Exercise 2 - Visualising Distribution",
+    "section": "Finishing touch",
+    "text": "Finishing touch\n coord_flip() of ggplot2 package is used to flip the raincloud chart horizontally to give it the raincloud appearance. theme_economist() of ggthemes package is also used to give the raincloud chart a professional publishing standard look.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(exam_df, \n       aes(x = RACE, \n           y = ENGLISH)) +\n  stat_halfeye(adjust = 0.5,\n               justification = -0.2,\n               .width = 0,\n               point_colour = NA) +\n  geom_boxplot(width = .20,\n               outlier.shape = NA) +\n  stat_dots(side = \"left\", \n            justification = 1.2, \n            binwidth = .5,\n            dotsize = 1.5) +\n  coord_flip() +\n  theme_economist()"
   },
   {
     "objectID": "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html#downloading-the-dataset",
