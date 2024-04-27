@@ -36,9 +36,14 @@ website:
             href: "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html"
 
     right:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+      - href: about.qmd
+        text: About
+    
+    tools:       
+    - icon: linkedin         
+      href: https://www.linkedin.com/in/lnealicia/       
+    - icon: github         
+      href: https://github.com/lnealicia/
 
 format:
   html:
