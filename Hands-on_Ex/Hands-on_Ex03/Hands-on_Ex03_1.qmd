@@ -546,7 +546,7 @@ Click actions must be a string column in the dataset containing valid javascript
 
 When a data point of one of the dotplot is selected, the corresponding data point ID on the second data visualisation will be highlighted too.
 
-In order to build a coordinated multiple views, the following programming strategy will be used:
+In order to build a coordinated multiple views, thse following programming strategy will be used:
 
 1.  Appropriate interactive functions of **ggiraph** will be used to create the multiple views.
 
