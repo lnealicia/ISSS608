@@ -102,7 +102,7 @@ Default information: - statistical details - Bayes Factor - sample sizes - distr
 
 -    Bayes factor allows evaluation of the data in favor of a null hypothesis, and to use external information to do so. It gives the weight of the evidence in favor of a given hypothesis.
 
--   When comparing two hypotheses, H1 (the alternate hypothesis) and H0 (the null hypothesis), the Bayes Factor is often written as B10.
+-   When comparing two hypotheses, H~1~ (the alternate hypothesis) and H~0~ (the null hypothesis), the Bayes Factor is often written as B~10~.
 
 ```{=html}
 <!-- -->
@@ -113,19 +113,19 @@ Default information: - statistical details - Bayes Factor - sample sizes - distr
 
 A **Bayes Factor** can be any positive number. A common interpretation was first proposed by Harold Jeffereys (1961) and slightly modified by [Lee and Wagenmakers](https://www-tandfonline-com.libproxy.smu.edu.sg/doi/pdf/10.1080/00031305.1999.10474443?needAccess=true) in 2013:
 
-| B10 Value  | Conclusion                  |
-|------------|-----------------------------|
-| \>100      | Extreme evidence for H1     |
-| 30-100     | Very strong evidence for H1 |
-| 10-30      | Strong evidence for H1      |
-| 3-10       | Moderate evidence for H1    |
-| 1-3        | Anecdotal evidence for H1   |
-| 1          | No evidence                 |
-| 1/3-1      | Anecdotal evidence for H1   |
-| 1/3-1/10   | Moderate evidence for H1    |
-| 1/10-1/30  | Strong evidence for H1      |
-| 1/30-1/100 | Very strong evidence for H1 |
-| \<1/100    | Extreme evidence for H1     |
+| B10 Value  | Conclusion                    |
+|------------|-------------------------------|
+| \>100      | Extreme evidence for H~1~     |
+| 30-100     | Very strong evidence for H~1~ |
+| 10-30      | Strong evidence for H~1~      |
+| 3-10       | Moderate evidence for H~1~    |
+| 1-3        | Anecdotal evidence for H~1~   |
+| 1          | No evidence                   |
+| 1/3-1      | Anecdotal evidence for H~1~   |
+| 1/3-1/10   | Moderate evidence for H~1~    |
+| 1/10-1/30  | Strong evidence for H~1~      |
+| 1/30-1/100 | Very strong evidence for H~1~ |
+| \<1/100    | Extreme evidence for H~1~     |
 
 ## **Two-sample mean test: *ggbetweenstats()***
 
