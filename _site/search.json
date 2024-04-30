@@ -541,23 +541,23 @@
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html",
     "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html",
-    "title": "Hands-on Exercise 4 - Visualising Distribution",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
     "section": "",
     "text": "Learning Objectives:"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#installing-and-loading-the-required-libraries",
     "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#installing-and-loading-the-required-libraries",
-    "title": "Hands-on Exercise 4 - Visualising Distribution",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
     "section": "Installing and loading the required libraries",
-    "text": "Installing and loading the required libraries\nThe following R packages will be used:\n\nggiraph for making ‘ggplot’ graphics interactive.\nplotly, R library for plotting interactive statistical graphs.\nDT provides an R interface to the JavaScript library DataTables that create interactive table on html page.\ntidyverse, a family of modern R packages specially designed to support data science, analysis and communication task including creating static statistical graphs.\npatchwork for combining multiple ggplot2 graphs into one figure.\n\nCode chunk below will be used to check if these packages have been installed and also will load them into the working R environment.\n\npacman::p_load(ggiraph, plotly, \n               patchwork, DT, tidyverse)"
+    "text": "Installing and loading the required libraries\nThe following R packages will be used:\n\nggstatsplotis an extension of ggplot2 package for creating graphics with details from statstical tests included in the plots themselces\ntidyverse, a family of modern R packages specially designed to support data science, analysis and communication task including creating static statistical graphs.\n\nCode chunk below will be used to check if these packages have been installed and also will load them into the working R environment.\n\npacman::p_load(ggstatsplot, tidyverse)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#importing-the-data",
     "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#importing-the-data",
-    "title": "Hands-on Exercise 4 - Visualising Distribution",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
     "section": "Importing the Data",
-    "text": "Importing the Data\n\nThe code chunk below imports exam_data.csv into R environment by using read_csv() function of readr package.\nreadr is a pacakge within tidyverse.\n\n\nexam_data &lt;- read_csv(\"data/Exam_data.csv\")\n\nexam_data tibble data frame contains:\n\nYear end examination grades of a cohort of primary 3 students from a local school.\nThere are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.\n\nThe categorical attributes are: ID, CLASS, GENDER and RACE.\nThe continuous attributes are: MATHS, ENGLISH and SCIENCE."
+    "text": "Importing the Data\n\nThe code chunk below imports exam_data.csv into R environment by using read_csv() function of readr package.\nreadr is a pacakge within tidyverse.\n\n\nexam &lt;- read_csv(\"data/Exam_data.csv\")\n\nexam_data tibble data frame contains:\n\nYear end examination grades of a cohort of primary 3 students from a local school.\nThere are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.\n\nThe categorical attributes are: ID, CLASS, GENDER and RACE.\nThe continuous attributes are: MATHS, ENGLISH and SCIENCE."
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#tooltip-effect-with-tooltip-aesthetic",
@@ -782,5 +782,110 @@
     "title": "Take-home Exercise 1 - Creating Data Visualisation Beyond Default",
     "section": "Price Distribution",
     "text": "Price Distribution\nCreate box plots for the price distribution of each private residence property type. geom_boxplot() displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually.\nNote: For better visibility, labels parameter with the function scales::number, formats the y-axis labels to include thousands separators.\nThe code chunk below shows that in Q1 2023 for Condominiums, there are two points with value above 900 million that is affecting the rest of the box plot. Thus, the decision was made to remove those points, and replot the data without the extreme outliers.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggplot(data = q1, \n       aes(x = `Property Type`, y = `Transacted Price ($)`)) + \ngeom_boxplot() +\nlabs(title = \"Q1 2023\",\n     x = \"Property Type\",\n     y = \"Transacted Price ($)\") +\nscale_y_continuous(labels = scales::number) + \ntheme_economist() +\ntheme(axis.text.x = element_text(angle = 90)) \n\n\n\n\n\nDrop Extreme Outlier\n\nq1_filtered &lt;- q1 %&gt;%\n  filter(`Transacted Price ($)` &lt;= 90000000)\n\n\n\nPrice Distribution by Property Type\nNote: For better visibility, labels parameter with the function scales::number(scale = 1e-6, suffix = \"M\") formats the y-axis labels to display in the millions unit, instead of the default scientific notation.\n\nQ1 2023Q2 2023Q3 2023Q4 2023Q1 2024\n\n\n\nq1_median &lt;- median(q1_filtered$`Transacted Price ($)`, na.rm = TRUE)\n\nq1_box &lt;- ggplot(data = q1_filtered, \n                aes(x = `Property Type`, y = `Transacted Price ($)`)) + \n          geom_boxplot() +\n          labs(title = \"Q1 2023\",\n                x = \"Property Type\",\n                y = \"Transacted Price ($)\") +\nscale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = \"M\"),\n                  limits = c(0, 67000000)) +\ngeom_hline(yintercept = q1_median,\n             linetype = \"dashed\", color = \"navy\") +\n  annotate(geom = \"text\",\n           x = 4, y = q1_median *10, \n           label = paste(\"Median:\", scales::number(q1_median, color = \"navy\"))) +\ntheme_economist() +\ntheme(axis.text.x = element_text(angle = 90)) \n\nq1_box\n\n\n\n\n\n\n\nq2_median &lt;- median(q2$`Transacted Price ($)`, na.rm = TRUE)\n\nq2_box &lt;- ggplot(data = q2, \n                aes(x = `Property Type`, y = `Transacted Price ($)`)) + \n          geom_boxplot() +\n          labs(title = \"Q2 2023\",\n                x = \"Property Type\",\n                y = \"Transacted Price ($)\") +\nscale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = \"M\"),\n                  limits = c(0, 67000000)) +\ngeom_hline(yintercept = q2_median,\n             linetype = \"dashed\", color = \"navy\") +\n  annotate(geom = \"text\",\n           x = 4, y = q2_median *10, \n           label = paste(\"Median:\", scales::number(q2_median, color = \"navy\"))) +\ntheme_economist() +\ntheme(axis.text.x = element_text(angle = 90)) \n\nq2_box\n\n\n\n\n\n\n\nq3_median &lt;- median(q3$`Transacted Price ($)`, na.rm = TRUE)\n\nq3_box &lt;- ggplot(data = q3, \n                aes(x = `Property Type`, y = `Transacted Price ($)`)) + \n          geom_boxplot() +\n          labs(title = \"Q3 2023\",\n                x = \"Property Type\",\n                y = \"Transacted Price ($)\") +\nscale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = \"M\"),\n                  limits = c(0, 67000000)) +\ngeom_hline(yintercept = q3_median,\n             linetype = \"dashed\", color = \"navy\") +\n  annotate(geom = \"text\",\n           x = 4, y = q3_median *10, \n           label = paste(\"Median:\", scales::number(q3_median, color = \"navy\"))) +\ntheme_economist() +\ntheme(axis.text.x = element_text(angle = 90)) \n\nq3_box\n\n\n\n\n\n\n\nq4_median &lt;- median(q4$`Transacted Price ($)`, na.rm = TRUE)\n\nq4_box &lt;- ggplot(data = q4, \n                aes(x = `Property Type`, y = `Transacted Price ($)`)) + \n          geom_boxplot() +\n          labs(title = \"Q4 2023\",\n                x = \"Property Type\",\n                y = \"Transacted Price ($)\") +\nscale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = \"M\"),\n                  limits = c(0, 67000000)) +\ngeom_hline(yintercept = q4_median,\n             linetype = \"dashed\", color = \"navy\") +\n  annotate(geom = \"text\",\n           x = 4, y = q4_median *10, \n          label = paste(\"Median:\", scales::number(q4_median, color = \"navy\"))) +\ntheme_economist() +\ntheme(axis.text.x = element_text(angle = 90)) \n\nq4_box\n\n\n\n\n\n\n\nq5_median &lt;- median(q5$`Transacted Price ($)`, na.rm = TRUE)\n\nq5_box &lt;- ggplot(data = q5, \n                aes(x = `Property Type`, y = `Transacted Price ($)`)) + \n          geom_boxplot() +\n          labs(title = \"Q1 2024\",\n                x = \"Property Type\",\n                y = \"Transacted Price ($)\") +\nscale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = \"M\"),\n                  limits = c(0, 67000000)) +\ngeom_hline(yintercept = q5_median,\n             linetype = \"dashed\", color = \"navy\") +\n  annotate(geom = \"text\",\n           x = 4, y = q5_median *10, \n          label = paste(\"Median:\", scales::number(q5_median, color = \"navy\"))) +\ntheme_economist() +\ntheme(axis.text.x = element_text(angle = 90)) \n\nq5_box\n\n\n\n\n\n\n\n\n\nComposite Plot\nUsing patchwork package, the plots for Q1 2023 and Q1 2024 are stacked into 1 composite plot for a quarter on quarter analysis.\n\nq1_box | q5_box\n\n\n\n\n\n\n\n\n\n\nWrite Up\n\n\n\nOverall, there is an increase in overall prices from 1.63 million to 1.69 million. However, the price variability for all property types have decreased, with fewer outliers present.\nThe boxplot shows Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status.\nDetached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers. In contrast, Executive Condominiums demonstrate the least variability in transacted prices, with their interquartile ranges (IQR) closely aligning with their medians. This suggests a stable and consistent pricing trend. Executive Condominiums have the lowest transacted prices, indicating their appeal as an affordable option within the private housing market.\nApartments and Condominiums, on the other hand, show a significant number of outliers in their transacted prices, suggesting a wider range of pricing and potentially more diversity in market conditions for these property types."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#one-sample-test-gghistostats-method",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#one-sample-test-gghistostats-method",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "One-sample test: gghistostats() method",
+    "text": "One-sample test: gghistostats() method\nIn the code chunk below, gghistostats() is used to to build an visual of one-sample test on English scores.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nset.seed(1234) # for reproducibility\n\ngghistostats(\n  data = exam,\n  x = ENGLISH,\n  type = \"bayes\",\n  test.value = 60,\n  xlab = \"English scores\"\n)\n\n\n\n\nDefault information: - statistical details - Bayes Factor - sample sizes - distribution summary"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#unpacking-the-bayes-factor",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#unpacking-the-bayes-factor",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Unpacking the Bayes Factor",
+    "text": "Unpacking the Bayes Factor\n\nA Bayes factor is the ratio of the likelihood of one particular hypothesis to the likelihood of another. i.e., a measure of the strength of evidence in favor of one theory among two competing theories.\nBayes factor allows evaluation of the data in favor of a null hypothesis, and to use external information to do so. It gives the weight of the evidence in favor of a given hypothesis.\nWhen comparing two hypotheses, H1 (the alternate hypothesis) and H0 (the null hypothesis), the Bayes Factor is often written as B10, defined mathematically as:\n\\(\\frac{likelihood of data given H_{1}}{likelihood of data given H_{0}} = \\frac{P(D|H_{1})}{P(D|H_{0})}\\)\nThe Schwarz criterion is one of the easiest ways to calculate rough approximation of the Bayes Factor.\n\n\nInterpreting Bayes Factor\nA Bayes Factor can be any positive number. A common interpretation was first proposed by Harold Jeffereys (1961) and slightly modified by Lee and Wagenmakers in 2013:\n\n\n\nB10 Value\nConclusion\n\n\n\n\n&gt;100\nExtreme evidence for H1\n\n\n30-100\nVery strong evidence for H1\n\n\n10-30\nStrong evidence for H1\n\n\n3-10\nModerate evidence for H1\n\n\n1-3\nAnecdotal evidence for H1\n\n\n1\nNo evidence\n\n\n1/3-1\nAnecdotal evidence for H1\n\n\n1/3-1/10\nModerate evidence for H1\n\n\n1/10-1/30\nStrong evidence for H1\n\n\n1/30-1/100\nVery strong evidence for H1\n\n\n&lt;1/100\nExtreme evidence for H1"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#two-sample-mean-test-ggbetweenstats",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#two-sample-mean-test-ggbetweenstats",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Two-sample mean test: ggbetweenstats()",
+    "text": "Two-sample mean test: ggbetweenstats()\nIn the code chunk below, ggbetweenstats() is used to build a visual for two-sample mean test of Maths scores by gender.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggbetweenstats(\n  data = exam,\n  x = GENDER, \n  y = MATHS,\n  type = \"np\",\n  messages = FALSE\n)\n\n\n\n\nDefault information: - statistical details - Bayes Factor - sample sizes - distribution summary"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#oneway-anova-test-ggbetweenstats-method",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#oneway-anova-test-ggbetweenstats-method",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Oneway ANOVA Test: ggbetweenstats() method",
+    "text": "Oneway ANOVA Test: ggbetweenstats() method\nIn the code chunk below, ggbetweenstats() is used to build a visual for One-way ANOVA test on English score by race.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggbetweenstats(\n  data = exam,\n  x = RACE, \n  y = ENGLISH,\n  type = \"p\",\n  mean.ci = TRUE, \n  pairwise.comparisons = TRUE, \n  pairwise.display = \"s\",\n  p.adjust.method = \"fdr\",\n  messages = FALSE\n)\n\n\n\n\n\n“ns” → only non-significant\n“s” → only significant\n“all” → everything\n\n\nggbetweenstats - Summary of tests\nFollowing (between-subjects) tests are carried out for each type of analyses:\n\n\n\n\n\n\n\n\nType\nNo. of groups\nTest\n\n\n\n\nParametric\n&gt;2\nFisher’s or Welch’s one-way ANOVA\n\n\nNon-parametric\n&gt;2\nKruskal-Wallis one-way ANOVA\n\n\nRobust\n&gt;2\nHeteroscedastic one-way ANOVA for trimmed means\n\n\nBayes Factor\n&gt;2\nFisher’s ANOVA\n\n\nParametric\n2\nStudent’s or Welch’s t-test\n\n\nNon-parametric\n2\nMann-Whitney U test\n\n\nRobust\n2\nYuen’s test for trimmed means\n\n\nBayes Factor\n2\nStudent’s t-test\n\n\n\nFollowing effect sizes (and confidence intervals) are available for each type of test:\n\n\n\n\n\n\n\n\n\nType\nNo. of Groups\nEffect Size\nConfidence Intervals\n\n\n\n\nParametric\n&gt;2\n\\({\\eta^2}_{p},\\eta^2,{\\omega^2}_{p},\\omega^2\\)\nYes\n\n\nNon-parametric\n&gt;2\n\\({\\eta^2}_{H}\\) (H-statistic based eta-squared)\nYes\n\n\nRobust\n&gt;2\n\\(\\xi\\) (Explanatory measure of effect size)\nYes\n\n\nBayes Factor\n&gt;2\nNo\nNo\n\n\nParametric\n2\nCohen’s d, Hedge’s g (central-and-noncentral-t distribution based)\nYes\n\n\nNon-parametric\n2\nr (computed as \\(Z/\\sqrt{N}\\))\nYes\n\n\nRobust\n2\n\\(\\xi\\) (Explanatory measure of effect size)\nYes\n\n\nBayes Factor\n2\nNo\nNo\n\n\n\nSummary of pairwise comparison tests supported in ggbetweenstats\n\n\n\n\n\n\n\n\n\nType\nEqual Variance\nTest\np-value Adjustment?\n\n\n\n\nParametric\nNo\nGames Howell Test\nYes\n\n\nParametric\nYes\nStudent’s t Test\nYes\n\n\nNon-Parametric\nNo\nDunn Test\nYes\n\n\nRobust\nNo\nYuen’s Trimmed Means Test\nYes\n\n\nBayes Factor\nNA\nStudent’s t Test\nNA"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#significant-test-of-correlation-ggscatterstats",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#significant-test-of-correlation-ggscatterstats",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Significant Test of Correlation: ggscatterstats()",
+    "text": "Significant Test of Correlation: ggscatterstats()\nIn the code chunk below, ggscatterstats() is used to build a visual for Significant Test of Correlation between Maths scores and English scores.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggscatterstats(\n  data = exam,\n  x = MATHS,\n  y = ENGLISH,\n  marginal = FALSE,\n  )"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#significant-test-of-association-depedence-ggbarstats-methods",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#significant-test-of-association-depedence-ggbarstats-methods",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Significant Test of Association (Depedence) : ggbarstats() methods",
+    "text": "Significant Test of Association (Depedence) : ggbarstats() methods\nIn the code chunk below, the Maths scores is binned into a 4-class variable by using cut().Plot\n\nexam1 &lt;- exam %&gt;% \n  mutate(MATHS_bins = \n           cut(MATHS, \n               breaks = c(0,60,75,85,100))\n)\n\nIn this code chunk below ggbarstats() is used to build a visual for Significant Test of Association\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggbarstats(exam1, \n           x = MATHS_bins, \n           y = GENDER)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#visualising-models",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#visualising-models",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Visualising Models",
+    "text": "Visualising Models\nVisualise model diagnostic and model parameters by using parameters package.\n\nToyota Corolla case study will be used. The purpose of study is to build a model to discover factors affecting prices of used-cars by taking into consideration a set of explanatory variables."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#installing-and-loading-the-required-libraries-1",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#installing-and-loading-the-required-libraries-1",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Installing and loading the required libraries",
+    "text": "Installing and loading the required libraries\n\npacman::p_load(readxl, performance, parameters, see)\n\n\nImporting Excel file: readxl methods\nIn the code chunk below, read_xls() of readxl package is used to import the data worksheet of ToyotaCorolla.xls workbook into R.\n\ncar_resale &lt;- read_xls(\"data/ToyotaCorolla.xls\", \n                       \"data\")\ncar_resale\n\n# A tibble: 1,436 × 38\n      Id Model    Price Age_08_04 Mfg_Month Mfg_Year     KM Quarterly_Tax Weight\n   &lt;dbl&gt; &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;         &lt;dbl&gt;  &lt;dbl&gt;\n 1    81 TOYOTA … 18950        25         8     2002  20019           100   1180\n 2     1 TOYOTA … 13500        23        10     2002  46986           210   1165\n 3     2 TOYOTA … 13750        23        10     2002  72937           210   1165\n 4     3  TOYOTA… 13950        24         9     2002  41711           210   1165\n 5     4 TOYOTA … 14950        26         7     2002  48000           210   1165\n 6     5 TOYOTA … 13750        30         3     2002  38500           210   1170\n 7     6 TOYOTA … 12950        32         1     2002  61000           210   1170\n 8     7  TOYOTA… 16900        27         6     2002  94612           210   1245\n 9     8 TOYOTA … 18600        30         3     2002  75889           210   1245\n10    44 TOYOTA … 16950        27         6     2002 110404           234   1255\n# ℹ 1,426 more rows\n# ℹ 29 more variables: Guarantee_Period &lt;dbl&gt;, HP_Bin &lt;chr&gt;, CC_bin &lt;chr&gt;,\n#   Doors &lt;dbl&gt;, Gears &lt;dbl&gt;, Cylinders &lt;dbl&gt;, Fuel_Type &lt;chr&gt;, Color &lt;chr&gt;,\n#   Met_Color &lt;dbl&gt;, Automatic &lt;dbl&gt;, Mfr_Guarantee &lt;dbl&gt;,\n#   BOVAG_Guarantee &lt;dbl&gt;, ABS &lt;dbl&gt;, Airbag_1 &lt;dbl&gt;, Airbag_2 &lt;dbl&gt;,\n#   Airco &lt;dbl&gt;, Automatic_airco &lt;dbl&gt;, Boardcomputer &lt;dbl&gt;, CD_Player &lt;dbl&gt;,\n#   Central_Lock &lt;dbl&gt;, Powered_Windows &lt;dbl&gt;, Power_Steering &lt;dbl&gt;, …"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#multiple-regression-model-using-lm",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#multiple-regression-model-using-lm",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Multiple Regression Model using lm()",
+    "text": "Multiple Regression Model using lm()\nThe code chunk below is used to calibrate a multiple linear regression model by using lm() of Base Stats of R.\n\nmodel &lt;- lm(Price ~ Age_08_04 + Mfg_Year + KM + \n              Weight + Guarantee_Period, data = car_resale)\nmodel\n\n\nCall:\nlm(formula = Price ~ Age_08_04 + Mfg_Year + KM + Weight + Guarantee_Period, \n    data = car_resale)\n\nCoefficients:\n     (Intercept)         Age_08_04          Mfg_Year                KM  \n      -2.637e+06        -1.409e+01         1.315e+03        -2.323e-02  \n          Weight  Guarantee_Period  \n       1.903e+01         2.770e+01"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#model-diagnostic-checking-for-multicolinearity",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#model-diagnostic-checking-for-multicolinearity",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Model Diagnostic: checking for multicolinearity:",
+    "text": "Model Diagnostic: checking for multicolinearity:\nIn the code chunk, check_collinearity() of performance package.\n\ncheck_collinearity(model)\n\n# Check for Multicollinearity\n\nLow Correlation\n\n             Term  VIF     VIF 95% CI Increased SE Tolerance Tolerance 95% CI\n               KM 1.46 [ 1.37,  1.57]         1.21      0.68     [0.64, 0.73]\n           Weight 1.41 [ 1.32,  1.51]         1.19      0.71     [0.66, 0.76]\n Guarantee_Period 1.04 [ 1.01,  1.17]         1.02      0.97     [0.86, 0.99]\n\nHigh Correlation\n\n      Term   VIF     VIF 95% CI Increased SE Tolerance Tolerance 95% CI\n Age_08_04 31.07 [28.08, 34.38]         5.57      0.03     [0.03, 0.04]\n  Mfg_Year 31.16 [28.16, 34.48]         5.58      0.03     [0.03, 0.04]\n\n\n\ncheck_c &lt;- check_collinearity(model)\nplot(check_c)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#model-diagnostic-checking-normality-assumption",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#model-diagnostic-checking-normality-assumption",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Model Diagnostic: checking normality assumption",
+    "text": "Model Diagnostic: checking normality assumption\nIn the code chunk, check_normality() of performance package.\n\nmodel1 &lt;- lm(Price ~ Age_08_04 + KM + \n              Weight + Guarantee_Period, data = car_resale)\n\ncheck_n &lt;- check_normality(model1)\n\n\nplot(check_n)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#model-diagnostic-check-model-for-homogeneity-of-variances",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#model-diagnostic-check-model-for-homogeneity-of-variances",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Model Diagnostic: Check model for homogeneity of variances",
+    "text": "Model Diagnostic: Check model for homogeneity of variances\nIn the code chunk, check_heteroscedasticity() of performance package.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\ncheck_h &lt;- check_heteroscedasticity(model1)\nplot(check_h)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#model-diagnostic-complete-check",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#model-diagnostic-complete-check",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Model Diagnostic: Complete check",
+    "text": "Model Diagnostic: Complete check\nWe can also perform the complete by using check_model().\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\ncheck_model(model1)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#visualising-regression-parameters-see-methods",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#visualising-regression-parameters-see-methods",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Visualising Regression Parameters: see methods",
+    "text": "Visualising Regression Parameters: see methods\nIn the code below, plot() of see package and parameters() of parameters package is used to visualise the parameters of a regression model.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nplot(parameters(model1))"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#visualising-regression-parameters-ggcoefstats-methods",
+    "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#visualising-regression-parameters-ggcoefstats-methods",
+    "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
+    "section": "Visualising Regression Parameters: ggcoefstats() methods",
+    "text": "Visualising Regression Parameters: ggcoefstats() methods\nIn the code below, ggcoefstats() of ggstatsplot package to visualise the parameters of a regression model.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggcoefstats(model1, \n            output = \"plot\")"
   }
 ]
