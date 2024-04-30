@@ -1,5 +1,5 @@
 ---
-title: "Hands-on Exercise 4 -  Visualising Uncertainty"
+title: "Hands-on Exercise 4 -  Funnel Plots for Fair Comparisons"
 author: "Alicia Loh"
 date: "April 30, 2024"
 date-modified: last-modified
@@ -7,18 +7,18 @@ execute:
   eval: true
   echo: true
   warning: false
-  freeze: true
+  freeze: false
 ---
+
+Funnel plot is a specially designed data visualisation for conducting unbiased comparison between outlets, stores or business entities. 
 
 Learning Objectives:
 
--   Plot statistics error bars by using ggplot2,
+-   plotting funnel plots by using **funnelPlotR** package,
 
--   Plot interactive error bars by combining ggplot2, plotly and DT,
+-   plotting static funnel plot by using ggplot2 package, and
 
--   Create advanced by using ggdist, and
-
--   Create hypothetical outcome plots (HOPs) by using ungeviz package.
+-   plotting interactive funnel plot by using both **plotly R** and **ggplot2** packages.
 
 # Getting Started
 
@@ -26,49 +26,36 @@ Learning Objectives:
 
 The following R packages will be used:
 
--   tidyverse, a family of R packages for data science process,
+-   **readr** for importing csv into R.
 
--   plotly for creating interactive plot,
+-   **FunnelPlotR** for creating funnel plot.
 
--   gganimate for creating animation plot,
+-   **ggplot2** for creating funnel plot manually.
 
--   DT for displaying interactive html table,
+-   **knitr** for building static html table.
 
--   crosstalk for for implementing cross-widget interactions (currently, linked brushing and filtering), and
-
--   ggdist for visualising distribution and uncertainty.
+-   **plotly** for creating interactive funnel plot.
 
 Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
 
 ```{r}
-devtools::install_github("wilkelab/ungeviz")
-
-pacman::p_load(ungeviz, plotly, crosstalk,
-               DT, ggdist, ggridges,
-               colorspace, gganimate, tidyverse)
+pacman::p_load(tidyverse, FunnelPlotR, plotly, knitr)
 ```
 
 ## Importing the Data
 
--   The code chunk below imports *exam_data.csv* into R environment by using [*read_csv()*](https://readr.tidyverse.org/reference/read_delim.html) function of [**readr**](https://readr.tidyverse.org/) package.
+The COVID-19_DKI_Jakarta will be used. The data was downloaded from [Open Data Covid-19 Provinsi DKI Jakarta portal](https://riwayat-file-covid-19-dki-jakarta-jakartagis.hub.arcgis.com/).
 
--   **readr** is a pacakge within tidyverse.
+For this hands-on exercise, compares the cumulative COVID-19 cases and death by sub-district (i.e. kelurahan) as at 31st July 2021, DKI Jakarta.
+
+The code chunk below imports the data into R and save it into a tibble data frame object called *covid19*.
 
 ```{r}
-exam <- read_csv("data/Exam_data.csv")
+covid19 <- read_csv("data/COVID-19_DKI_Jakarta.csv") %>%
+  mutate_if(is.character, as.factor)
 ```
 
-**exam_data** tibble data frame contains:
-
--   Year end examination grades of a cohort of primary 3 students from a local school.
-
--   There are a total of seven attributes. Four of them are categorical data type and the other three are in continuous data type.
-
-    -   The categorical attributes are: ID, CLASS, GENDER and RACE.
-
-    -   The continuous attributes are: MATHS, ENGLISH and SCIENCE.
-
-## **Visualizing the uncertainty of point estimates: ggplot2 methods**
+# **FunnelPlotR methods**
 
 A point estimate is a single number, e.g., mean. Uncertainty, is expressed as standard error, confidence interval, or credible interval.
 
