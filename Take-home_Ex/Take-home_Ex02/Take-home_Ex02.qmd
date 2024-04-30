@@ -1,0 +1,701 @@
+---
+title: "Take-home Exercise 2 - DataVis Makeover"
+author: "Alicia Loh"
+date: "April 30, 2024"
+date-modified: last-modified
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: false
+---
+
+# **Context**
+
+There are two major residential property market in Singapore, namely public and private housing. Public housing aims to meet the basic need of the general public with monthly household income less than or equal to S\$14,000. For families with monthly household income more than S\$14,000, they need to turn to the private residential market.
+
+# **The Task**
+
+Assuming the role of a graphical editor of a median company, a minimum two and maximum three of data visualisations are prepared to reveal the private residential market and sub-markets of Singapore for the 1st quarter of 2024.
+
+# **The Data**
+
+To accomplish the task, transaction data of [REALIS](https://www.ura.gov.sg/reis/index) will be used.
+
+## Downloading the Dataset
+
+1.  Access Dataset via [**SMU e-library**](https://www-ura-gov-sg.libproxy.smu.edu.sg/reis/ipLoginNotice)\
+
+2.  After logging in with SMU credentials, navigate to "**Residential**" tab\
+
+3.  Under **Property Types**, "Select All"
+
+4.  Under **Sale Date**, select "2023 Jan" - "2024 Mar"
+
+5.  Click "Search"
+
+6.  Click "Download"
+
+7.  Due to the size of the dataset, it is split into multiple segments. Download all in .csv format\
+
+## **The Designing Tool**
+
+The data will be processed using the appropriate **tidyverse** family of packages and the statistical graphics will be prepared using **ggplot2** and its extensions.
+
+# Getting Started
+
+## Installing and loading the required libraries
+
+Note: Ensure that the [pacman](https://cran.r-project.org/web/packages/pacman/) package has already been installed.
+
+The code chunk below loads the following packages using uses `p_load()` of pacman package:
+
+-   [**tidyverse**](https://www.tidyverse.org/): (i.e. readr, tidyr, [dplyr](https://dplyr.tidyverse.org/), [ggplot2](https://ggplot2.tidyverse.org/), [lubridate](https://lubridate.tidyverse.org/)) for performing data science tasks such as importing, tidying, and wrangling data, as well as creating graphics based on The Grammar of Graphics
+
+-   [**reshape2**](https://seananderson.ca/2013/10/19/reshape/) for transforming data between wide and long formats
+
+-   [**ggthemes**](https://ggplot2.tidyverse.org/reference/ggtheme.html): provides some extra themes, geoms, and scales for ‘ggplot2’.
+
+-   [**ggdist**](https://mjskay.github.io/ggdist/): a ggplot2 extension specially designed for visualising distribution and uncertainty
+
+-   [**patchwork**](https://patchwork.data-imaginist.com/articles/guides/assembly.html): an R package for preparing composite figure created using ggplot2.
+
+```{r}
+pacman::p_load(tidyverse, reshape2, ggthemes, ggdist, patchwork)
+```
+
+## Importing the Data
+
+-   The data has been split into multiple .csv files
+
+-   **`list.files()`** list all CSV files in the specified directory.
+
+-   After looping through each CSV file, read it into a data frame using **`read_csv()`**, and store it in a list.
+
+-   **`bind_rows()`** combines all data frames in the list into a single big data frame.
+
+```{r}
+csv_directory <- "data/"
+csv_files <- list.files(csv_directory, pattern = "\\.csv$", full.names = TRUE)
+
+realis <- list()
+
+for (file in csv_files) {
+  realis[[file]] <- read_csv(file)
+}
+```
+
+```{r}
+realis_all <- bind_rows(realis)
+```
+
+## View Data
+
+-   **`names()`** function prints the names of the columns in the tibble data frame.
+-   **`glimpse()`** function gives a quick overview of the tibble data frame
+
+::: panel-tabset
+## Column Names
+
+```{r}
+col_names <- names(realis_all)
+col_names
+```
+
+## Overview of Tibble Data Frame
+
+```{r}
+glimpse(realis_all)
+```
+:::
+
+::: callout-note
+**realis_all contains:**
+
+-   Public and Private residential property transaction data from 1st January 2023 to 31st March 2024.
+
+-   There are 26,806 rows and 21 columns.
+:::
+
+## Data Preparation
+
+### Standardise Date Format
+
+The "Sales Date" column is currently a *cha* type. It needs to be converted into date format.
+
+**`dmy()`** is a function from the [**lubridate**](https://lubridate.tidyverse.org/) package that converts character strings to date format in the day-month-year (DMY) order.
+
+::: panel-tabset
+## Standardise Date Format
+
+```{r}
+realis_all$`Sale Date` <- dmy(realis_all$`Sale Date`)
+```
+
+## View Data
+
+```{r}
+head(realis_all$`Sale Date`)
+```
+:::
+
+### Keep Relevant Rows
+
+Duplicate and empty rows are removed.
+
+```{r}
+qa_pte_raw <- realis_all %>%
+    distinct() %>%
+    drop_na()
+```
+
+#### View Data
+
+```{r}
+glimpse(qa_pte_raw)
+```
+
+::: callout-note
+**qa_pte_raw contains:**
+
+-   Private residential property transaction data from 1st January 2023 to 31st March 2024
+
+-   There are 26,800 rows and 21 columns.
+:::
+
+### Keep Relevant Columns
+
+Not all 21 columns will be used for analysis e.g. contains overlapping information as another column. Only relevant columns will be kept.
+
+Columns to drop:
+
+-   Area (SQFT): Similar information as Area (SQM)
+
+-   Unit Price (\$ PSF): Similar information as Unit Price (\$ PSM)
+
+-   Nett Price (\$): Similar information as Transacted Price (\$)
+
+-   Postal District and Postal Sector: Overlapping information as Postal Code
+
+Columns to be dropped can be specified by prefixing the column names with a minus sign (-) when using the **`select()`** function from the **`dplyr`** package.
+
+::: panel-tabset
+## Keep Relevant Columns
+
+```{r}
+qa_pte <- qa_pte_raw %>%
+    select(
+        -`Area (SQFT)`,
+        -`Unit Price ($ PSF)`,
+        -`Postal District`,
+        -`Postal Sector`
+    )
+```
+
+## View Data
+
+```{r}
+glimpse(qa_pte)
+```
+:::
+
+::: callout-note
+**qa_pte contains:**
+
+-   Private residential property transaction data from 1st January 2024 to 31st March 2024
+
+-   There are 26,800 rows and 14 columns.
+
+-   Columns:
+
+    -   Project Name
+
+    -   Transacted Price (\$)
+
+    -   Sale Date
+
+    -   Address
+
+    -   Type of Sale
+
+    -   Type of Area
+
+    -   Area (SQM)
+
+    -   Unit Price (\$ PSM)
+
+    -   Nett Price
+
+    -   Property Type
+
+    -   Number of Units
+
+    -   Tenure
+
+    -   Completion Date
+
+    -   Purchaser Address Indicator
+
+    -   Postal Code
+
+    -   Planning Region
+
+    -   Planning Area
+:::
+
+### Separate Data by Quarters
+
+The dataset contains 5 quarters:
+
+-   Quarter 1: 2023 Jan - Mar
+
+-   Quarter 2: 2023 Apr - Jun
+
+-   Quarter 3: 2023 Jul - Sep
+
+-   Quarter 4: 2023 Aug - Dec
+
+-   Quarter 5: 2024 Jan - Mar
+
+To allow for comparison between quarters, qa_pte will be split into the respective quarters by `Sale Date`.
+
+```{r}
+q1 <- qa_pte %>%
+  filter(`Sale Date` <= "2023-03-31")
+
+q2 <- qa_pte %>%
+  filter(`Sale Date` > "2023-03-31" & `Sale Date` <= "2023-06-30")
+
+q3 <- qa_pte %>%
+  filter(`Sale Date` > "2023-06-30" & `Sale Date` <= "2023-09-30")
+
+q4 <- qa_pte %>%
+  filter(`Sale Date` > "2023-09-30" & `Sale Date` <= "2023-12-31")
+
+q5 <- qa_pte %>%
+  filter(`Sale Date` > "2023-12-31")
+```
+
+### View Data
+
+::: panel-tabset
+## Q1
+
+```{r}
+glimpse(q1)
+```
+
+## Q2
+
+```{r}
+summary(q2)
+```
+
+## Q3
+
+```{r}
+summary(q3)
+```
+
+## Q4
+
+```{r}
+summary(q4)
+```
+
+## Q5
+
+```{r}
+summary(q5)
+```
+:::
+
+# Visualisation
+
+There are various types of Properties for Private residences.
+
+```{r}
+unique(qa_pte$`Property Type`)
+```
+
+The different types in the dataset are:
+
+-   Condominium
+
+-   Terrace House
+
+-   Apartment
+
+-   Executive Condominium
+
+-   Semi-Detached House
+
+-   Detached House
+
+## Number of Units Sold
+
+Create bar chart plots for the price distribution of each private residence property type. A bar chart or graph that presents categorical data with rectangular bars with heights or lengths proportional to the values that they represent. They can be plotted vertically or horizontally.
+
+For each quarter, the data is grouped by property type, then summed by the number of units, in order to obtain the number of units sold per quarter.
+
+### Summarise Number of Units Sold by Property Type
+
+::: panel-tabset
+## Q1 2023
+
+```{r}
+q1_units <- q1 %>%
+  group_by(`Property Type`) %>%
+  summarize(`Total Units` = sum(`Number of Units`), .groups = "drop")
+q1_units
+```
+
+## Q2 2023
+
+```{r}
+q2_units <- q2 %>%
+  group_by(`Property Type`) %>%
+  summarize(`Total Units` = sum(`Number of Units`), .groups = "drop")
+q2_units
+```
+
+## Q3 2023
+
+```{r}
+q3_units <- q3 %>%
+  group_by(`Property Type`) %>%
+  summarize(`Total Units` = sum(`Number of Units`), .groups = "drop")
+q3_units
+```
+
+## Q4 2023
+
+```{r}
+q4_units <- q4 %>%
+  group_by(`Property Type`) %>%
+  summarize(`Total Units` = sum(`Number of Units`), .groups = "drop")
+q4_units
+```
+
+## Q1 2024
+
+```{r}
+q5_units <- q5 %>%
+  group_by(`Property Type`) %>%
+  summarize(`Total Units` = sum(`Number of Units`), .groups = "drop")
+q5_units
+```
+:::
+
+The code chunk below plots the number of units by property type for each quarter.
+
+::: panel-tabset
+## 2023 Q1
+
+```{r}
+q1_mean <- mean(q1_units$`Total Units`)
+
+q1_plot <- ggplot(q1_units, aes(x = `Property Type`, y = `Total Units`)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Property Type", y = "Total Units Sold") +
+  ggtitle("Q1 2023") +
+  ylim(0, 2700) +
+  theme_economist() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = q1_mean, color = "navy", linetype = "dashed") +
+  annotate(geom = "text", x = 5, y = q1_mean + 100, 
+           label = paste("Mean:", round(q1_mean, 2)), color = "navy")
+
+q1_plot
+
+```
+
+## 2023 Q2
+
+```{r}
+q2_mean <- mean(q2_units$`Total Units`)
+
+q2_plot <- ggplot(q2_units, aes(x = `Property Type`, y = `Total Units`)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Property Type", y = "Total Units Sold") +
+  ggtitle("Q2 2023") +
+  ylim(0, 2700) +
+  theme_economist() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = q2_mean, color = "navy", linetype = "dashed") +
+  annotate(geom = "text", x = 5, y = q2_mean + 100, 
+           label = paste("Mean:", round(q2_mean, 2)), color = "navy")
+
+q2_plot
+```
+
+## 2023 Q3
+
+```{r}
+q3_mean <- mean(q3_units$`Total Units`)
+
+q3_plot <- ggplot(q3_units, aes(x = `Property Type`, y = `Total Units`)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Property Type", y = "Total Units Sold") +
+  ggtitle("Q3 2023") +
+  ylim(0, 2700) +
+  theme_economist() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = q3_mean, color = "navy", linetype = "dashed") +
+  annotate(geom = "text", x = 5, y = q3_mean + 100, 
+           label = paste("Mean:", round(q3_mean, 2)), color = "navy")
+
+q3_plot
+```
+
+## 2023 Q4
+
+```{r}
+q4_mean <- mean(q4_units$`Total Units`)
+
+q4_plot <- ggplot(q4_units, aes(x = `Property Type`, y = `Total Units`)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Property Type", y = "Total Units Sold") +
+  ggtitle("Q4 2023") +
+  ylim(0, 2700) +
+  theme_economist() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = q4_mean, color = "navy", linetype = "dashed") +
+  annotate(geom = "text", x = 5, y = q4_mean + 100, 
+           label = paste("Mean:", round(q4_mean, 2)), color = "navy")
+
+q4_plot
+```
+
+## 2024 Q1
+
+```{r}
+q5_mean <- mean(q5_units$`Total Units`)
+
+q5_plot <- ggplot(q5_units, aes(x = `Property Type`, y = `Total Units`)) +
+  geom_bar(stat = "identity") +
+  labs(x = "Property Type", y = "Total Units Sold") +
+  ggtitle("Q1 2024") +
+  ylim(0, 2700) +
+  theme_economist() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  geom_hline(yintercept = q5_mean, color = "navy", linetype = "dashed") +
+  annotate(geom = "text", x = 5, y = q5_mean + 100, 
+           label = paste("Mean:", round(q5_mean, 2)), color = "navy")
+
+q5_plot
+```
+:::
+
+### Composite Plot
+
+Using **`patchwork`** package, the plots for Q1 2023 and Q1 2024 are stacked into 1 composite plot for a quarter on quarter analysis.
+
+```{r}
+q1_plot | q5_plot
+
+```
+
+::: callout-tip
+## Write Up
+
+Comparing bar chart plots for Q1 2023 and Q1 2024 (quarter on quarter), insights emerge regarding the mean number of units sold. In Q1 2023, the average stood at 804.67 units, edging slightly higher to 817.17 units in Q1 2024. This suggests a slight overall increase in property sales.
+
+While Apartments and Executive Condominiums experienced growth in sales volumes, Semi-Detached Houses and Terrace Houses maintained stable figures. Conversely, a decline was observed in the number of Condominiums and Detached Houses sold.
+
+Notably, Apartments and Condominiums, the predominant property types, experienced the most significant shifts in sales volumes, with Apartments witnessing the largest increase and Condominiums facing the most substantial decline.
+:::
+
+## Price Distribution
+
+Create box plots for the price distribution of each private residence property type. [`geom_boxplot()`](https://ggplot2.tidyverse.org/reference/geom_boxplot.html) displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually.
+
+Note: For better visibility, **`labels`** parameter with the function **`scales::number`**, formats the y-axis labels to include thousands separators.
+
+The code chunk below shows that in Q1 2023 for Condominiums, there are two points with value above 900 million that is affecting the rest of the box plot. Thus, the decision was made to remove those points, and replot the data without the extreme outliers.
+
+::: panel-tabset
+## Plot
+
+```{r}
+#| echo: false
+ggplot(data = q1, 
+       aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+geom_boxplot() +
+labs(title = "Q1 2023",
+     x = "Property Type",
+     y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number) + 
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+```
+
+## Code
+
+```{r}
+#| eval: false
+ggplot(data = q1, 
+       aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+geom_boxplot() +
+labs(title = "Q1 2023",
+     x = "Property Type",
+     y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number) + 
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+```
+:::
+
+### Drop Extreme Outlier
+
+```{r}
+q1_filtered <- q1 %>%
+  filter(`Transacted Price ($)` <= 90000000)
+```
+
+### Price Distribution by Property Type
+
+Note: For better visibility, **`labels`** parameter with the function **`scales::number(scale = 1e-6, suffix = "M")`** formats the y-axis labels to display in the millions unit, instead of the default scientific notation.
+
+::: panel-tabset
+## Q1 2023
+
+```{r}
+q1_median <- median(q1_filtered$`Transacted Price ($)`, na.rm = TRUE)
+
+q1_box <- ggplot(data = q1_filtered, 
+                aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+          geom_boxplot() +
+          labs(title = "Q1 2023",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M"),
+                  limits = c(0, 67000000)) +
+geom_hline(yintercept = q1_median,
+             linetype = "dashed", color = "navy") +
+  annotate(geom = "text",
+           x = 4, y = q1_median *10, 
+           label = paste("Median:", scales::number(q1_median, color = "navy"))) +
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+
+q1_box
+```
+
+## Q2 2023
+
+```{r}
+q2_median <- median(q2$`Transacted Price ($)`, na.rm = TRUE)
+
+q2_box <- ggplot(data = q2, 
+                aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+          geom_boxplot() +
+          labs(title = "Q2 2023",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M"),
+                  limits = c(0, 67000000)) +
+geom_hline(yintercept = q2_median,
+             linetype = "dashed", color = "navy") +
+  annotate(geom = "text",
+           x = 4, y = q2_median *10, 
+           label = paste("Median:", scales::number(q2_median, color = "navy"))) +
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+
+q2_box
+```
+
+## Q3 2023
+
+```{r}
+q3_median <- median(q3$`Transacted Price ($)`, na.rm = TRUE)
+
+q3_box <- ggplot(data = q3, 
+                aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+          geom_boxplot() +
+          labs(title = "Q3 2023",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M"),
+                  limits = c(0, 67000000)) +
+geom_hline(yintercept = q3_median,
+             linetype = "dashed", color = "navy") +
+  annotate(geom = "text",
+           x = 4, y = q3_median *10, 
+           label = paste("Median:", scales::number(q3_median, color = "navy"))) +
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+
+q3_box
+```
+
+## Q4 2023
+
+```{r}
+q4_median <- median(q4$`Transacted Price ($)`, na.rm = TRUE)
+
+q4_box <- ggplot(data = q4, 
+                aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+          geom_boxplot() +
+          labs(title = "Q4 2023",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M"),
+                  limits = c(0, 67000000)) +
+geom_hline(yintercept = q4_median,
+             linetype = "dashed", color = "navy") +
+  annotate(geom = "text",
+           x = 4, y = q4_median *10, 
+          label = paste("Median:", scales::number(q4_median, color = "navy"))) +
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+
+q4_box
+```
+
+## Q1 2024
+
+```{r}
+q5_median <- median(q5$`Transacted Price ($)`, na.rm = TRUE)
+
+q5_box <- ggplot(data = q5, 
+                aes(x = `Property Type`, y = `Transacted Price ($)`)) + 
+          geom_boxplot() +
+          labs(title = "Q1 2024",
+                x = "Property Type",
+                y = "Transacted Price ($)") +
+scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M"),
+                  limits = c(0, 67000000)) +
+geom_hline(yintercept = q5_median,
+             linetype = "dashed", color = "navy") +
+  annotate(geom = "text",
+           x = 4, y = q5_median *10, 
+          label = paste("Median:", scales::number(q5_median, color = "navy"))) +
+theme_economist() +
+theme(axis.text.x = element_text(angle = 90)) 
+
+q5_box
+```
+:::
+
+### Composite Plot
+
+Using **`patchwork`** package, the plots for Q1 2023 and Q1 2024 are stacked into 1 composite plot for a quarter on quarter analysis.
+
+```{r}
+q1_box | q5_box
+
+```
+
+::: callout-tip
+## Write Up
+
+Overall, there is an increase in overall prices from 1.63 million to 1.69 million. However, the price variability for all property types have decreased, with fewer outliers present.
+
+The boxplot shows Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status.
+
+Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers. In contrast, Executive Condominiums demonstrate the least variability in transacted prices, with their interquartile ranges (IQR) closely aligning with their medians. This suggests a stable and consistent pricing trend. Executive Condominiums have the lowest transacted prices, indicating their appeal as an affordable option within the private housing market.
+
+Apartments and Condominiums, on the other hand, show a significant number of outliers in their transacted prices, suggesting a wider range of pricing and potentially more diversity in market conditions for these property types.
+:::
