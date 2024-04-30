@@ -21,9 +21,6 @@ website:
             href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_2.html"
           - text: "Hands-on Exercise 4 Part III"
             href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_3.html"
-          - text: "Hands-on Exercise 4 Part IV"
-            href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_4.html"
-
 
       - text: "In-class Exercise"
         menu:

@@ -1,5 +1,5 @@
 ---
-title: "Hands-on Exercise 4 -  Visualising Distribution"
+title: "Hands-on Exercise 4 -  Visual Statistical Analysis"
 author: "Alicia Loh"
 date: "April 27, 2024"
 date-modified: last-modified
@@ -12,29 +12,32 @@ execute:
 
 Learning Objectives:
 
--   Create interactive data visualisation by using functions provided by **ggiraph** and **plotlyr** packages
+-   Create visual graphics with rich statistical information using ggstatsplot package
+-   Use performance package to visualise model diagnostics
+-   Use parameters package to visualise model parameters
 
 # Getting Started
+
+[**ggstatsplot**](https://indrajeetpatil.github.io/ggstatsplot/) is an extension of [**ggplot2**](https://ggplot2.tidyverse.org/) package for creating graphics with details from statistical tests included in the information-rich plots themselves.
+
+-   To provide alternative statistical inference methods by default
+
+-   To follow besst practices for statistical reporting
+
+-   For all statistical tests resulted in the plots, the default template abides by the [APA gold standard](https://my.ilstu.edu/~jhkahn/apastats.html) for statistical reporting
 
 ## Installing and loading the required libraries
 
 The following R packages will be used:
 
--   [**ggiraph**](https://davidgohel.github.io/ggiraph/) for making ‘ggplot’ graphics interactive.
-
--   [**plotly**](https://plotly.com/r/), R library for plotting interactive statistical graphs.
-
--   [**DT**](https://rstudio.github.io/DT/) provides an R interface to the JavaScript library [DataTables](https://datatables.net/) that create interactive table on html page.
+-   [**ggstatsplot**](https://indrajeetpatil.github.io/ggstatsplot/)is an extension of ggplot2 package for creating graphics with details from statstical tests included in the plots themselces
 
 -   [**tidyverse**](https://www.tidyverse.org/), a family of modern R packages specially designed to support data science, analysis and communication task including creating static statistical graphs.
-
--   [**patchwork**](https://patchwork.data-imaginist.com/) for combining multiple ggplot2 graphs into one figure.
 
 Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
 
 ```{r}
-pacman::p_load(ggiraph, plotly, 
-               patchwork, DT, tidyverse)
+pacman::p_load(ggstatsplot, tidyverse)
 ```
 
 ## Importing the Data
@@ -44,7 +47,7 @@ pacman::p_load(ggiraph, plotly,
 -   **readr** is a pacakge within tidyverse.
 
 ```{r}
-exam_data <- read_csv("data/Exam_data.csv")
+exam <- read_csv("data/Exam_data.csv")
 ```
 
 **exam_data** tibble data frame contains:
@@ -57,183 +60,181 @@ exam_data <- read_csv("data/Exam_data.csv")
 
     -   The continuous attributes are: MATHS, ENGLISH and SCIENCE.
 
-# **Interactive Data Visualisation - ggiraph methods**
+## **One-sample test: *gghistostats()* method**
 
-[ggiraph](https://davidgohel.github.io/ggiraph/) is a html widget and a ggplot2 extension. It allows ggplot graphics to be interactive.
-
-Interactive elements are made possible with [**ggplot geometries**](https://davidgohel.github.io/ggiraph/reference/#section-interactive-geometries) that understands three arguments:
-
--   **Tooltip**: a column of data-sets that contain tooltips to be displayed when the mouse is over elements.
-
--   **Onclick**: a column of data-sets that contain a JavaScript function to be executed when elements are clicked.
-
--   **Data_id**: a column of data-sets that contain an id to be associated with elements.
-
-## **Tooltip effect with *tooltip* aesthetic**
-
-Below shows a typical code chunk to plot an interactive statistical graph by using **ggiraph** package. 
-
-First, an interactive version of ggplot2 geom (i.e. [`geom_dotplot_interactive()`](https://davidgohel.github.io/ggiraph/reference/geom_dotplot_interactive.html)) will be used to create the basic graph. Then, [`girafe()`](https://davidgohel.github.io/ggiraph/reference/girafe.html) will be used to generate an svg object to be displayed on an html page.
+In the code chunk below, [*gghistostats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/gghistostats.html) is used to to build an visual of one-sample test on English scores.
 
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
+```{r,echo=FALSE}
+set.seed(1234) # for reproducibility
 
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(
-    aes(tooltip = ID),
-    stackgroups = TRUE, 
-    binwidth = 1, 
-    method = "histodot") +
-  scale_y_continuous(NULL, 
-                     breaks = NULL)
-girafe(
-  ggobj = p,
-  width_svg = 6,
-  height_svg = 6*0.618
+gghistostats(
+  data = exam,
+  x = ENGLISH,
+  type = "bayes",
+  test.value = 60,
+  xlab = "English scores"
 )
 ```
 
 ## Code
 
-```{r}
-#| eval: false
+```{r, eval=FALSE}
+set.seed(1234) # for reproducibility
 
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(
-    aes(tooltip = ID),
-    stackgroups = TRUE, 
-    binwidth = 1, 
-    method = "histodot") +
-  scale_y_continuous(NULL, 
-                     breaks = NULL)
-girafe(
-  ggobj = p,
-  width_svg = 6,
-  height_svg = 6*0.618
+gghistostats(
+  data = exam,
+  x = ENGLISH,
+  type = "bayes",
+  test.value = 60,
+  xlab = "English scores"
 )
 ```
 :::
 
-## **Displaying multiple information on tooltip**
+Default information: - statistical details - Bayes Factor - sample sizes - distribution summary
 
-The first three lines of codes in the code chunk create a new field called *tooltip*. At the same time, it populates text in ID and CLASS fields into the newly created field. Next, this newly created field is used as tooltip field as shown in the code of line 7. By hovering the mouse pointer on an data point of interest, the student’s ID will be displayed.
+## **Unpacking the Bayes Factor**
+
+-   A Bayes factor is the ratio of the likelihood of one particular hypothesis to the likelihood of another. i.e., a measure of the strength of evidence in favor of one theory among two competing theories.
+
+-    Bayes factor allows evaluation of the data in favor of a null hypothesis, and to use external information to do so. It gives the weight of the evidence in favor of a given hypothesis.
+
+-   When comparing two hypotheses, H1 (the alternate hypothesis) and H0 (the null hypothesis), the Bayes Factor is often written as B10.
+
+```{=html}
+<!-- -->
+```
+-   The [**Schwarz criterion**](https://www.statisticshowto.com/bayesian-information-criterion/) is one of the easiest ways to calculate rough approximation of the Bayes Factor.
+
+### **Interpreting Bayes Factor**
+
+A **Bayes Factor** can be any positive number. A common interpretation was first proposed by Harold Jeffereys (1961) and slightly modified by [Lee and Wagenmakers](https://www-tandfonline-com.libproxy.smu.edu.sg/doi/pdf/10.1080/00031305.1999.10474443?needAccess=true) in 2013:
+
+| B10 Value  | Conclusion                  |
+|------------|-----------------------------|
+| \>100      | Extreme evidence for H1     |
+| 30-100     | Very strong evidence for H1 |
+| 10-30      | Strong evidence for H1      |
+| 3-10       | Moderate evidence for H1    |
+| 1-3        | Anecdotal evidence for H1   |
+| 1          | No evidence                 |
+| 1/3-1      | Anecdotal evidence for H1   |
+| 1/3-1/10   | Moderate evidence for H1    |
+| 1/10-1/30  | Strong evidence for H1      |
+| 1/30-1/100 | Very strong evidence for H1 |
+| \<1/100    | Extreme evidence for H1     |
+
+## **Two-sample mean test: *ggbetweenstats()***
+
+In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for two-sample mean test of Maths scores by gender.
 
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
+```{r, echo=FALSE}
 
-exam_data$tooltip <- c(paste0(     
-  "Name = ", exam_data$ID,         
-  "\n Class = ", exam_data$CLASS)) 
-
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(
-    aes(tooltip = exam_data$tooltip), 
-    stackgroups = TRUE,
-    binwidth = 1,
-    method = "histodot") +
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(
-  ggobj = p,
-  width_svg = 8,
-  height_svg = 8*0.618
+ggbetweenstats(
+  data = exam,
+  x = GENDER, 
+  y = MATHS,
+  type = "np",
+  messages = FALSE
 )
 ```
 
 ## Code
 
-```{r}
-#| eval: false
+```{r, eval=FALSE}
 
-exam_data$tooltip <- c(paste0(     
-  "Name = ", exam_data$ID,         
-  "\n Class = ", exam_data$CLASS)) 
-
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(
-    aes(tooltip = exam_data$tooltip), 
-    stackgroups = TRUE,
-    binwidth = 1,
-    method = "histodot") +
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(
-  ggobj = p,
-  width_svg = 8,
-  height_svg = 8*0.618
+ggbetweenstats(
+  data = exam,
+  x = GENDER, 
+  y = MATHS,
+  type = "np",
+  messages = FALSE
 )
 ```
 :::
 
-## Customising Tooltop style
+Default information: - statistical details - Bayes Factor - sample sizes - distribution summary
 
-Code chunk below uses [`opts_tooltip()`](https://davidgohel.github.io/ggiraph/reference/opts_tooltip.html) of **ggiraph** to customize tooltip rendering by add css declarations.
+##  **Oneway ANOVA Test: *ggbetweenstats()* method**
 
-Notice that the background colour of the tooltip is black and the font colour is white and bold.
+In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for One-way ANOVA test on English score by race.
 
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
+```{r, echo=FALSE}
 
-tooltip_css <- "background-color:white; #<<
-font-style:bold; color:black;" #<<
-
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(              
-    aes(tooltip = ID),                   
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") +               
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(                                  
-  ggobj = p,                             
-  width_svg = 6,                         
-  height_svg = 6*0.618,
-  options = list(    #<<
-    opts_tooltip(    #<<
-      css = tooltip_css)) #<<
-)                                        
+ggbetweenstats(
+  data = exam,
+  x = RACE, 
+  y = ENGLISH,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
 ```
 
 ## Code
 
-```{r}
-#| eval: false
+```{r, eval=FALSE}
 
-tooltip_css <- "background-color:white; #<<
-font-style:bold; color:black;" #<<
+ggbetweenstats(
+  data = exam,
+  x = RACE, 
+  y = ENGLISH,
+  type = "p",
+  mean.ci = TRUE, 
+  pairwise.comparisons = TRUE, 
+  pairwise.display = "s",
+  p.adjust.method = "fdr",
+  messages = FALSE
+)
+```
+:::
 
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(              
-    aes(tooltip = ID),                   
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") +               
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(                                  
-  ggobj = p,                             
-  width_svg = 6,                         
-  height_svg = 6*0.618,
-  options = list(    #<<
-    opts_tooltip(    #<<
-      css = tooltip_css)) #<<
-)                                        
+-   “ns” → only non-significant
+
+-   “s” → only significant
+
+-   “all” → everything
+
+### ggbetweenstats - Summary of tests
+
+Following (between-subjects) tests are carried out for each type of analyses:
+
+| Type           | No. of groups | Test                                            |
+|----------------|---------------|-------------------------------------------------|
+| Parametric     | \>2           | Fisher's or Welch's one-way ANOVA               |
+| Non-parametric | \>2           | Kruskal-Wallis one-way ANOVA                    |
+| Robust         | \>2           | Heteroscedastic one-way ANOVA for trimmed means |
+| Bayes Factor   | \>2           | Fisher's ANOVA                                  |
+| Parametric     | 2             | Student's or Welch's t-test                     |
+| Non-parametric | 2             | Mann-Whitney U test                             |
+| Robust         | 2             | Yuen's test for trimmed means                   |
+| Bayes Factor   | 2             | Student's t-test                                |
+
+Following effect sizes (and confidence intervals) are available for each type of test:
+
+::: panel-tabset
+## Plot
+
+```{r, echo=FALSE}
+                
+```
+
+## Code
+
+```{r, eval=FALSE}
+                                  
 
 ```
 :::
@@ -249,64 +250,18 @@ Code chunk below shows an advanced way to customise tooltip. In this example, a 
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
+```{r, echo=FALSE}
 
-tooltip <- function(y, ymax, accuracy = .01) {
-  mean <- scales::number(y, accuracy = accuracy)
-  sem <- scales::number(ymax - y, accuracy = accuracy)
-  paste("Mean maths scores:", mean, "+/-", sem)
-}
 
-gg_point <- ggplot(data=exam_data, 
-                   aes(x = RACE),
-) +
-  stat_summary(aes(y = MATHS, 
-                   tooltip = after_stat(  
-                     tooltip(y, ymax))),  
-    fun.data = "mean_se", 
-    geom = GeomInteractiveCol,  
-    fill = "light blue"
-  ) +
-  stat_summary(aes(y = MATHS),
-    fun.data = mean_se,
-    geom = "errorbar", width = 0.2, size = 0.2
-  )
 
-girafe(ggobj = gg_point,
-       width_svg = 8,
-       height_svg = 8*0.618)
 ```
 
 ## Code
 
-```{r}
-#| eval: false
+```{r, eval=FALSE}
 
-tooltip <- function(y, ymax, accuracy = .01) {
-  mean <- scales::number(y, accuracy = accuracy)
-  sem <- scales::number(ymax - y, accuracy = accuracy)
-  paste("Mean maths scores:", mean, "+/-", sem)
-}
 
-gg_point <- ggplot(data=exam_data, 
-                   aes(x = RACE),
-) +
-  stat_summary(aes(y = MATHS, 
-                   tooltip = after_stat(  
-                     tooltip(y, ymax))),  
-    fun.data = "mean_se", 
-    geom = GeomInteractiveCol,  
-    fill = "light blue"
-  ) +
-  stat_summary(aes(y = MATHS),
-    fun.data = mean_se,
-    geom = "errorbar", width = 0.2, size = 0.2
-  )
 
-girafe(ggobj = gg_point,
-       width_svg = 8,
-       height_svg = 8*0.618)
 ```
 :::
 
@@ -319,44 +274,15 @@ Elements associated with a *data_id* (i.e CLASS) will be highlighted upon mous
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
+```{r, echo=FALSE}
 
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(           
-    aes(data_id = CLASS),             
-    stackgroups = TRUE,               
-    binwidth = 1,                        
-    method = "histodot") +               
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(                                  
-  ggobj = p,                             
-  width_svg = 6,                         
-  height_svg = 6*0.618                      
-)                                        
+                                    
 ```
 
 ## Code
 
-```{r}
-#| eval: false
-
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(           
-    aes(data_id = CLASS),             
-    stackgroups = TRUE,               
-    binwidth = 1,                        
-    method = "histodot") +               
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(                                  
-  ggobj = p,                             
-  width_svg = 6,                         
-  height_svg = 6*0.618                      
-)                                        
+```{r, eval=FALSE}
+                               
 ```
 :::
 
@@ -373,52 +299,14 @@ Elements associated with a *data_id* (i.e CLASS) will be highlighted upon mous
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
-
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(              
-    aes(data_id = CLASS),              
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") +               
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(                                  
-  ggobj = p,                             
-  width_svg = 6,                         
-  height_svg = 6*0.618,
-  options = list(                        
-    opts_hover(css = "fill: #202020;"),  
-    opts_hover_inv(css = "opacity:0.2;") 
-  )                                        
-)                                        
+```{r, echo=FALSE}
+                            
 ```
 
 ## Code
 
-```{r}
-#| eval: false
-
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(              
-    aes(data_id = CLASS),              
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") +               
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(                                  
-  ggobj = p,                             
-  width_svg = 6,                         
-  height_svg = 6*0.618,
-  options = list(                        
-    opts_hover(css = "fill: #202020;"),  
-    opts_hover_inv(css = "opacity:0.2;") 
-  )                                        
-)                                        
+```{r, eval=FALSE}
+                                    
 ```
 :::
 
@@ -431,54 +319,14 @@ Elements associated with a *data_id* (i.e CLASS) will be highlighted upon mous
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
-
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(              
-    aes(tooltip = CLASS, 
-        data_id = CLASS),              
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") +               
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(                                  
-  ggobj = p,                             
-  width_svg = 6,                         
-  height_svg = 6*0.618,
-  options = list(                        
-    opts_hover(css = "fill: #202020;"),  
-    opts_hover_inv(css = "opacity:0.2;") 
-  )                                        
-)                                        
+```{r, echo=FALSE}
+                              
 ```
 
 ## Code
 
-```{r}
-#| eval: false
-
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(              
-    aes(tooltip = CLASS, 
-        data_id = CLASS),              
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") +               
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(                                  
-  ggobj = p,                             
-  width_svg = 6,                         
-  height_svg = 6*0.618,
-  options = list(                        
-    opts_hover(css = "fill: #202020;"),  
-    opts_hover_inv(css = "opacity:0.2;") 
-  )                                        
-)                                        
+```{r, eval=FALSE}
+                       
 ```
 :::
 
@@ -491,50 +339,14 @@ The code chunk below shown an example of `onclick`.
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
-
-exam_data$onclick <- sprintf("window.open(\"%s%s\")",
-"https://www.moe.gov.sg/schoolfinder?journey=Primary%20school",
-as.character(exam_data$ID))
-
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(              
-    aes(onclick = onclick),              
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") +               
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(                                  
-  ggobj = p,                             
-  width_svg = 6,                         
-  height_svg = 6*0.618)                                        
+```{r, echo=FALSE}
+                                     
 ```
 
 ## Code
 
-```{r}
-#| eval: false
-
-exam_data$onclick <- sprintf("window.open(\"%s%s\")",
-"https://www.moe.gov.sg/schoolfinder?journey=Primary%20school",
-as.character(exam_data$ID))
-
-p <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(              
-    aes(onclick = onclick),              
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") +               
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-girafe(                                  
-  ggobj = p,                             
-  width_svg = 6,                         
-  height_svg = 6*0.618)                                        
+```{r, eval=FALSE}
+                                  
 ```
 :::
 
@@ -557,76 +369,14 @@ The *data_id* aesthetic is critical to link observations between plots and the
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
+```{r, echo=FALSE}
 
-p1 <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(              
-    aes(data_id = ID),              
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") +  
-  coord_cartesian(xlim=c(0,100)) + 
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-
-p2 <- ggplot(data=exam_data, 
-       aes(x = ENGLISH)) +
-  geom_dotplot_interactive(              
-    aes(data_id = ID),              
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") + 
-  coord_cartesian(xlim=c(0,100)) + 
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-
-girafe(code = print(p1 + p2), 
-       width_svg = 6,
-       height_svg = 3,
-       options = list(
-         opts_hover(css = "fill: #202020;"),
-         opts_hover_inv(css = "opacity:0.2;")
-         )
-       ) 
 ```
 
 ## Code
 
-```{r}
-#| eval: false
+```{r, eval=FALSE}
 
-p1 <- ggplot(data=exam_data, 
-       aes(x = MATHS)) +
-  geom_dotplot_interactive(              
-    aes(data_id = ID),              
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") +  
-  coord_cartesian(xlim=c(0,100)) + 
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-
-p2 <- ggplot(data=exam_data, 
-       aes(x = ENGLISH)) +
-  geom_dotplot_interactive(              
-    aes(data_id = ID),              
-    stackgroups = TRUE,                  
-    binwidth = 1,                        
-    method = "histodot") + 
-  coord_cartesian(xlim=c(0,100)) + 
-  scale_y_continuous(NULL,               
-                     breaks = NULL)
-
-girafe(code = print(p1 + p2), 
-       width_svg = 6,
-       height_svg = 3,
-       options = list(
-         opts_hover(css = "fill: #202020;"),
-         opts_hover_inv(css = "opacity:0.2;")
-         )
-       ) 
 ```
 :::
 
@@ -647,22 +397,14 @@ The code chunk below shows an example a basic interactive plot created by using 
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
+```{r, echo=FALSE}
 
-plot_ly(data = exam_data, 
-             x = ~MATHS, 
-             y = ~ENGLISH)
 ```
 
 ## Code
 
-```{r}
-#| eval: false
+```{r, eval=FALSE}
 
-plot_ly(data = exam_data, 
-             x = ~MATHS, 
-             y = ~ENGLISH)
 ```
 :::
 
@@ -673,24 +415,14 @@ In the code chunk below, *color* argument is mapped to a qualitative visual vari
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
+```{r, echo=FALSE}
 
-plot_ly(data = exam_data, 
-        x = ~ENGLISH, 
-        y = ~MATHS, 
-        color = ~RACE)
 ```
 
 ## Code
 
-```{r}
-#| eval: false
+```{r, eval=FALSE}
 
-plot_ly(data = exam_data, 
-        x = ~ENGLISH, 
-        y = ~MATHS, 
-        color = ~RACE)
 ```
 :::
 
@@ -701,29 +433,14 @@ The code chunk below plots an interactive scatter plot by using *ggplotly()*.
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
+```{r, echo=FALSE}
 
-p <- ggplot(data=exam_data, 
-            aes(x = MATHS,
-                y = ENGLISH)) +
-  geom_point(size=1) +
-  coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100))
-ggplotly(p)
 ```
 
 ## Code
 
-```{r}
-#| eval: false
-p <- ggplot(data=exam_data, 
-            aes(x = MATHS,
-                y = ENGLISH)) +
-  geom_point(size=1) +
-  coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100))
-ggplotly(p)
+```{r, eval=FALSE}
+
 ```
 :::
 
@@ -736,7 +453,7 @@ The only extra line you need to include in the code chunk is *ggplotly()*.
 [Crosstalk](https://rstudio.github.io/crosstalk/) is an add-on to the htmlwidgets package. It extends htmlwidgets with a set of classes, functions, and conventions for implementing cross-widget interactions (currently, linked brushing and filtering).
 
 ```{r}
-DT::datatable(exam_data, class= "compact")
+
 ```
 
 ## **Linked brushing: crosstalk method**
@@ -746,43 +463,13 @@ Code chunk below is used to implement coordinated brushing.
 ::: panel-tabset
 ## Plot
 
-```{r}
-#| echo: false
-
-d <- highlight_key(exam_data) 
-p <- ggplot(d, 
-            aes(ENGLISH, 
-                MATHS)) + 
-  geom_point(size=1) +
-  coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100))
-
-gg <- highlight(ggplotly(p),        
-                "plotly_selected")  
-
-crosstalk::bscols(gg,               
-                  DT::datatable(d), 
-                  widths = 5)        
+```{r, echo=FALSE}
+     
 ```
 
 ## Code
 
-```{r}
-#| eval: false
-
-d <- highlight_key(exam_data) 
-p <- ggplot(d, 
-            aes(ENGLISH, 
-                MATHS)) + 
-  geom_point(size=1) +
-  coord_cartesian(xlim=c(0,100),
-                  ylim=c(0,100))
-
-gg <- highlight(ggplotly(p),        
-                "plotly_selected")  
-
-crosstalk::bscols(gg,               
-                  DT::datatable(d), 
-                  widths = 5)        
+```{r, eval=FALSE}
+   
 ```
 :::
