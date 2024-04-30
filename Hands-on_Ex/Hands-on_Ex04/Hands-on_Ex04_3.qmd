@@ -7,7 +7,7 @@ execute:
   eval: true
   echo: true
   warning: false
-  freeze: false
+  freeze: true
 ---
 
 Funnel plot is a specially designed data visualisation for conducting unbiased comparison between outlets, stores or business entities. 
