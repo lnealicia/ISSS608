@@ -7,7 +7,7 @@ execute:
   eval: true
   echo: true
   warning: false
-  freeze: true
+  freeze: false
 ---
 
 Learning Objectives:
@@ -211,7 +211,7 @@ ggbetweenstats(
 Following (between-subjects) tests are carried out for each type of analyses:
 
 |      Type      | No. of groups |                      Test                       |
-|:--------------:|:--------------:|:--------------------------------------:|
+|:---------------:|:---------------:|:------------------------------------:|
 |   Parametric   |      \>2      |        Fisher's or Welch's one-way ANOVA        |
 | Non-parametric |      \>2      |          Kruskal-Wallis one-way ANOVA           |
 |     Robust     |      \>2      | Heteroscedastic one-way ANOVA for trimmed means |
@@ -224,7 +224,7 @@ Following (between-subjects) tests are carried out for each type of analyses:
 Following effect sizes (and confidence intervals) are available for each type of test:
 
 |      Type      | No. of Groups |                              Effect Size                               | Confidence Intervals |
-|:--------------:|:--------------:|:-----------------------:|:--------------:|
+|:---------------:|:---------------:|:---------------------:|:---------------:|
 |   Parametric   |      \>2      |             ${\eta^2}_{p},\eta^2,{\omega^2}_{p},\omega^2$              |         Yes          |
 | Non-parametric |      \>2      |             ${\eta^2}_{H}$ (H-statistic based eta-squared)             |         Yes          |
 |     Robust     |      \>2      |               $\xi$ (Explanatory measure of effect size)               |         Yes          |
@@ -237,7 +237,7 @@ Following effect sizes (and confidence intervals) are available for each type of
 Summary of pairwise comparison tests supported in *ggbetweenstats*
 
 |      Type      | Equal Variance |           Test            | p-value Adjustment? |
-|:---------------:|:---------------:|:-------------------:|:----------------:|
+|:----------------:|:----------------:|:------------------:|:----------------:|
 |   Parametric   |       No       |     Games Howell Test     |         Yes         |
 |   Parametric   |      Yes       |     Student's t Test      |         Yes         |
 | Non-Parametric |       No       |         Dunn Test         |         Yes         |
