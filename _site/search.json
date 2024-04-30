@@ -823,7 +823,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#significant-test-of-association-depedence-ggbarstats-methods",
     "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
     "section": "Significant Test of Association (Depedence) : ggbarstats() methods",
-    "text": "Significant Test of Association (Depedence) : ggbarstats() methods\nIn the code chunk below, the Maths scores is binned into a 4-class variable by using cut().Plot\n\nexam1 &lt;- exam %&gt;% \n  mutate(MATHS_bins = \n           cut(MATHS, \n               breaks = c(0,60,75,85,100))\n)\n\nIn this code chunk below ggbarstats() is used to build a visual for Significant Test of Association\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nggbarstats(exam1, \n           x = MATHS_bins, \n           y = GENDER)"
+    "text": "Significant Test of Association (Depedence) : ggbarstats() methods\nIn the code chunk below, the Maths scores is binned into a 4-class variable by using cut(). ggbarstats() is used to build a visual for Significant Test of Association\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nexam1 &lt;- exam %&gt;% \n  mutate(MATHS_bins = \n           cut(MATHS, \n               breaks = c(0,60,75,85,100))\n)\n\nggbarstats(exam1, \n           x = MATHS_bins, \n           y = GENDER)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#visualising-models",
@@ -858,7 +858,7 @@
     "href": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#model-diagnostic-checking-normality-assumption",
     "title": "Hands-on Exercise 4 - Visual Statistical Analysis",
     "section": "Model Diagnostic: checking normality assumption",
-    "text": "Model Diagnostic: checking normality assumption\nIn the code chunk, check_normality() of performance package.\n\nmodel1 &lt;- lm(Price ~ Age_08_04 + KM + \n              Weight + Guarantee_Period, data = car_resale)\n\ncheck_n &lt;- check_normality(model1)\n\n\nplot(check_n)"
+    "text": "Model Diagnostic: checking normality assumption\nIn the code chunk, check_normality() of performance package.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nmodel1 &lt;- lm(Price ~ Age_08_04 + KM + \n              Weight + Guarantee_Period, data = car_resale)\n\ncheck_n &lt;- check_normality(model1)\n\nplot(check_n)"
   },
   {
     "objectID": "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html#model-diagnostic-check-model-for-homogeneity-of-variances",
