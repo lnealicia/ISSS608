@@ -20,6 +20,54 @@ execute:
 
 -   Remake the original design by using ggplot2, ggplot2 extensions and tidyverse packages.
 
+# **The Source**
+
+The visualisation of this critique is taken from fellow classmate [Seng Jing Yi](https://jingyi-vaa.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#data-visualization) for learning purposes only.
+
+## Visualisation
+
+In "Visualization 1 - How has transacted price varied over the 2024 Q1 and 2023", the following plot is presented:
+
+![](images/clipboard-275283112.png)
+
+### Aesthetics
+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Pros                                                                                                                                                            | Cons                                                                                                                                                                               |
++=================================================================================================================================================================+====================================================================================================================================================================================+
+| -   The presented charts are relatively well spaced, so while there is a lot of information, chart elements are not overlaid on top of each other and obscured. | -   At first glance, one could mistakenly assume that the 3 general colour groups i.e. blue, green, orange were meant to be a grouping, where:                                     |
+|                                                                                                                                                                 |                                                                                                                                                                                    |
+|                                                                                                                                                                 |     -   Group 1: Apartment, Condominium                                                                                                                                            |
+|                                                                                                                                                                 |                                                                                                                                                                                    |
+|                                                                                                                                                                 |     -   Group 2: Detached House, Semi-detached House, Terrace House                                                                                                                |
+|                                                                                                                                                                 |                                                                                                                                                                                    |
+|                                                                                                                                                                 |     -   Group 3: Executive Condominium                                                                                                                                             |
+|                                                                                                                                                                 |                                                                                                                                                                                    |
+|                                                                                                                                                                 | -   In addition, the light colours chosen, when presented with a light background in the raincloud plot, does not have good contrast.                                              |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| -   Colour theme of the plot is consistently applied, making reference between presented charts quick and easy                                                  | -   In-consistent Y axis for bar-line chart                                                                                                                                        |
+|                                                                                                                                                                 |                                                                                                                                                                                    |
+|                                                                                                                                                                 |     -   The right Y-axis label formats are not consistent. The top 3 charts have a typical number format, but the bottom 3 charts presents the numbers with a scientific notation. |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+### Clarity
+
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Pros    | Cons                                                                                                                                                                                                   |
++=========+========================================================================================================================================================================================================+
+|         | -   It is not clear on first glance what the red dotted line separates:                                                                                                                                |
+|         |                                                                                                                                                                                                        |
+|         |     -   Timeline? In the bar-line chart and stacked bar chart, it appears to be separating timeline of interest, but it is unclear whether the right or left side is the timeline of interest.         |
+|         |                                                                                                                                                                                                        |
+|         |     -   Mean/Median? In the raincloud plot, there is no timeline per se, so it seems to denote the mean or median transacted price                                                                     |
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|         | -   In-consistent Y axis for bar-line chart                                                                                                                                                            |
+|         |                                                                                                                                                                                                        |
+|         |     -   Left Y-axis does not show the same scale across property types e.g. EC ranges from 0 to 500, and Apartment ranges from 0 to 1500. This makes direct comparison a little more tricky            |
+|         |                                                                                                                                                                                                        |
+|         |     -   Similarly, right Y-axis does not show the same scale across property types e.g. EC ranges from 0 to 1.5M, and Apartment ranges from 0 to 2M. This makes direct comparison a little more tricky |
++---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
 # Getting Started
 
 ## Installing and loading the required libraries
