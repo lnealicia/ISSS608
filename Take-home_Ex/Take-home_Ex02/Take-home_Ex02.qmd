@@ -22,7 +22,7 @@ execute:
 
 # **The Source**
 
-The visualisation of this critique is taken from fellow classmate [Seng Jing Yi](https://jingyi-vaa.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#data-visualization) for learning purposes only.
+The visualisation of this critique is taken from fellow classmate [Seng Jing Yi](https://jingyi-vaa.netlify.app/take-home_ex/take-home_ex01/take-home_ex01#data-visualization) for learning purposes only, based on my interpretation of [Prof Kam's Designing Graphics to Enlighten](https://isss608-ay2023-24apr.netlify.app/lesson/lesson02/lesson02-designing%20graphs%20to%20enlighten#/title-slide).
 
 ## Visualisation
 
@@ -34,7 +34,7 @@ In "Visualization 1 - How has transacted price varied over the 2024 Q1 and 2023"
 
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | Pros                                                                                                                                                            | Cons                                                                                                                                                                               |
-+=================================================================================================================================================================+====================================================================================================================================================================================+
++:================================================================================================================================================================+:===================================================================================================================================================================================+
 | -   The presented charts are relatively well spaced, so while there is a lot of information, chart elements are not overlaid on top of each other and obscured. | -   At first glance, one could mistakenly assume that the 3 general colour groups i.e. blue, green, orange were meant to be a grouping, where:                                     |
 |                                                                                                                                                                 |                                                                                                                                                                                    |
 |                                                                                                                                                                 |     -   Group 1: Apartment, Condominium                                                                                                                                            |
@@ -44,6 +44,8 @@ In "Visualization 1 - How has transacted price varied over the 2024 Q1 and 2023"
 |                                                                                                                                                                 |     -   Group 3: Executive Condominium                                                                                                                                             |
 |                                                                                                                                                                 |                                                                                                                                                                                    |
 |                                                                                                                                                                 | -   In addition, the light colours chosen, when presented with a light background in the raincloud plot, does not have good contrast.                                              |
+|                                                                                                                                                                 |                                                                                                                                                                                    |
+|                                                                                                                                                                 | -   It is unclear what the different shades of gray used for the line-bar chart represents                                                                                         |
 +-----------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | -   Colour theme of the plot is consistently applied, making reference between presented charts quick and easy                                                  | -   In-consistent Y axis for bar-line chart                                                                                                                                        |
 |                                                                                                                                                                 |                                                                                                                                                                                    |
@@ -52,23 +54,27 @@ In "Visualization 1 - How has transacted price varied over the 2024 Q1 and 2023"
 
 ### Clarity
 
-+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Pros    | Cons                                                                                                                                                                                                   |
-+=========+========================================================================================================================================================================================================+
-|         | -   It is not clear on first glance what the red dotted line separates:                                                                                                                                |
-|         |                                                                                                                                                                                                        |
-|         |     -   Timeline? In the bar-line chart and stacked bar chart, it appears to be separating timeline of interest, but it is unclear whether the right or left side is the timeline of interest.         |
-|         |                                                                                                                                                                                                        |
-|         |     -   Mean/Median? In the raincloud plot, there is no timeline per se, so it seems to denote the mean or median transacted price                                                                     |
-+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|         | -   In-consistent Y axis for bar-line chart                                                                                                                                                            |
-|         |                                                                                                                                                                                                        |
-|         |     -   Left Y-axis does not show the same scale across property types e.g. EC ranges from 0 to 500, and Apartment ranges from 0 to 1500. This makes direct comparison a little more tricky            |
-|         |                                                                                                                                                                                                        |
-|         |     -   Similarly, right Y-axis does not show the same scale across property types e.g. EC ranges from 0 to 1.5M, and Apartment ranges from 0 to 2M. This makes direct comparison a little more tricky |
-+---------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++-----------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Pros                                                                                                                                                | Cons                                                                                                                                                                                                   |
++=====================================================================================================================================================+========================================================================================================================================================================================================+
+| -   Generally, the volumne of the bars in the stacked bar chart and line-bar chart correspond to their relative values, useful for quick comparison | -   It is not clear on first glance what the red dotted line separates:                                                                                                                                |
+|                                                                                                                                                     |                                                                                                                                                                                                        |
+|                                                                                                                                                     |     -   Timeline? In the bar-line chart and stacked bar chart, it appears to be separating timeline of interest, but it is unclear whether the right or left side is the timeline of interest.         |
+|                                                                                                                                                     |                                                                                                                                                                                                        |
+|                                                                                                                                                     |     -   Mean/Median? In the raincloud plot, there is no timeline per se, so it seems to denote the mean or median transacted price                                                                     |
++-----------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+|                                                                                                                                                     | -   In-consistent Y axis for bar-line chart                                                                                                                                                            |
+|                                                                                                                                                     |                                                                                                                                                                                                        |
+|                                                                                                                                                     |     -   Left Y-axis does not show the same scale across property types e.g. EC ranges from 0 to 500, and Apartment ranges from 0 to 1500. This makes direct comparison a little more tricky            |
+|                                                                                                                                                     |                                                                                                                                                                                                        |
+|                                                                                                                                                     |     -   Similarly, right Y-axis does not show the same scale across property types e.g. EC ranges from 0 to 1.5M, and Apartment ranges from 0 to 2M. This makes direct comparison a little more tricky |
++-----------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+# Sketch for Alternative Design
 
 # Getting Started
+
+Jingyi's method for data wrangling will be used in order to keep the plots consistent.
 
 ## Installing and loading the required libraries
 
@@ -76,458 +82,256 @@ Note: Ensure that the [pacman](https://cran.r-project.org/web/packages/pacman/) 
 
 The code chunk below loads the following packages using uses `p_load()` of pacman package:
 
--   [**tidyverse**](https://www.tidyverse.org/): (i.e. readr, tidyr, [dplyr](https://dplyr.tidyverse.org/), [ggplot2](https://ggplot2.tidyverse.org/), [lubridate](https://lubridate.tidyverse.org/)) for performing data science tasks such as importing, tidying, and wrangling data, as well as creating graphics based on The Grammar of Graphics
-
--   [**reshape2**](https://seananderson.ca/2013/10/19/reshape/) for transforming data between wide and long formats
-
--   [**ggthemes**](https://ggplot2.tidyverse.org/reference/ggtheme.html): provides some extra themes, geoms, and scales for ‘ggplot2’.
-
--   [**ggdist**](https://mjskay.github.io/ggdist/): a ggplot2 extension specially designed for visualising distribution and uncertainty
-
--   [**patchwork**](https://patchwork.data-imaginist.com/articles/guides/assembly.html): an R package for preparing composite figure created using ggplot2.
++-----------------------+--------------------------------------------------------------------------------------+
+| tidyverse             | -   Include dpylr for data manipulation with “mutate”, “group_by”, “summarize”, etc. |
+|                       |                                                                                      |
+|                       | -   Include ggplot2 for visualisation through histogram, boxplots, etc.              |
+|                       |                                                                                      |
+|                       | -   Include forcats for factoring and ordering of variables                          |
++-----------------------+--------------------------------------------------------------------------------------+
+| ggdist                | -   For visualisation of distributions and uncertainity.                             |
+|                       |                                                                                      |
+| ggridges              | -   For creating density plots for visualisation of continuous distribution.         |
+|                       |                                                                                      |
+| ggrepel               | -   For repelling overlapping text labels in plot                                    |
+|                       |                                                                                      |
+| ggthemes & hrbrthemes | -   For customisation of plot appearance                                             |
++-----------------------+--------------------------------------------------------------------------------------+
+| patchwork             | For combination and alignment of multiple plots for each visualisation.              |
++-----------------------+--------------------------------------------------------------------------------------+
+| knitr                 | For elegant, flexible and fast report generation of underlying dataframes.           |
++-----------------------+--------------------------------------------------------------------------------------+
 
 ```{r}
-pacman::p_load(tidyverse, reshape2, ggthemes, ggdist, patchwork)
+pacman::p_load(ggrepel, patchwork, 
+               ggthemes, hrbrthemes,
+               tidyverse, readr, ggdist, ggridges, colorspace, knitr, forcats, reshape2, png, grid) 
 ```
 
 ## Importing the Data
 
 -   The data has been split into multiple .csv files
 
--   **`list.files()`** list all CSV files in the specified directory.
-
--   After looping through each CSV file, read it into a data frame using **`read_csv()`**, and store it in a list.
-
--   **`bind_rows()`** combines all data frames in the list into a single big data frame.
+-   They will be loaded seperately, then bound together using `rbind`.
 
 ```{r}
-csv_directory <- "data/"
-csv_files <- list.files(csv_directory, pattern = "\\.csv$", full.names = TRUE)
+realis_1 <- read_csv("data/ResidentialTransaction20240308160536.csv")
+realis_2 <- read_csv("data/ResidentialTransaction20240308160736.csv")
+realis_3 <- read_csv("data/ResidentialTransaction20240308161009.csv")
+realis_4 <- read_csv("data/ResidentialTransaction20240308161109.csv")
+realis_5 <- read_csv("data/ResidentialTransaction20240414220633.csv")
 
-realis <- list()
-
-for (file in csv_files) {
-  realis[[file]] <- read_csv(file)
-}
+realis_full <- rbind(realis_1, realis_2, realis_3, realis_4, realis_5)
 ```
 
-```{r}
-realis_all <- bind_rows(realis)
-```
+## Summary of Data
 
-## View Data
-
--   **`names()`** function prints the names of the columns in the tibble data frame.
--   **`glimpse()`** function gives a quick overview of the tibble data frame
+`summary()` function used to obtain dataset min, max values and interquartile range.
 
 ::: panel-tabset
-## Column Names
+## Code
 
-```{r}
-col_names <- names(realis_all)
-col_names
+```{r, echo=FALSE}
+# Understanding the distribution of numerical values in Realis 
+realis_num <- realis_full[,c("Transacted Price ($)", "Area (SQFT)", "Unit Price ($ PSF)", "Number of Units")]
+
+realis_num <- realis_num %>% 
+  rename("Transacted_Price" = "Transacted Price ($)") %>% 
+  rename("Area_SQFT" = "Area (SQFT)") %>%
+  rename("Unit_Price_PSF" = "Unit Price ($ PSF)") %>% 
+  rename("Number_of_Units" = "Number of Units")
+  
+kable(summary(realis_num))
 ```
 
 ## Overview of Tibble Data Frame
 
-```{r}
-glimpse(realis_all)
+```{r,eval=FALSE}
+# Understanding the distribution of numerical values in Realis 
+realis_num <- realis_full[,c("Transacted Price ($)", "Area (SQFT)", "Unit Price ($ PSF)", "Number of Units")]
+
+realis_num <- realis_num %>% 
+  rename("Transacted_Price" = "Transacted Price ($)") %>% 
+  rename("Area_SQFT" = "Area (SQFT)") %>%
+  rename("Unit_Price_PSF" = "Unit Price ($ PSF)") %>% 
+  rename("Number_of_Units" = "Number of Units")
+  
+kable(summary(realis_num))
 ```
 :::
 
-::: callout-note
-**realis_all contains:**
+# Data Processing
 
--   Public and Private residential property transaction data from 1st January 2023 to 31st March 2024.
+### Manual Data Correction for Incorrect Data Entry
 
--   There are 26,806 rows and 21 columns.
-:::
+-   Re-labelling was performed for visibly wrong record. (e.g., `Completion Year` for [“The Hiller”](https://www.edgeprop.sg/condo-apartment/the-hillier) should be 2011 instead of 0216) and this was cross-checked with industry sources.
 
-## Data Preparation
+-   Referencing “Property Guru”, the property sold can be grouped into Central Core Region, Rest of Central Region and Outside of Central Region ([CCR, RCR and OCR](https://www.propertyguru.com.sg/property-guides/ccr-ocr-rcr-region-singapore-ura-map-21045)).
 
-### Standardise Date Format
-
-The "Sales Date" column is currently a *cha* type. It needs to be converted into date format.
-
-**`dmy()`** is a function from the [**lubridate**](https://lubridate.tidyverse.org/) package that converts character strings to date format in the day-month-year (DMY) order.
-
-::: panel-tabset
-## Standardise Date Format
+-   Hence, a new column of `Region_type` was created to reflect the 3 segmented zones based on classifying the existing values in `Postal District`.
 
 ```{r}
-realis_all$`Sale Date` <- dmy(realis_all$`Sale Date`)
+# Encoding postal district into CCR, RCR and OCR
+realis_full <- realis_full %>% 
+  mutate(`Postal District` = as.numeric(`Postal District`)) %>%
+  mutate(Region_type = case_when(
+    `Postal District` %in% c(01, 02, 04, 06, 07, 09,10, 11) ~ "CCR",
+    `Postal District` %in% c(03, 05, 08, 12, 13, 14, 15, 20) ~ "RCR",
+    `Postal District` %in% c(16, 17, 18, 19, 21, 22, 23, 24, 25, 26, 27, 28) ~ "OCR"
+  ))
 ```
 
-## View Data
+### Reclassification of `Postal District` to Reflect Proximity to City Center
+
+-   a mapping of the `Postal District` values was mapped to easily recognised `Planning Area` that the public is familiar with.
 
 ```{r}
-head(realis_all$`Sale Date`)
+postal_mapping<- realis_full %>%
+  group_by(`Planning Area`) %>%
+  summarize(Distinct_Values = paste(unique(`Postal District`), collapse = ", "))
+
+kable(postal_mapping, title = "Mapping of Planning Area to Postal District ")
 ```
-:::
 
-### Keep Relevant Rows
+### Standardisation
 
-Duplicate and empty rows are removed.
+Large projects tend to spread across multiple postal codes, thus, a consistent postal code was assigned to each project. Revised postal code assigned is based on the highest frequency per project with the `group_by()` function.
 
 ```{r}
-qa_pte_raw <- realis_all %>%
-    distinct() %>%
-    drop_na()
+# Re-assigning large projects to a common postal code. (highest frequency postal code) for standardisation. 
+realis_full <- realis_full %>%
+  group_by(`Project Name`) %>%
+  mutate(`Postal Code` = names(which.max(table(`Postal Code`)))) %>%
+  ungroup()
 ```
 
-#### View Data
+### Converting `Tenure` into remaining lease life.
+
+-   Converting `Tenure` into date format, excluding: “Freehold”, “99 or 999 years leasehold from uncompleted units”.
+
+-   Calculating the remaining lease life based on `Sale Date`. (Rounded down to nearest no. of years)
+
+-   Re-labeling back the records which are “Freehold” and “99 or 999 years leasehold” for uncompleted units.
 
 ```{r}
-glimpse(qa_pte_raw)
+realis_clean <- realis_full %>%
+  rowwise() %>%
+  mutate(
+    years = as.numeric(str_extract(Tenure, "\\d+(?=\\s+yrs)")),  # Extracts digits before " yrs" as years
+    start_date = dmy(str_extract(Tenure, "\\d{2}/\\d{2}/\\d{4}")),  # Extracts date in "dd/mm/yyyy" format
+    end_date = start_date + years(years),
+    remaining_years = floor(as.numeric(difftime(end_date, Sys.Date(), units = "days") / 365)) # Calculate remaining years from days
+  ) %>%
+  ungroup()
+
+realis_clean2 <- realis_clean %>%
+  mutate(years_left = ifelse(!is.na(remaining_years), remaining_years, 
+                             ifelse(Tenure == "999 years leasehold", "999", 
+                                    ifelse(Tenure == "99 years leasehold", "99", 
+                                           ifelse(Tenure == "Freehold", "Freehold", 
+                                                  ifelse(Tenure == "110 yrs from 01/11/2017", "103",
+                                                         ifelse(Tenure == "110 Yrs from 01/11/2017", "103", NA)))))))
+
+# Converting character into date format
+realis_clean2$`Sale Date` <- as.Date(realis_clean2$`Sale Date`, format = "%d %b %Y") 
 ```
 
-::: callout-note
-**qa_pte_raw contains:**
+## **Exploring outliers**
 
--   Private residential property transaction data from 1st January 2023 to 31st March 2024
+### Commercial En-bloc
 
--   There are 26,800 rows and 21 columns.
-:::
+The data set includes transactions that include commercial purchases that are infrequent and done by private developers for large land masses. This subset of transactions are unlikely to be done by individual buyers, and will be excluded from subsequent visualisation to prevent distortion of the axis.
 
-### Keep Relevant Columns
+-   `Number of Units` \> 5
 
-Not all 21 columns will be used for analysis e.g. contains overlapping information as another column. Only relevant columns will be kept.
+-   `Type of Sale` = “Resale”
 
-Columns to drop:
+-   `Purchaser Address Indicator` =“Private”
 
--   Area (SQFT): Similar information as Area (SQM)
-
--   Unit Price (\$ PSF): Similar information as Unit Price (\$ PSM)
-
--   Nett Price (\$): Similar information as Transacted Price (\$)
-
--   Postal District and Postal Sector: Overlapping information as Postal Code
-
-Columns to be dropped can be specified by prefixing the column names with a minus sign (-) when using the **`select()`** function from the **`dplyr`** package.
-
-::: panel-tabset
-## Keep Relevant Columns
+-   `Tenure` = “Freehold”
 
 ```{r}
-qa_pte <- qa_pte_raw %>%
-    select(
-        -`Area (SQFT)`,
-        -`Unit Price ($ PSF)`,
-        -`Postal District`,
-        -`Postal Sector`
-    )
+enbloc_set <- realis_full %>% filter(`Tenure` == "Freehold", 
+                                     `Number of Units` > 5, 
+                                     `Purchaser Address Indicator` == "Private", 
+                                     `Type of Sale` == "Resale"
+                                      )
+enbloc_set_2 <- enbloc_set %>% 
+  rename("Transacted_Price" = "Transacted Price ($)") %>% 
+  rename("Area_SQFT" = "Area (SQFT)") %>%
+  rename("Unit_Price_PSF" = "Unit Price ($ PSF)") %>% 
+  rename("Sale_Date" = "Sale Date") %>% 
+  rename("Number_of_Units" = "Number of Units")
+
+kable(enbloc_set_2)
 ```
 
-## View Data
+### Large new launches
+
+Another subset identified are new project launches, where we observe a spike in transaction volumes in the month which new large developments are launched. While these transactions are not excluded from the visualisation dataset, this subset will be further analysed under section 3.3
+
+-   `Type of Sale` = “New Sale”
+
+-   `Completion Date` = “Uncompleted”
+
+-   Sum of `Number of Units` group by `Project Name` \> 100
 
 ```{r}
-glimpse(qa_pte)
+Sale_by_proj <- realis_full %>% 
+  group_by(`Project Name`) %>% 
+  mutate(total_sale = sum(`Number of Units`))%>% 
+  arrange(desc(total_sale)) %>%
+  ungroup()
+  
+new_launch <- Sale_by_proj %>% 
+  filter(`Type of Sale` == "New Sale", 
+         `Completion Date` == "Uncompleted")
+
+large_new_launch <- Sale_by_proj %>% 
+  filter(`Type of Sale` == "New Sale", 
+         `Completion Date` == "Uncompleted", 
+         total_sale > 100)
+
+large_new_launch <- large_new_launch %>% 
+  rename("Unit_Price_PSF" = "Unit Price ($ PSF)")
+
+new_proj_sale <- large_new_launch %>%
+  group_by(`Project Name`) %>%
+  summarize(proj_sale = total_sale, 
+            median_proj_psf = median(as.numeric(`Unit_Price_PSF`))) %>%
+  arrange(desc(proj_sale))
+
+kable(head(distinct(new_proj_sale)), n =5)
 ```
-:::
 
-::: callout-note
-**qa_pte contains:**
+### Luxury market
 
--   Private residential property transaction data from 1st January 2024 to 31st March 2024
-
--   There are 26,800 rows and 14 columns.
-
--   Columns:
-
-    -   Project Name
-
-    -   Transacted Price (\$)
-
-    -   Sale Date
-
-    -   Address
-
-    -   Type of Sale
-
-    -   Type of Area
-
-    -   Area (SQM)
-
-    -   Unit Price (\$ PSM)
-
-    -   Nett Price
-
-    -   Property Type
-
-    -   Number of Units
-
-    -   Tenure
-
-    -   Completion Date
-
-    -   Purchaser Address Indicator
-
-    -   Postal Code
-
-    -   Planning Region
-
-    -   Planning Area
-:::
-
-### Separate Data by Quarters
-
-The dataset contains 5 quarters:
-
--   Quarter 1: 2023 Jan - Mar
-
--   Quarter 2: 2023 Apr - Jun
-
--   Quarter 3: 2023 Jul - Sep
-
--   Quarter 4: 2023 Aug - Dec
-
--   Quarter 5: 2024 Jan - Mar
-
-To allow for comparison between quarters, qa_pte will be split into the respective quarters by `Sale Date`.
+Transactions with `Transacted Price ($)` in the top 2.5% are excluded in earlier price distribution visualisations as they skewed the records.
 
 ```{r}
-q1 <- qa_pte %>%
-  filter(`Sale Date` <= "2023-03-31")
+high_val <- realis_clean2 %>%
+  filter(`Transacted Price ($)` > quantile(`Transacted Price ($)`, 0.975, na.rm = TRUE)) 
 
-q2 <- qa_pte %>%
-  filter(`Sale Date` > "2023-03-31" & `Sale Date` <= "2023-06-30")
-
-q3 <- qa_pte %>%
-  filter(`Sale Date` > "2023-06-30" & `Sale Date` <= "2023-09-30")
-
-q4 <- qa_pte %>%
-  filter(`Sale Date` > "2023-09-30" & `Sale Date` <= "2023-12-31")
-
-q5 <- qa_pte %>%
-  filter(`Sale Date` > "2023-12-31")
+ind_high_val <- anti_join(high_val, enbloc_set, by = c("Tenure","Number of Units","Type of Sale"))
 ```
 
-### View Data
+# **Visualization**
 
-::: panel-tabset
-## Q1
+Diving into individual private residential purchases, the visualization data set used `Realis_vis` will exclude the subset of `Enbloc_set`.
 
 ```{r}
-glimpse(q1)
+realis_vis <- anti_join(realis_clean2, enbloc_set, by = c("Tenure","Number of Units","Type of Sale"))
 ```
 
-## Q2
+## Common Theme
+
+Setting a common colour theme
 
 ```{r}
-summary(q2)
+prop_col <- c("Apartment" = "#CCE5FF", 
+              "Executive Condominium" = "#CCFF99", 
+              "Condominium" = "#99CCff", 
+              "Terrace House" = "#FFE5CC", 
+              "Semi-Detached House" = "#FFCC99", 
+              "Detached House" = "#FF9933")
 ```
-
-## Q3
-
-```{r}
-summary(q3)
-```
-
-## Q4
-
-```{r}
-summary(q4)
-```
-
-## Q5
-
-```{r}
-summary(q5)
-```
-:::
-
-# Visualisation
-
-There are various types of Properties for Private residences.
-
-```{r}
-unique(qa_pte$`Property Type`)
-```
-
-The different types in the dataset are:
-
--   Condominium
-
--   Terrace House
-
--   Apartment
-
--   Executive Condominium
-
--   Semi-Detached House
-
--   Detached House
-
-## Number of Units Sold
-
-Create bar chart plots for the price distribution of each private residence property type. A bar chart or graph that presents categorical data with rectangular bars with heights or lengths proportional to the values that they represent. They can be plotted vertically or horizontally.
-
-For each quarter, the data is grouped by property type, then summed by the number of units, in order to obtain the number of units sold per quarter.
-
-### Summarise Number of Units Sold by Property Type
-
-::: panel-tabset
-## Q1 2023
-
-```{r}
-q1_units <- q1 %>%
-  group_by(`Property Type`) %>%
-  summarize(`Total Units` = sum(`Number of Units`), .groups = "drop")
-q1_units
-```
-
-## Q2 2023
-
-```{r}
-q2_units <- q2 %>%
-  group_by(`Property Type`) %>%
-  summarize(`Total Units` = sum(`Number of Units`), .groups = "drop")
-q2_units
-```
-
-## Q3 2023
-
-```{r}
-q3_units <- q3 %>%
-  group_by(`Property Type`) %>%
-  summarize(`Total Units` = sum(`Number of Units`), .groups = "drop")
-q3_units
-```
-
-## Q4 2023
-
-```{r}
-q4_units <- q4 %>%
-  group_by(`Property Type`) %>%
-  summarize(`Total Units` = sum(`Number of Units`), .groups = "drop")
-q4_units
-```
-
-## Q1 2024
-
-```{r}
-q5_units <- q5 %>%
-  group_by(`Property Type`) %>%
-  summarize(`Total Units` = sum(`Number of Units`), .groups = "drop")
-q5_units
-```
-:::
-
-The code chunk below plots the number of units by property type for each quarter.
-
-::: panel-tabset
-## 2023 Q1
-
-```{r}
-q1_mean <- mean(q1_units$`Total Units`)
-
-q1_plot <- ggplot(q1_units, aes(x = `Property Type`, y = `Total Units`)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Property Type", y = "Total Units Sold") +
-  ggtitle("Q1 2023") +
-  ylim(0, 2700) +
-  theme_economist() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  geom_hline(yintercept = q1_mean, color = "navy", linetype = "dashed") +
-  annotate(geom = "text", x = 5, y = q1_mean + 100, 
-           label = paste("Mean:", round(q1_mean, 2)), color = "navy")
-
-q1_plot
-
-```
-
-## 2023 Q2
-
-```{r}
-q2_mean <- mean(q2_units$`Total Units`)
-
-q2_plot <- ggplot(q2_units, aes(x = `Property Type`, y = `Total Units`)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Property Type", y = "Total Units Sold") +
-  ggtitle("Q2 2023") +
-  ylim(0, 2700) +
-  theme_economist() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  geom_hline(yintercept = q2_mean, color = "navy", linetype = "dashed") +
-  annotate(geom = "text", x = 5, y = q2_mean + 100, 
-           label = paste("Mean:", round(q2_mean, 2)), color = "navy")
-
-q2_plot
-```
-
-## 2023 Q3
-
-```{r}
-q3_mean <- mean(q3_units$`Total Units`)
-
-q3_plot <- ggplot(q3_units, aes(x = `Property Type`, y = `Total Units`)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Property Type", y = "Total Units Sold") +
-  ggtitle("Q3 2023") +
-  ylim(0, 2700) +
-  theme_economist() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  geom_hline(yintercept = q3_mean, color = "navy", linetype = "dashed") +
-  annotate(geom = "text", x = 5, y = q3_mean + 100, 
-           label = paste("Mean:", round(q3_mean, 2)), color = "navy")
-
-q3_plot
-```
-
-## 2023 Q4
-
-```{r}
-q4_mean <- mean(q4_units$`Total Units`)
-
-q4_plot <- ggplot(q4_units, aes(x = `Property Type`, y = `Total Units`)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Property Type", y = "Total Units Sold") +
-  ggtitle("Q4 2023") +
-  ylim(0, 2700) +
-  theme_economist() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  geom_hline(yintercept = q4_mean, color = "navy", linetype = "dashed") +
-  annotate(geom = "text", x = 5, y = q4_mean + 100, 
-           label = paste("Mean:", round(q4_mean, 2)), color = "navy")
-
-q4_plot
-```
-
-## 2024 Q1
-
-```{r}
-q5_mean <- mean(q5_units$`Total Units`)
-
-q5_plot <- ggplot(q5_units, aes(x = `Property Type`, y = `Total Units`)) +
-  geom_bar(stat = "identity") +
-  labs(x = "Property Type", y = "Total Units Sold") +
-  ggtitle("Q1 2024") +
-  ylim(0, 2700) +
-  theme_economist() +
-  theme(axis.text.x = element_text(angle = 90)) +
-  geom_hline(yintercept = q5_mean, color = "navy", linetype = "dashed") +
-  annotate(geom = "text", x = 5, y = q5_mean + 100, 
-           label = paste("Mean:", round(q5_mean, 2)), color = "navy")
-
-q5_plot
-```
-:::
-
-### Composite Plot
-
-Using **`patchwork`** package, the plots for Q1 2023 and Q1 2024 are stacked into 1 composite plot for a quarter on quarter analysis.
-
-```{r}
-q1_plot | q5_plot
-
-```
-
-::: callout-tip
-## Write Up
-
-Comparing bar chart plots for Q1 2023 and Q1 2024 (quarter on quarter), insights emerge regarding the mean number of units sold. In Q1 2023, the average stood at 804.67 units, edging slightly higher to 817.17 units in Q1 2024. This suggests a slight overall increase in property sales.
-
-While Apartments and Executive Condominiums experienced growth in sales volumes, Semi-Detached Houses and Terrace Houses maintained stable figures. Conversely, a decline was observed in the number of Condominiums and Detached Houses sold.
-
-Notably, Apartments and Condominiums, the predominant property types, experienced the most significant shifts in sales volumes, with Apartments witnessing the largest increase and Condominiums facing the most substantial decline.
-:::
