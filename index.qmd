@@ -34,16 +34,6 @@ Welcome to **ISSS608 Visual Analytics and Applications** homepage. In this websi
 
 Overview:
 
-[Introduction to Visual Analytics](Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html)\
-[Designing Graphics to Enlighten](Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html)\
-[Interactivity in Visual Analytics](Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_1.html)\
-[Fundamentals of Visual Analytics](Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html)\
-Designing Web-enabled Visual Analytics application with Shiny\
-Visual Multivariate Analysis\
-Visualising & Analysing Time Oriented Data\
-Network Data Visualisation & Analysis\
-Information Dashboard Design
-
 ::: content-container
 ::: listing-block
 ## Hands On Exercise
