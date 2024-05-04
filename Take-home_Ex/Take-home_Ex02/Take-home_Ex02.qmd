@@ -205,7 +205,7 @@ realis_full <- realis_full %>%
   ungroup()
 ```
 
-### Converting `Tenure` into remaining lease life.
+### Converting `Tenure` into Remaining Lease Life.
 
 -   Converting `Tenure` into date format, excluding: “Freehold”, “99 or 999 years leasehold from uncompleted units”.
 
@@ -315,7 +315,7 @@ high_val <- realis_clean2 %>%
 ind_high_val <- anti_join(high_val, enbloc_set, by = c("Tenure","Number of Units","Type of Sale"))
 ```
 
-# **Visualization**
+# **Visualisation**
 
 Diving into individual private residential purchases, the visualization data set used `Realis_vis` will exclude the subset of `Enbloc_set`.
 
@@ -323,17 +323,16 @@ Diving into individual private residential purchases, the visualization data set
 realis_vis <- anti_join(realis_clean2, enbloc_set, by = c("Tenure","Number of Units","Type of Sale"))
 ```
 
-## Common Theme
-
-Setting a common colour theme
+Define colours
 
 ```{r}
-prop_col <- c("Apartment" = "#CCE5FF", 
-              "Executive Condominium" = "#CCFF99", 
-              "Condominium" = "#99CCff", 
-              "Terrace House" = "#FFE5CC", 
-              "Semi-Detached House" = "#FFCC99", 
-              "Detached House" = "#FF9933")
+# Define colors for each property type
+prop_colors <- c("Apartment" = "steelblue", 
+                 "Condominium" = "skyblue", 
+                 "Detached House" = "lightblue",
+                 "Executive Condominium" = "royalblue", 
+                 "Semi-Detached House" = "cornflowerblue", 
+                 "Terrace House" = "deepskyblue")
 ```
 
 Removing outliers
@@ -343,7 +342,7 @@ upper_bound <- quantile(realis_clean2$`Transacted Price ($)`, 0.975)
 print(paste("Upper bound price at 97.5%", upper_bound))
 ```
 
-#### No. of Property Sold per Property Type
+## No. of Property Sold per Property Type
 
 Data Wrangling
 
@@ -378,29 +377,59 @@ Histogram Plot
 
 ```{r,echo=FALSE}
 
-# Plotting distribution of sales by month 
+# Sum the total number of units sold per month
+monthly_sum <- sale_by_prop_month %>%
+  group_by(year_month) %>%
+  summarise(total_units_sum = sum(total_units))
+
+# Calculate the mean of the total number of units sold per month
+mean_value <- mean(monthly_sum$total_units_sum)
+
+# Plot the histogram with a mean line
 hist_plot <- ggplot(data = sale_by_prop_month, 
-                    aes(x= year_month, y = total_units, fill = `Property Type`)) + 
-  geom_col(color = "grey30") + ylim(0,2000) + 
-  labs(title = "Distribution of Units Sale per Month", 
-       x = "No. of Units Sold", 
-       y = "Month")
+                    aes(x = year_month, y = total_units, fill = `Property Type`)) + 
+  geom_col(color = "grey30") + 
+  labs(title = "Distribution of Units Sold per Month", 
+       x = "Month", 
+       y = "No. of Units Sold") +
+ scale_fill_manual(values = prop_colors) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  lims(x = as.Date(c("2023-01-01", "2024-03-01"))) +
+  scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),
+                     labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%m-%Y")) +
+  geom_hline(yintercept = mean_value, linetype = "dotted", color = "red") +
+  annotate("text", x = as.Date("2023-12-01"), y = mean_value, label = paste("Mean:", round(mean_value, 2)), vjust = -3, colour="red")
 
 hist_plot
+
 ```
 
 ## Code
 
 ```{r,eval=FALSE}
 
-# Plotting distribution of sales by month 
+# Sum the total number of units sold per month
+monthly_sum <- sale_by_prop_month %>%
+  group_by(year_month) %>%
+  summarise(total_units_sum = sum(total_units))
+
+# Calculate the mean of the total number of units sold per month
+mean_value <- mean(monthly_sum$total_units_sum)
+
+# Plot the histogram with a mean line
 hist_plot <- ggplot(data = sale_by_prop_month, 
-                    aes(x= year_month, y = total_units, fill = `Property Type`)) + 
-  geom_col(color = "grey30") + ylim(0,2000) + 
-  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5)) +
-  labs(title = "Distribution of Units Sale per Month", 
-       x = "No. of Units Sold", 
-       y = "Month")
+                    aes(x = year_month, y = total_units, fill = `Property Type`)) + 
+  geom_col(color = "grey30") + 
+  labs(title = "Distribution of Units Sold per Month", 
+       x = "Month", 
+       y = "No. of Units Sold") +
+ scale_fill_manual(values = prop_colors) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  lims(x = as.Date(c("2023-01-01", "2024-03-01"))) +
+  scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),
+                     labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%m-%Y")) +
+  geom_hline(yintercept = mean_value, linetype = "dotted", color = "red") +
+  annotate("text", x = as.Date("2023-12-01"), y = mean_value, label = paste("Mean:", round(mean_value, 2)), vjust = -3, colour="red")
 
 hist_plot
 ```
@@ -413,15 +442,6 @@ Raincloud Plot
 
 ```{r, echo=FALSE}
 
-# Setting upper bound price for apartment
-upper_bound <- quantile(realis_clean2$`Transacted Price ($)`, 0.99)
-
-# Setting order
-prop_order <- c("Detached House", "Semi-Detached House","Terrace House", "Condominium", "Apartment", "Executive Condominium")
-
-realis_clean2$`Property Type` <- factor(realis_clean2$`Property Type`, levels = prop_order)
-
-# drawing graph
 prop_price_dist <- ggplot(realis_clean2, 
                      aes(x = `Property Type`, y = `Transacted Price ($)`, fill = `Property Type` )) +
   stat_halfeye(adjust = 0.5,
@@ -436,8 +456,10 @@ prop_price_dist <- ggplot(realis_clean2,
             dotsize = 2) +
    coord_flip() +
   ylim(0, upper_bound) + 
-  scale_fill_manual(values = prop_col)  + 
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) + labs(title = "Spread of Transacted Price per Property Type", 
+  scale_fill_manual(values = prop_colors)  + 
+  scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M")) +  # Close scale_y_continuous here
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) + 
+  labs(title = "Spread of Transacted Price per Property Type", 
        x = "Property Type", 
        y = "Transacted Price")
 
@@ -448,15 +470,7 @@ prop_price_dist
 ## Code
 
 ```{r, eval=FALSE}
-# Setting upper bound price for apartment
-upper_bound <- quantile(realis_clean2$`Transacted Price ($)`, 0.99)
 
-# Setting order
-prop_order <- c("Detached House", "Semi-Detached House","Terrace House", "Condominium", "Apartment", "Executive Condominium")
-
-realis_clean2$`Property Type` <- factor(realis_clean2$`Property Type`, levels = prop_order)
-
-# drawing graph
 prop_price_dist <- ggplot(realis_clean2, 
                      aes(x = `Property Type`, y = `Transacted Price ($)`, fill = `Property Type` )) +
   stat_halfeye(adjust = 0.5,
@@ -471,16 +485,19 @@ prop_price_dist <- ggplot(realis_clean2,
             dotsize = 2) +
    coord_flip() +
   ylim(0, upper_bound) + 
-  scale_fill_manual(values = prop_col)  + 
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) + labs(title = "Spread of Transacted Price per Property Type", 
+  scale_fill_manual(values = prop_colors)  + 
+  scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M")) +  # Close scale_y_continuous here
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) + 
+  labs(title = "Spread of Transacted Price per Property Type", 
        x = "Property Type", 
        y = "Transacted Price")
 
 prop_price_dist
+
 ```
 :::
 
-#### Transaction Price & No. of Unit sold per Property Type
+## Transaction Price & No. of Unit sold per Property Type
 
 The code chunk below:
 
@@ -510,14 +527,14 @@ d_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == 
 # Creating the graph
 
 hist_plot_apt <- ggplot(data = apt_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
-  geom_col() +
-  scale_fill_gradient(low = "#E0E0E0", high = "#000000", name = "Intensity", limit = c(0,2000)) +  # Apply a color scale for intensity
-  geom_line(aes(y = avg_price * 1500 / 2000000), color = "blue") +
+  geom_col(fill = "steelblue") +
+  geom_line(aes(y = avg_price * 1500 / 2000000), color = "blueviolet", linewidth=1) +
   scale_y_continuous(
-    name = "Apt",
+    name = "Number of Units Sold",
     limits = c(0, 1500),
-    sec.axis = sec_axis(~. * 2000000 / 1500, name = "Median Price")
-  ) + theme(legend.position = "none", panel.background = element_rect(fill = "#CCE5FF"))
+    sec.axis = sec_axis(~. * 2000000 / 1500, name = "Median Price",labels = scales::number_format(scale = 1e-6, suffix = "M"))
+  ) + theme(legend.position = "none") +
+   annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour="blueviolet")
 
 hist_plot_apt
 ```
@@ -529,14 +546,15 @@ hist_plot_apt
 # summary(ec_by_month) 
 # max unit sold: 459, max avg price = 1504000
 
-hist_plot_ec <- ggplot(data = ec_by_month, 
-                    aes(x= year_month, y = total_units, fill = total_units)) +
-  geom_col() +
-  scale_fill_gradient(low = "#E0E0E0", high = "#000000", name = "Intensity", limit = c(0,2000)) + 
-  geom_line(aes(y = avg_price *500/1600000), color = "blue") + 
-   scale_y_continuous(name = "EC", 
-                      limits = c(0, 500), 
-                      sec.axis = sec_axis(~.*1600000/500) ) + theme(legend.position = "none", panel.background = element_rect(fill = "#CCFF99")) + labs(title = "Unit Sold & Median Price over Months")
+hist_plot_ec <- ggplot(data = ec_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
+  geom_col(fill = "royalblue") +
+  geom_line(aes(y = avg_price * 1500 / 2000000), color = "blueviolet", linewidth=1) +
+  scale_y_continuous(
+    name = "Number of Units Sold",
+    limits = c(0, 1500),
+    sec.axis = sec_axis(~. * 2000000 / 1500, name = "Median Price",labels = scales::number_format(scale = 1e-6, suffix = "M"))
+  ) + theme(legend.position = "none") +
+   annotate("text", x = as.Date("2023-12-01"), y = 1250, label = "Median Price", colour="blueviolet")
 
 hist_plot_ec
 ```
@@ -547,14 +565,15 @@ hist_plot_ec
 # summary(c_by_month)
 # max unit sold: 1108, max price: 1780000
 
-hist_plot_c <- ggplot(data = c_by_month, 
-                    aes(x= year_month, y = total_units, fill = total_units)) +
-  geom_col() +
-  scale_fill_gradient(low = "#E0E0E0", high = "#000000", name = "Intensity", limit = c(0,2000)) + 
-  geom_line(aes(y = avg_price *1200/1800000), color = "blue") + 
-   scale_y_continuous(name = "Condo", 
-                      limits = c(0, 1200), 
-                      sec.axis = sec_axis(~.*1800000/1200) ) +  theme(legend.position = "none", panel.background = element_rect(fill = "#99CCFF" ))
+hist_plot_c <- ggplot(data = c_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
+  geom_col(fill = "skyblue") +
+  geom_line(aes(y = avg_price * 1500 / 2000000), color = "blueviolet", linewidth=1) +
+  scale_y_continuous(
+    name = "Number of Units Sold",
+    limits = c(0, 1500),
+    sec.axis = sec_axis(~. * 2000000 / 1500, name = "Median Price",labels = scales::number_format(scale = 1e-6, suffix = "M"))
+  ) + theme(legend.position = "none") +
+   annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour="blueviolet")
 
 hist_plot_c
 ```
@@ -566,16 +585,17 @@ hist_plot_c
 # max units: 95
 # max price: 3,844,000
 
-hist_plot_t <- ggplot(data = t_by_month, 
-                    aes(x= year_month, y = total_units, fill = total_units)) +
-  geom_col() +
-  scale_fill_gradient(low = "#E0E0E0", high = "#000000", name = "Intensity", limit = c(0,100)) + 
-  geom_line(aes(y = avg_price *100/4000000), color = "blue") + 
-   scale_y_continuous(name = "Terrace", 
-                      limits = c(0, 100), 
-                      sec.axis = sec_axis(~.*4000000/100) ) +  theme(legend.position = "none", panel.background = element_rect(fill = "#FFE5CC"))
+hist_plot_t <- ggplot(data = t_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
+  geom_col(fill = "deepskyblue") +
+  geom_line(aes(y = avg_price * 1500 / 4000000), color = "blueviolet", linewidth=1) +
+  scale_y_continuous(
+    name = "Number of Units Sold",
+    limits = c(0, 1500),
+    sec.axis = sec_axis(~. * 4000000 / 1500, name = "Median Price",labels = scales::number_format(scale = 1e-6, suffix = "M"))
+  ) + theme(legend.position = "none") +
+   annotate("text", x = as.Date("2023-12-01"), y = 1500, label = "Median Price", colour="blueviolet")
 
-hist_plot_t 
+hist_plot_t
 ```
 
 ## Semi-Detached House
@@ -585,14 +605,15 @@ hist_plot_t
 # max unit: 67
 # max price: 6,539,400 
 
-hist_plot_sd <- ggplot(data = sd_by_month, 
-                    aes(x= year_month, y = total_units, fill = total_units)) +
-  geom_col() +
-  scale_fill_gradient(low = "#e0e0e0", high = "#000000", name = "Intensity", limit = c(0,100)) + 
-  geom_line(aes(y = avg_price *100/7000000), color = "blue") + 
-   scale_y_continuous(name = "Semi-Detached", 
-                      limits = c(0, 100), 
-                      sec.axis = sec_axis(~.*7000000/100, name = "Median Price") ) + theme(legend.position = "none", panel.background = element_rect(fill = "#FFCC99"))
+hist_plot_sd <- ggplot(data = sd_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
+  geom_col(fill = "cornflowerblue") +
+  geom_line(aes(y = avg_price * 1500 / 7000000), color = "blueviolet", linewidth=1) +
+  scale_y_continuous(
+    name = "Number of Units Sold",
+    limits = c(0, 1500),
+    sec.axis = sec_axis(~. * 7000000 / 1500, name = "Median Price",labels = scales::number_format(scale = 1e-6, suffix = "M"))
+  ) + theme(legend.position = "none") +
+   annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour="blueviolet")
 
 hist_plot_sd
 ```
@@ -604,14 +625,15 @@ hist_plot_sd
 # max unit: 34
 # max price: 14,500,000
 
-hist_plot_d <- ggplot(data = d_by_month, 
-                    aes(x= year_month, y = total_units, fill = total_units)) +
-  geom_col() +
-  scale_fill_gradient(low = "#E0E0E0", high = "#000000", name = "Intensity", limit = c(0,100)) + 
-  geom_line(aes(y = avg_price *50/15000000), color = "blue") + 
-   scale_y_continuous(name = "Detached", 
-                      limits = c(0, 100), 
-                      sec.axis = sec_axis(~.*15000000/50) ) +  theme(legend.position = "none", panel.background = element_rect(fill = "#FF9933"))
+hist_plot_d <- ggplot(data = d_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
+  geom_col(fill = "lightblue") +
+  geom_line(aes(y = avg_price * 1500 / 15000000), color = "blueviolet", linewidth=1) +
+  scale_y_continuous(
+    name = "Number of Units Sold",
+    limits = c(0, 1500),
+    sec.axis = sec_axis(~. * 15000000 / 1500, name = "Median Price",labels = scales::number_format(scale = 1e-6, suffix = "M"))
+  ) + theme(legend.position = "none") +
+   annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour="blueviolet")
 
 hist_plot_d
 ```
