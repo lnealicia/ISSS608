@@ -129,7 +129,7 @@ realis_full <- rbind(realis_1, realis_2, realis_3, realis_4, realis_5)
 `summary()` function used to obtain dataset min, max values and interquartile range.
 
 ::: panel-tabset
-## Code
+## Overview of Tibble Data Frame
 
 ```{r, echo=FALSE}
 # Understanding the distribution of numerical values in Realis 
@@ -144,7 +144,7 @@ realis_num <- realis_num %>%
 kable(summary(realis_num))
 ```
 
-## Overview of Tibble Data Frame
+## Code
 
 ```{r,eval=FALSE}
 # Understanding the distribution of numerical values in Realis 
