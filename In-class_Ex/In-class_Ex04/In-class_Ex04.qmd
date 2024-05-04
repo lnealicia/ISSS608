@@ -1,5 +1,5 @@
 ---
-title: "In-Class Exercise 4 -  "
+title: "In-Class Exercise 4 - Fundamentals of Visual Analytics"
 author: "Alicia Loh"
 date: "May 04, 2024"
 date-modified: last-modified
@@ -46,7 +46,7 @@ pacman::p_load(ggstatsplot, tidyverse)
 
 -   **readr** is a pacakge within tidyverse.
 
-```{r,eval=FALSE}
+```{r}
 exam <- read_csv("data/Exam_data.csv")
 ```
 
@@ -67,16 +67,23 @@ In the code chunk below, [*gghistostats()*](https://indrajeetpatil.github.io/ggs
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r,echo=FALSE}
 set.seed(1234) # for reproducibility
 
-gghistostats(
+p <- gghistostats(
   data = exam,
   x = ENGLISH,
-  type = "bayes",
+  type = "parametric",
   test.value = 60,
-  xlab = "English scores"
+  bin.args = list(color = "black",
+                  fill = "skyblue",
+                  alpha = 0.7),
+  normal.curve = TRUE, #default value is FALSE
+  normal.curve.args = list(linewidth = .5),
+  xlab = "English Scores"
 )
+
+p
 ```
 
 ## Code
@@ -84,63 +91,96 @@ gghistostats(
 ```{r, eval=FALSE}
 set.seed(1234) # for reproducibility
 
-gghistostats(
+p <- gghistostats(
   data = exam,
   x = ENGLISH,
-  type = "bayes",
+  type = "parametric",
   test.value = 60,
-  xlab = "English scores"
+  bin.args = list(color = "black",
+                  fill = "skyblue",
+                  alpha = 0.7),
+  normal.curve = FALSE, #default value is FALSE
+  normal.curve.args = list(linewidth = .5),
+  xlab = "English Scores"
+)
+
+p
+```
+:::
+
+Default information: - statistical details - Bayes Factor - sample sizes - distribution summary
+
+### **Extracting expressions and data frames with statistical details**
+
+[ggstatsplot](https://indrajeetpatil.github.io/ggstatsplot/) also offers a convenience function to extract data frames with statistical details that are used to create expressions displayed in [ggstatsplot](https://indrajeetpatil.github.io/ggstatsplot/) plots.
+
+```{r}
+extract_stats(p)
+```
+
+## ***ggdotplotstats()***
+
+In the code chunk below, the function `ggdotplotstats` is used to provide an easy way to make **publication-ready dot plots/charts** with appropriate and selected statistical details embedded in the plot itself.
+
+::: panel-tabset
+## Plot
+
+```{r, echo=FALSE}
+
+ggdotplotstats(
+  data = exam,
+  x = ENGLISH, 
+  y = CLASS,
+  title = "p",
+  xlab = "FALSE"
+)
+```
+
+## Code
+
+```{r, eval=FALSE}
+
+ggdotplotstats(
+  data = exam,
+  x = ENGLISH, 
+  y = CLASS,
+  title = "p",
+  xlab = "FALSE"
 )
 ```
 :::
 
 Default information: - statistical details - Bayes Factor - sample sizes - distribution summary
 
-## **Unpacking the Bayes Factor**
+## ***ggwithinstats()***
 
--   A Bayes factor is the ratio of the likelihood of one particular hypothesis to the likelihood of another. i.e., a measure of the strength of evidence in favor of one theory among two competing theories.
+Transform data into suitable format for plot
 
--   Bayes factor allows evaluation of the data in favor of a null hypothesis, and to use external information to do so. It gives the weight of the evidence in favor of a given hypothesis.
+```{r}
+exam_long <- exam %>%
+  pivot_longer(
+    cols = ENGLISH:SCIENCE,
+    names_to = "SUBJECT",
+    values_to = "SCORES"
+  ) %>%
+  filter(CLASS == "3A")
 
--   When comparing two hypotheses, H~1~ (the alternate hypothesis) and H~0~ (the null hypothesis), the Bayes Factor is often written as B~10~, defined mathematically as:
+```
 
-    $\frac{likelihood of data given H_{1}}{likelihood of data given H_{0}} = \frac{P(D|H_{1})}{P(D|H_{0})}$
-
--   The [**Schwarz criterion**](https://www.statisticshowto.com/bayesian-information-criterion/) is one of the easiest ways to calculate rough approximation of the Bayes Factor.
-
-### **Interpreting Bayes Factor**
-
-A **Bayes Factor** can be any positive number. A common interpretation was first proposed by Harold Jeffereys (1961) and slightly modified by [Lee and Wagenmakers](https://www-tandfonline-com.libproxy.smu.edu.sg/doi/pdf/10.1080/00031305.1999.10474443?needAccess=true) in 2013:
-
-| B10 Value  |          Conclusion           |
-|:----------:|:-----------------------------:|
-|   \>100    |   Extreme evidence for H~1~   |
-|   30-100   | Very strong evidence for H~1~ |
-|   10-30    |   Strong evidence for H~1~    |
-|    3-10    |  Moderate evidence for H~1~   |
-|    1-3     |  Anecdotal evidence for H~1~  |
-|     1      |          No evidence          |
-|   1/3-1    |  Anecdotal evidence for H~1~  |
-|  1/3-1/10  |  Moderate evidence for H~1~   |
-| 1/10-1/30  |   Strong evidence for H~1~    |
-| 1/30-1/100 | Very strong evidence for H~1~ |
-|  \<1/100   |   Extreme evidence for H~1~   |
-
-## **Two-sample mean test: *ggbetweenstats()***
-
-In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for two-sample mean test of Maths scores by gender.
+In the code chunk below, the function `ggwithinstats` is designed to facilitate **data exploration**, and for making highly customizable **publication-ready plots**, with relevant statistical details included in the plot itself if desired.
 
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r,echo=FALSE}
 
-ggbetweenstats(
-  data = exam,
-  x = GENDER, 
-  y = MATHS,
-  type = "np",
-  messages = FALSE
+ggwithinstats(
+  data = filter(exam_long,
+                SUBJECT %in%
+                  c("MATHS", "SCIENCE")),
+  x = SUBJECT, 
+  y = SCORES,
+  type = "p"
 )
 ```
 
@@ -148,65 +188,16 @@ ggbetweenstats(
 
 ```{r, eval=FALSE}
 
-ggbetweenstats(
-  data = exam,
-  x = GENDER, 
-  y = MATHS,
-  type = "np",
-  messages = FALSE
+ggwithinstats(
+  data = filter(exam_long,
+                SUBJECT %in%
+                  c("MATHS", "SCIENCE")),
+  x = SUBJECT, 
+  y = SCORES,
+  type = "p"
 )
 ```
 :::
-
-Default information: - statistical details - Bayes Factor - sample sizes - distribution summary
-
-## **Oneway ANOVA Test: *ggbetweenstats()* method**
-
-In the code chunk below, [*ggbetweenstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbetweenstats.html) is used to build a visual for One-way ANOVA test on English score by race.
-
-::: panel-tabset
-## Plot
-
-```{r,eval=FALSE}
-
-ggbetweenstats(
-  data = exam,
-  x = RACE, 
-  y = ENGLISH,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "s",
-  p.adjust.method = "fdr",
-  messages = FALSE
-)
-```
-
-## Code
-
-```{r, eval=FALSE}
-
-ggbetweenstats(
-  data = exam,
-  x = RACE, 
-  y = ENGLISH,
-  type = "p",
-  mean.ci = TRUE, 
-  pairwise.comparisons = TRUE, 
-  pairwise.display = "s",
-  p.adjust.method = "fdr",
-  messages = FALSE
-)
-```
-:::
-
--   “ns” → only non-significant
-
--   “s” → only significant
-
--   “all” → everything
-
-### ggbetweenstats - Summary of tests
 
 ## **Significant Test of Correlation: *ggscatterstats()***
 
@@ -215,13 +206,15 @@ In the code chunk below, [*ggscatterstats()*](https://indrajeetpatil.github.io/g
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r,echo=FALSE}
 
 ggscatterstats(
   data = exam,
   x = MATHS,
   y = ENGLISH,
-  marginal = FALSE,
+  marginal = TRUE,
+  label.var = ID, # show student ID 
+  label.expression = ENGLISH > 90 & MATHS > 90 #criteria
   )                
 ```
 
@@ -233,44 +226,10 @@ ggscatterstats(
   data = exam,
   x = MATHS,
   y = ENGLISH,
-  marginal = FALSE,
-  )
-```
-:::
-
-## **Significant Test of Association (Depedence) : *ggbarstats()* methods**
-
-In the code chunk below, the Maths scores is binned into a 4-class variable by using [*cut()*](https://www.rdocumentation.org/packages/base/versions/3.6.2/topics/cut). [*ggbarstats()*](https://indrajeetpatil.github.io/ggstatsplot/reference/ggbarstats.html) is used to build a visual for Significant Test of Association
-
-::: panel-tabset
-## Plot
-
-```{r,eval=FALSE}
-
-exam1 <- exam %>% 
-  mutate(MATHS_bins = 
-           cut(MATHS, 
-               breaks = c(0,60,75,85,100))
-)
-
-ggbarstats(exam1, 
-           x = MATHS_bins, 
-           y = GENDER)                                    
-```
-
-## Code
-
-```{r, eval=FALSE}
-
-exam1 <- exam %>% 
-  mutate(MATHS_bins = 
-           cut(MATHS, 
-               breaks = c(0,60,75,85,100))
-)
-
-ggbarstats(exam1, 
-           x = MATHS_bins, 
-           y = GENDER)                                  
+  marginal = TRUE,
+  label.var = ID, # show student ID 
+  label.expression = ENGLISH > 90 & MATHS > 90 #criteria
+  )   
 ```
 :::
 
@@ -290,7 +249,7 @@ pacman::p_load(readxl, performance, parameters, see)
 
 In the code chunk below, [*read_xls()*](https://readxl.tidyverse.org/reference/read_excel.html) of [**readxl**](https://readxl.tidyverse.org/) package is used to import the data worksheet of `ToyotaCorolla.xls` workbook into R.
 
-```{r,eval=FALSE}
+```{r}
 car_resale <- read_xls("data/ToyotaCorolla.xls", 
                        "data")
 car_resale
@@ -300,9 +259,9 @@ car_resale
 
 The code chunk below is used to calibrate a multiple linear regression model by using *lm()* of Base Stats of R.
 
-```{r,eval=FALSE}
+```{r}
 model <- lm(Price ~ Age_08_04 + Mfg_Year + KM + 
-              Weight + Guarantee_Period, data = car_resale)
+              Weight + Guarantee_Period, data = car_resale) # list square model
 model
 ```
 
@@ -310,11 +269,11 @@ model
 
 In the code chunk, [*check_collinearity()*](https://easystats.github.io/performance/reference/check_collinearity.html) of [**performance**](https://easystats.github.io/performance/) package.
 
-```{r,eval=FALSE}
+```{r}
 check_collinearity(model)
 ```
 
-```{r,eval=FALSE}
+```{r}
 check_c <- check_collinearity(model)
 plot(check_c)
 ```
@@ -326,7 +285,7 @@ In the code chunk, [*check_normality()*](https://easystats.github.io/performance
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r,echo=FALSE}
 
 model1 <- lm(Price ~ Age_08_04 + KM + 
               Weight + Guarantee_Period, data = car_resale)
@@ -357,7 +316,7 @@ In the code chunk, [*check_heteroscedasticity()*](https://easystats.github.io/pe
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r,echo=FALSE}
 
 check_h <- check_heteroscedasticity(model1)
 plot(check_h)
@@ -379,7 +338,7 @@ We can also perform the complete by using [*check_model()*](https://easystats.gi
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r,echo=FALSE}
 check_model(model1)
 ```
 
@@ -397,7 +356,7 @@ In the code below, plot() of see package and parameters() of parameters package 
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r,echo=FALSE}
 
 plot(parameters(model1))
 ```
@@ -417,7 +376,7 @@ In the code below, [*ggcoefstats()*](https://indrajeetpatil.github.io/ggstatsplo
 ::: panel-tabset
 ## Plot
 
-```{r,eval=FALSE}
+```{r,echo=FALSE}
 
 ggcoefstats(model1, 
             output = "plot")
