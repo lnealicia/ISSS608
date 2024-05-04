@@ -1,5 +1,31 @@
 ---
 title: "Visual Analytics and Applications"
+
+listing: 
+
+  - id: Hands_on_Exercise
+    contents:
+      - "Hands-on_Ex/*/*.qmd"
+    sort:
+      - "title"
+    type: grid
+    fields: [image, date, title, author]
+  - id: In_Class_Exercise
+    contents:
+      - "In-class_Ex/*/*.qmd"
+    sort:
+      - "title"
+    type: grid
+    fields: [image, date, title, author]
+  
+  - id: Take_Home_Exercise
+    contents:
+      - "Take-home_Ex/*/*.qmd"
+    sort:
+      - "title"
+    type: grid
+    fields: [image, date, title, author]
+toc: false
 ---
 
 Welcome to **ISSS608 Visual Analytics and Applications** homepage. In this website, you will find my coursework.
@@ -17,3 +43,36 @@ Visual Multivariate Analysis\
 Visualising & Analysing Time Oriented Data\
 Network Data Visualisation & Analysis\
 Information Dashboard Design
+
+::: content-container
+::: listing-block
+## Hands On Exercise
+
+</a>
+
+::: {#Hands_on_Exercise}
+:::
+:::
+:::
+
+::: content-container
+::: listing-block
+## In Class Exercise
+
+</a>
+
+::: {#In_Class_Exercise}
+:::
+:::
+:::
+
+::: content-container
+::: listing-block
+## Take Home Exercise
+
+</a>
+
+::: {#Take_Home_Exercise}
+:::
+:::
+:::

@@ -5,7 +5,8 @@ website:
   title: "ISSS608"
   navbar:
     left: 
-      - text: "Hands-on Exercise"
+      - icon: pencil-square
+        text: "Hands-on Exercise"
         menu:
           - text: "Hands-on Exercise 1"
             href: "Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html"
@@ -22,7 +23,8 @@ website:
           - text: "Hands-on Exercise 4 Part III"
             href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_3.html"
 
-      - text: "In-class Exercise"
+      - icon: book-half
+        text: "In-class Exercise"
         menu:
           - text: "In-class Exercise 1"
             href: "In-class_Ex/In-class_Ex01/In-class_Ex01.html"
@@ -31,7 +33,8 @@ website:
           - text: "In-class Exercise 4"
             href: "In-class_Ex/In-class_Ex04/In-class_Ex04.html"
 
-      - text: "Take-home Exercise"
+      - icon: person-fill
+        text: "Take-home Exercise"
         menu:
           - text: "Take-home Exercise 1"
             href: "Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html"
@@ -49,6 +52,8 @@ website:
       href: https://www.linkedin.com/in/lnealicia/       
     - icon: github         
       href: https://github.com/lnealicia/
+    - icon: bar-chart-fill
+      href: https://public.tableau.com/app/profile/lne.alicia/vizzes
 
 format:
   html:
