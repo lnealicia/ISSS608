@@ -491,7 +491,6 @@ prop_price_dist <- ggplot(realis_clean2,
        y = "Transacted Price")
 
 prop_price_dist
-
 ```
 :::
 
@@ -659,8 +658,23 @@ hist_plot_d
 ```
 :::
 
-## Composite Plot
+## Composite Plot 1
+
+To facilitate the composite plot later, the legend for the plots are hidden
 
 ```{r}
-(hist_plot / prop_price_dist) | (hist_plot_apt / hist_plot_c / hist_plot_d / hist_plot_ec / hist_plot_sd / hist_plot_t)
+hist_plot <- hist_plot + theme(legend.position = "none")
+prop_price_dist <- prop_price_dist + theme(legend.position = "none")
+```
+
+Patchwork is used to create the composite plot. The legend for the plot is created separately.
+
+```{r}
+hist_plot / prop_price_dist
+```
+
+## Composite Plot 2
+
+```{r}
+hist_plot_apt / hist_plot_c / hist_plot_d / hist_plot_ec / hist_plot_sd / hist_plot_t
 ```
