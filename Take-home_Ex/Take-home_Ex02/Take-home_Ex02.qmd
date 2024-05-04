@@ -268,7 +268,7 @@ kable(enbloc_set_2)
 
 ### Large new launches
 
-Another subset identified are new project launches, where we observe a spike in transaction volumes in the month which new large developments are launched. While these transactions are not excluded from the visualisation dataset, this subset will be further analysed under section 3.3
+Another subset identified are new project launches, where we observe a spike in transaction volumes in the month which new large developments are launched.
 
 -   `Type of Sale` = “New Sale”
 
@@ -382,9 +382,6 @@ Histogram Plot
 hist_plot <- ggplot(data = sale_by_prop_month, 
                     aes(x= year_month, y = total_units, fill = `Property Type`)) + 
   geom_col(color = "grey30") + ylim(0,2000) + 
-  geom_vline(
-    xintercept = as.Date("2024-01-01") -15, color = "red", linetype = "dashed") + scale_fill_manual(values = prop_col) + 
-  theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5)) +
   labs(title = "Distribution of Units Sale per Month", 
        x = "No. of Units Sold", 
        y = "Month")
@@ -400,8 +397,6 @@ hist_plot
 hist_plot <- ggplot(data = sale_by_prop_month, 
                     aes(x= year_month, y = total_units, fill = `Property Type`)) + 
   geom_col(color = "grey30") + ylim(0,2000) + 
-  geom_vline(
-    xintercept = as.Date("2024-01-01") -15, color = "red", linetype = "dashed") + scale_fill_manual(values = prop_col) + 
   theme(axis.text.x = element_text(angle = 0, hjust = 0.5, vjust = 0.5)) +
   labs(title = "Distribution of Units Sale per Month", 
        x = "No. of Units Sold", 
@@ -442,7 +437,7 @@ prop_price_dist <- ggplot(realis_clean2,
    coord_flip() +
   ylim(0, upper_bound) + 
   scale_fill_manual(values = prop_col)  + 
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) + geom_hline(yintercept = 2750000, color = "red", linetype = "dashed") + labs(title = "Spread of Transacted Price per Property Type", 
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) + labs(title = "Spread of Transacted Price per Property Type", 
        x = "Property Type", 
        y = "Transacted Price")
 
@@ -477,7 +472,7 @@ prop_price_dist <- ggplot(realis_clean2,
    coord_flip() +
   ylim(0, upper_bound) + 
   scale_fill_manual(values = prop_col)  + 
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) + geom_hline(yintercept = 2750000, color = "red", linetype = "dashed") + labs(title = "Spread of Transacted Price per Property Type", 
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) + labs(title = "Spread of Transacted Price per Property Type", 
        x = "Property Type", 
        y = "Transacted Price")
 
@@ -522,7 +517,7 @@ hist_plot_apt <- ggplot(data = apt_by_month, aes(x = year_month, y = total_units
     name = "Apt",
     limits = c(0, 1500),
     sec.axis = sec_axis(~. * 2000000 / 1500, name = "Median Price")
-  ) + geom_vline(xintercept = as.Date("2024-01-01") -15, color = "red", linetype = "dashed") + theme(legend.position = "none", panel.background = element_rect(fill = "#CCE5FF"))
+  ) + theme(legend.position = "none", panel.background = element_rect(fill = "#CCE5FF"))
 
 hist_plot_apt
 ```
@@ -541,7 +536,7 @@ hist_plot_ec <- ggplot(data = ec_by_month,
   geom_line(aes(y = avg_price *500/1600000), color = "blue") + 
    scale_y_continuous(name = "EC", 
                       limits = c(0, 500), 
-                      sec.axis = sec_axis(~.*1600000/500) ) + geom_vline(xintercept = as.Date("2024-01-01") -15, color = "red", linetype = "dashed") + theme(legend.position = "none", panel.background = element_rect(fill = "#CCFF99")) + labs(title = "Unit Sold & Median Price over Months")
+                      sec.axis = sec_axis(~.*1600000/500) ) + theme(legend.position = "none", panel.background = element_rect(fill = "#CCFF99")) + labs(title = "Unit Sold & Median Price over Months")
 
 hist_plot_ec
 ```
@@ -559,7 +554,7 @@ hist_plot_c <- ggplot(data = c_by_month,
   geom_line(aes(y = avg_price *1200/1800000), color = "blue") + 
    scale_y_continuous(name = "Condo", 
                       limits = c(0, 1200), 
-                      sec.axis = sec_axis(~.*1800000/1200) ) + geom_vline(xintercept = as.Date("2024-01-01") -15, color = "red", linetype = "dashed") + theme(legend.position = "none", panel.background = element_rect(fill = "#99CCFF" ))
+                      sec.axis = sec_axis(~.*1800000/1200) ) +  theme(legend.position = "none", panel.background = element_rect(fill = "#99CCFF" ))
 
 hist_plot_c
 ```
@@ -578,7 +573,7 @@ hist_plot_t <- ggplot(data = t_by_month,
   geom_line(aes(y = avg_price *100/4000000), color = "blue") + 
    scale_y_continuous(name = "Terrace", 
                       limits = c(0, 100), 
-                      sec.axis = sec_axis(~.*4000000/100) ) + geom_vline(xintercept = as.Date("2024-01-01") -15, color = "red", linetype = "dashed") + theme(legend.position = "none", panel.background = element_rect(fill = "#FFE5CC"))
+                      sec.axis = sec_axis(~.*4000000/100) ) +  theme(legend.position = "none", panel.background = element_rect(fill = "#FFE5CC"))
 
 hist_plot_t 
 ```
@@ -597,7 +592,7 @@ hist_plot_sd <- ggplot(data = sd_by_month,
   geom_line(aes(y = avg_price *100/7000000), color = "blue") + 
    scale_y_continuous(name = "Semi-Detached", 
                       limits = c(0, 100), 
-                      sec.axis = sec_axis(~.*7000000/100, name = "Median Price") ) + geom_vline(xintercept = as.Date("2024-01-01") -15, color = "red", linetype = "dashed") + theme(legend.position = "none", panel.background = element_rect(fill = "#FFCC99"))
+                      sec.axis = sec_axis(~.*7000000/100, name = "Median Price") ) + theme(legend.position = "none", panel.background = element_rect(fill = "#FFCC99"))
 
 hist_plot_sd
 ```
@@ -616,14 +611,7 @@ hist_plot_d <- ggplot(data = d_by_month,
   geom_line(aes(y = avg_price *50/15000000), color = "blue") + 
    scale_y_continuous(name = "Detached", 
                       limits = c(0, 100), 
-                      sec.axis = sec_axis(~.*15000000/50) ) + geom_vline(xintercept = as.Date("2024-01-01") -15, color = "red", linetype = "dashed") + theme(legend.position = "none", panel.background = element_rect(fill = "#FF9933"))
-
-
-hist_plot_t <- hist_plot_t + theme(axis.text.x = element_blank(), axis.line.x = element_blank(), axis.title.x = element_blank())
-hist_plot_sd <- hist_plot_sd + theme(axis.text.x = element_blank(), axis.line.x = element_blank(), axis.title.x = element_blank())
-hist_plot_d <- hist_plot_d + theme(axis.title.x = element_blank())
-
-combined_plot_2 <- hist_plot_t + hist_plot_sd + hist_plot_d + plot_layout(ncol = 1) + theme(axis.line.x = element_line(color = "black")) 
+                      sec.axis = sec_axis(~.*15000000/50) ) +  theme(legend.position = "none", panel.background = element_rect(fill = "#FF9933"))
 
 hist_plot_d
 ```
