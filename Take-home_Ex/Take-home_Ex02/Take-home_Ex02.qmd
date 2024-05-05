@@ -164,7 +164,7 @@ kable(summary(realis_num))
 
 ### Manual Data Correction for Incorrect Data Entry
 
--   Re-labelling was performed for visibly wrong record. (e.g., `Completion Year` for [“The Hiller”](https://www.edgeprop.sg/condo-apartment/the-hillier) should be 2011 instead of 0216) and this was cross-checked with industry sources.
+-   Re-labelling was performed for a visibly wrong record. (e.g., `Completion Year` for [“The Hiller”](https://www.edgeprop.sg/condo-apartment/the-hillier) should be 2011 instead of 0216) and this was cross-checked with industry sources.
 
 -   Referencing “Property Guru”, the property sold can be grouped into Central Core Region, Rest of Central Region and Outside of Central Region ([CCR, RCR and OCR](https://www.propertyguru.com.sg/property-guides/ccr-ocr-rcr-region-singapore-ura-map-21045)).
 
@@ -183,7 +183,7 @@ realis_full <- realis_full %>%
 
 ### Reclassification of `Postal District` to Reflect Proximity to City Center
 
--   a mapping of the `Postal District` values was mapped to easily recognised `Planning Area` that the public is familiar with.
+-   `Postal District` values were mapped to `Planning Area` that the public is familiar with.
 
 ```{r}
 postal_mapping<- realis_full %>%
@@ -250,7 +250,10 @@ The data set includes transactions that include commercial purchases that are in
 
 -   `Tenure` = “Freehold”
 
-```{r}
+::: panel-tabset
+## Overview of Dataframe
+
+```{r,echo=FALSE}
 enbloc_set <- realis_full %>% filter(`Tenure` == "Freehold", 
                                      `Number of Units` > 5, 
                                      `Purchaser Address Indicator` == "Private", 
@@ -266,6 +269,25 @@ enbloc_set_2 <- enbloc_set %>%
 kable(enbloc_set_2)
 ```
 
+## Code
+
+```{r,eval=FALSE}
+enbloc_set <- realis_full %>% filter(`Tenure` == "Freehold", 
+                                     `Number of Units` > 5, 
+                                     `Purchaser Address Indicator` == "Private", 
+                                     `Type of Sale` == "Resale"
+                                      )
+enbloc_set_2 <- enbloc_set %>% 
+  rename("Transacted_Price" = "Transacted Price ($)") %>% 
+  rename("Area_SQFT" = "Area (SQFT)") %>%
+  rename("Unit_Price_PSF" = "Unit Price ($ PSF)") %>% 
+  rename("Sale_Date" = "Sale Date") %>% 
+  rename("Number_of_Units" = "Number of Units")
+
+kable(enbloc_set_2)
+```
+:::
+
 ### Large new launches
 
 Another subset identified are new project launches, where we observe a spike in transaction volumes in the month which new large developments are launched.
@@ -276,7 +298,10 @@ Another subset identified are new project launches, where we observe a spike in 
 
 -   Sum of `Number of Units` group by `Project Name` \> 100
 
-```{r}
+::: panel-tabset
+## Overview of Dataframe
+
+```{r,echo=FALSE}
 Sale_by_proj <- realis_full %>% 
   group_by(`Project Name`) %>% 
   mutate(total_sale = sum(`Number of Units`))%>% 
@@ -304,6 +329,37 @@ new_proj_sale <- large_new_launch %>%
 kable(head(distinct(new_proj_sale)), n =5)
 ```
 
+## Code
+
+```{r,eval=FALSE}
+Sale_by_proj <- realis_full %>% 
+  group_by(`Project Name`) %>% 
+  mutate(total_sale = sum(`Number of Units`))%>% 
+  arrange(desc(total_sale)) %>%
+  ungroup()
+  
+new_launch <- Sale_by_proj %>% 
+  filter(`Type of Sale` == "New Sale", 
+         `Completion Date` == "Uncompleted")
+
+large_new_launch <- Sale_by_proj %>% 
+  filter(`Type of Sale` == "New Sale", 
+         `Completion Date` == "Uncompleted", 
+         total_sale > 100)
+
+large_new_launch <- large_new_launch %>% 
+  rename("Unit_Price_PSF" = "Unit Price ($ PSF)")
+
+new_proj_sale <- large_new_launch %>%
+  group_by(`Project Name`) %>%
+  summarize(proj_sale = total_sale, 
+            median_proj_psf = median(as.numeric(`Unit_Price_PSF`))) %>%
+  arrange(desc(proj_sale))
+
+kable(head(distinct(new_proj_sale)), n =5)
+```
+:::
+
 ### Luxury market
 
 Transactions with `Transacted Price ($)` in the top 2.5% are excluded in earlier price distribution visualisations as they skewed the records.
@@ -326,13 +382,28 @@ realis_vis <- anti_join(realis_clean2, enbloc_set, by = c("Tenure","Number of Un
 Define colours
 
 ```{r}
-# Define colors for each property type
+
+# Define the property colors
 prop_colors <- c("Apartment" = "steelblue", 
                  "Condominium" = "skyblue", 
                  "Detached House" = "lightblue",
                  "Executive Condominium" = "royalblue", 
                  "Semi-Detached House" = "cornflowerblue", 
                  "Terrace House" = "deepskyblue")
+
+# Create a data frame for the legend
+legend_data <- data.frame(Property_Type = names(prop_colors), Color = prop_colors)
+
+# Plot a legend using ggplot2
+legend_plot <- ggplot(legend_data, aes(x = "", y = "", fill = Property_Type)) +
+               geom_tile() +
+               scale_fill_manual(values = prop_colors) +
+               theme_void() +
+               theme(legend.position = "right")
+
+# Display the legend plot
+legend_plot
+
 ```
 
 Removing outliers
@@ -504,22 +575,14 @@ The code chunk below:
 
 -   Creates line graph on the median `Transaction Price` for the property sold that month
 
-```{r}
-# Segment into property type
-apt_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Apartment")
-ec_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Executive Condominium")
-c_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Condominium")
-t_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Terrace House")
-sd_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Semi-Detached House")
-d_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Detached House")
-```
-
 ::: panel-tabset
 ## Apartment
 
 ```{r}
 # summary(apt_by_month)
 # Max units: 1444, max price = $1,875,000
+
+apt_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Apartment")
 
 # Creating the graph
 hist_plot_apt <- ggplot(data = apt_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
@@ -546,6 +609,8 @@ hist_plot_apt
 # summary(ec_by_month) 
 # max unit sold: 459, max avg price = 1504000
 
+ec_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Executive Condominium")
+
 #Creating the graph
 hist_plot_ec <- ggplot(data = ec_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
   geom_col(fill = "royalblue") +
@@ -568,6 +633,9 @@ hist_plot_ec
 ```{r}
 # summary(c_by_month)
 # max unit sold: 1108, max price: 1780000
+
+c_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Condominium")
+
 
 #Creating the graph
 hist_plot_c <- ggplot(data = c_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
@@ -593,6 +661,9 @@ hist_plot_c
 # max units: 95
 # max price: 3,844,000
 
+t_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Terrace House")
+
+
 #Creating the graph
 hist_plot_t <- ggplot(data = t_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
   geom_col(fill = "deepskyblue") +
@@ -615,7 +686,10 @@ hist_plot_t
 ```{r}
 # kable(summary(sd_by_month))
 # max unit: 67
-# max price: 6,539,400 
+# max price: 6,539,400
+
+sd_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Semi-Detached House")
+
 
 #Creating the graph
 hist_plot_sd <- ggplot(data = sd_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
@@ -640,6 +714,8 @@ hist_plot_sd
 # kable(summary(d_by_month))
 # max unit: 34
 # max price: 14,500,000
+
+d_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Detached House")
 
 hist_plot_d <- ggplot(data = d_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
   geom_col(fill = "lightblue") +
