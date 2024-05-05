@@ -37,10 +37,10 @@ In "Visualization 1 - How has transacted price varied over the 2024 Q1 and 2023"
 +:================================================================================================================================================================+:=====================================================================================================================================================================+
 | -   The presented charts are relatively well spaced, so while there is a lot of information, chart elements are not overlaid on top of each other and obscured. | -   At first glance, one could mistakenly assume that the 3 general colour groups i.e. blue, green, orange were meant to be a grouping, where:                       |
 |                                                                                                                                                                 |                                                                                                                                                                      |
-| ```{=html}                                                                                                                                                      |     -   Group 1: Apartment, Condominium                                                                                                                              |
-| <!-- -->                                                                                                                                                        |                                                                                                                                                                      |
-| ```                                                                                                                                                             |     -   Group 2: Detached House, Semi-detached House, Terrace House                                                                                                  |
-| -   Colour theme of the plot is consistently applied, making reference between presented charts quick and easy                                                  |                                                                                                                                                                      |
+| <!-- -->                                                                                                                                                        |     -   Group 1: Apartment, Condominium                                                                                                                              |
+|                                                                                                                                                                 |                                                                                                                                                                      |
+| -   Colour theme of the plot is consistently applied, making reference between presented charts quick and easy                                                  |     -   Group 2: Detached House, Semi-detached House, Terrace House                                                                                                  |
+|                                                                                                                                                                 |                                                                                                                                                                      |
 |                                                                                                                                                                 |     -   Group 3: Executive Condominium                                                                                                                               |
 |                                                                                                                                                                 |                                                                                                                                                                      |
 |                                                                                                                                                                 | -   In addition, the light colours chosen, when presented with a light background in the raincloud plot, does not have good contrast.                                |
@@ -64,15 +64,56 @@ In "Visualization 1 - How has transacted price varied over the 2024 Q1 and 2023"
 |                                                                                                                                                     |                                                                                                                                                                                                                                                                                                                            |
 |                                                                                                                                                     |     -   Mean/Median? In the raincloud plot, there is no timeline per se, so it seems to denote the mean or median transacted price                                                                                                                                                                                         |
 |                                                                                                                                                     |                                                                                                                                                                                                                                                                                                                            |
-|                                                                                                                                                     | ```{=html}                                                                                                                                                                                                                                                                                                                 |
 |                                                                                                                                                     | <!-- -->                                                                                                                                                                                                                                                                                                                   |
-|                                                                                                                                                     | ```                                                                                                                                                                                                                                                                                                                        |
+|                                                                                                                                                     |                                                                                                                                                                                                                                                                                                                            |
 |                                                                                                                                                     | -   In-consistent Y axis for bar-line chart                                                                                                                                                                                                                                                                                |
 |                                                                                                                                                     |                                                                                                                                                                                                                                                                                                                            |
 |                                                                                                                                                     |     -   Right Y-axis, includes both numbers and scientific notation, making it challenging to interpret. Specifically, the lack of clear spacing between the digits in the numerical format makes it difficult to read, while the scientific notation may not be readily understandable to individuals unfamiliar with it. |
 +-----------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
-# Sketch for Alternative Design
+# Alternative Design
+
+## **Aesthetics**
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Identified Areas for Improvement                                                                                                                                     | Proposed Solutions                                                                                                                                                                  |
++:=====================================================================================================================================================================+=====================================================================================================================================================================================+
+| -   At first glance, one could mistakenly assume that the 3 general colour groups i.e. blue, green, orange were meant to be a grouping, where:                       | -   Colours simplified to various shades of blue                                                                                                                                    |
+|                                                                                                                                                                      |                                                                                                                                                                                     |
+|     -   Group 1: Apartment, Condominium                                                                                                                              | -   Instead of colouring the background for the bar-line chart, the bars themselves were coloured with the corresponding colour                                                     |
+|                                                                                                                                                                      |                                                                                                                                                                                     |
+|     -   Group 2: Detached House, Semi-detached House, Terrace House                                                                                                  | -   Gray shading of the bars are removed, since it is generally obvious which bar is longer than the other                                                                          |
+|                                                                                                                                                                      |                                                                                                                                                                                     |
+|     -   Group 3: Executive Condominium                                                                                                                               | -   Individual Y axis labels for type of property is removed for simplicity. The same colour scheme is applied throughout the composite plot, so further labelling is not necessary |
+|                                                                                                                                                                      |                                                                                                                                                                                     |
+| -   In addition, the light colours chosen, when presented with a light background in the raincloud plot, does not have good contrast.                                | -   The composite plot showing six bar-line charts have one Y axis on each side, serving as an overall Y axis title                                                                 |
+|                                                                                                                                                                      |                                                                                                                                                                                     |
+| -   Not immediately obvious what the different shades of gray used for the line-bar chart represents, especially for bar charts where the bars have similar Y values |                                                                                                                                                                                     |
+|                                                                                                                                                                      |                                                                                                                                                                                     |
+| -   In-consistent Y axis labels for bar-line chart                                                                                                                   |                                                                                                                                                                                     |
+|                                                                                                                                                                      |                                                                                                                                                                                     |
+|     -   Abbreviations such as “EC”, “Apt”, “Condo” is not used anywhere else in the plot                                                                             |                                                                                                                                                                                     |
+|                                                                                                                                                                      |                                                                                                                                                                                     |
+|     -   Left Y axis has “Median Price” labeled for the second and fifth plot only, which could cause confusion as to why the rest of the plots are not labeled       |                                                                                                                                                                                     |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+## Clarity
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+
+| Identified Areas for Improvement                                                                                                                                                                                                                                                                                           | Proposed Solutions                                                                                                                               |
++============================================================================================================================================================================================================================================================================================================================+==================================================================================================================================================+
+| -   It is not clear on first glance what the red dotted line separates:                                                                                                                                                                                                                                                    | -   Only plot mean or median as a red dotted line, for comparison between quarters, adding a description before or after the plot should suffice |
+|                                                                                                                                                                                                                                                                                                                            |                                                                                                                                                  |
+|     -   Timeline? In the bar-line chart and stacked bar chart, it appears to be separating timeline of interest, but it is unclear whether the right or left side is the timeline of interest.                                                                                                                             | -   Convert all prices in axes to "millions" unit for ease of interpretability                                                                   |
+|                                                                                                                                                                                                                                                                                                                            |                                                                                                                                                  |
+|     -   Mean/Median? In the raincloud plot, there is no timeline per se, so it seems to denote the mean or median transacted price                                                                                                                                                                                         |                                                                                                                                                  |
+|                                                                                                                                                                                                                                                                                                                            |                                                                                                                                                  |
+| <!-- -->                                                                                                                                                                                                                                                                                                                   |                                                                                                                                                  |
+|                                                                                                                                                                                                                                                                                                                            |                                                                                                                                                  |
+| -   In-consistent Y axis for bar-line chart                                                                                                                                                                                                                                                                                |                                                                                                                                                  |
+|                                                                                                                                                                                                                                                                                                                            |                                                                                                                                                  |
+|     -   Right Y-axis, includes both numbers and scientific notation, making it challenging to interpret. Specifically, the lack of clear spacing between the digits in the numerical format makes it difficult to read, while the scientific notation may not be readily understandable to individuals unfamiliar with it. |                                                                                                                                                  |
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------------------------------------------------------------------------------------------------------------------------------------------+
 
 # Getting Started
 
@@ -103,13 +144,11 @@ The code chunk below loads the following packages using uses `p_load()` of pacma
 +-----------------------+--------------------------------------------------------------------------------------+
 | knitr                 | For elegant, flexible and fast report generation of underlying dataframes.           |
 +-----------------------+--------------------------------------------------------------------------------------+
-| cowplot               | Allows for customised arranging of plot elements                                     |
-+-----------------------+--------------------------------------------------------------------------------------+
 
 ```{r}
 pacman::p_load(ggrepel, patchwork, 
                ggthemes, hrbrthemes,
-               tidyverse, readr, ggdist, ggridges, colorspace, knitr, forcats, reshape2, png, grid, cowplot) 
+               tidyverse, readr, ggdist, ggridges, colorspace, knitr, forcats, reshape2, png, grid) 
 ```
 
 ## Importing the Data
@@ -511,7 +550,7 @@ hist_plot <- ggplot(data = sale_by_prop_month,
        x = "", 
        y = "No. of Units Sold") +
  scale_fill_manual(values = prop_colors) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),plot.title = element_text(size = 10)) +
   lims(x = as.Date(c("2023-01-01", "2024-03-01"))) +
   scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),
                      labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%b-%y")) +
@@ -592,10 +631,10 @@ prop_price_dist <- ggplot(for_raincloud,
   scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M")) +
   scale_fill_manual(values = prop_colors)  + 
   scale_x_discrete() + 
-  labs(title = "Distribution of Transacted Price by Property Type", 
+  labs(title = "Distribution of Transacted Price\nby Property Type", 
        x = "", 
        y = "Transacted Price") +
-   theme(legend.position = "none")
+   theme(legend.position = "none",plot.title = element_text(size = 10))
 
 prop_price_dist
 
@@ -621,10 +660,10 @@ prop_price_dist <- ggplot(for_raincloud,
   scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M")) +
   scale_fill_manual(values = prop_colors)  + 
   scale_x_discrete() + 
-  labs(title = "Distribution of Transacted Price per Property Type", 
+  labs(title = "Distribution of Transacted Price\nby Property Type", 
        x = "", 
        y = "Transacted Price") +
-   theme(legend.position = "none")
+   theme(legend.position = "none",plot.title = element_text(size = 10))
 
 prop_price_dist
 ```
@@ -826,38 +865,48 @@ cplot1
 
 ## Composite Plot 2
 
+In the resulting bar-line charts, the use of non-standardized Y-axes diminishes the ease of direct comparison between different categories. Standardizing the values could potentially improve comparability but would obscure bars representing extremely small values. For instance, the "Number of Units Sold" might vary widely, such as 34 for Detached Houses and 1444 for Apartments.
+
+To strike a balance, two separate scales were employed for each Y-axis. The left Y-axis ranges from 0 to 100 for the number of units sold and from 0 to 150 for the median price. Meanwhile, the right Y-axis spans from 0 to 2 million for the number of units sold and from 0 to 15 million for the median price. This approach ensures that both the magnitude of the values and the differences between categories remain visible to the audience.
+
 To facilitate the composite plot, the x axis showing Sale Date for the plots are hidden
 
 ```{r}
-hist_plot_apt <- hist_plot_apt +
+hist_plot_apt <- hist_plot_apt + 
   labs(x = NULL) +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())
+    theme(axis.text.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.ticks.x = element_blank())
 
-hist_plot_c <- hist_plot_c +
+hist_plot_c <- hist_plot_c + 
   labs(x = NULL) +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())
+    theme(axis.text.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.ticks.x = element_blank())
 
-hist_plot_d <- hist_plot_d +
+hist_plot_d <- hist_plot_d + 
   labs(x = NULL) +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())
+    theme(axis.text.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.ticks.x = element_blank())
 
-hist_plot_ec<- hist_plot_ec +
+hist_plot_ec <- hist_plot_ec + 
   labs(x = NULL) +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())
+    theme(axis.text.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.ticks.x = element_blank())
 
-hist_plot_sd <- hist_plot_sd +
+hist_plot_sd <- hist_plot_sd + 
   labs(x = NULL) +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())
+    theme(axis.text.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.ticks.x = element_blank())
 
-hist_plot_t <- hist_plot_t +
+hist_plot_t <- hist_plot_t + 
   labs(x = NULL) +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank())
+    theme(axis.text.x = element_blank(),
+          axis.title.x = element_blank(),
+          axis.ticks.x = element_blank())
 ```
 
 In the plot below, we see that:
@@ -869,6 +918,8 @@ In the plot below, we see that:
 -   Due to the scale on the left Y-axis, bar charts for Detached House, Semi Detached House and Terrace House are difficult to interpret from the plot
 
 -   Due to the scales of the Y axis, the plots should also be rearranged accordingly for easy visual comparison
+
+-   Title "Transaction Price & No. of Units sold by Property Type" is missing
 
 ::: panel-tabset
 ## Plot
@@ -895,32 +946,33 @@ Therefore, we revise the plot as follows:
 
 -   Rearrange the plots to show in this order: Apartment, Condominium, Executive Condominium, Detached House, Semi Detached House, Terrace House
 
+-   Add overall plot title
+
 ```{r}
+
+# List of plots
+plot_list2 <- list(hist_plot_apt, hist_plot_d, hist_plot_ec, hist_plot_sd, hist_plot_t)
+
+# Apply theme modifications to all plots in the list
+for (plot in plot_list2) {
+  plot <- plot +
+    labs(x = NULL, y = NULL) +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank())
+}
+
+# hist_plot_a add title
 hist_plot_apt <- hist_plot_apt +
-  labs(x = NULL, y = NULL) +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank(),
-        axis.title.y = element_blank())
+  labs(title = "Transaction Price & No. of Units sold\nby Property Type") +
+  theme(plot.title = element_text(size = 10))
 
+
+# hist_plot_c keep Y axis
 hist_plot_c <- hist_plot_c +
-  labs(x = NULL, y = NULL) +
+  labs(x = NULL) +
   theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank(),
-        axis.title.y = element_blank())
-
-# his_plot_ec excluded
-
-hist_plot_d <- hist_plot_d +
-  labs(x = NULL, y = NULL) +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank(),
-        axis.title.y = element_blank())
-
-hist_plot_sd <- hist_plot_sd +
-  labs(x = NULL, y = NULL) +
-  theme(axis.text.x = element_blank(),
-        axis.ticks.x = element_blank(),
-        axis.title.y = element_blank())
+        axis.ticks.x = element_blank())
 
 # hist_plot_t x axis to turn back on
 hist_plot_t <- hist_plot_t +
@@ -964,6 +1016,4 @@ cplot1 | cplot2
 
 ## After
 
-While both Y axis in the bar-line charts are not standardised, making direct comparison less intuitive, if we standardise the values, it would compromise the visibility of bars with extremely small values e.g. Number of Units Sold: Detached House = 34 vs Apartment = 1444. As such, a compromise was made to have 2 scales for each Y axis.
-
-For the left Y axis, 0-100 and 0-150. and for the right Y axis, 0-2M and 0-15M.
+### 
