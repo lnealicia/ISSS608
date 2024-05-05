@@ -660,7 +660,7 @@ hist_plot_d
 
 ## Composite Plot 1
 
-To facilitate the composite plot later, the legend for the plots are hidden
+To facilitate the composite plot, the legend for the plots are hidden
 
 ```{r}
 hist_plot <- hist_plot + theme(legend.position = "none")
@@ -670,10 +670,51 @@ prop_price_dist <- prop_price_dist + theme(legend.position = "none")
 Patchwork is used to create the composite plot. The legend for the plot is created separately.
 
 ```{r}
-hist_plot / prop_price_dist
+# Combine the plots
+combined_plot <- hist_plot + prop_price_dist
+
+# Set the height of the combined plot
+combined_plot <- combined_plot + plot_layout(heights = c(1, 4))
+
+# Display the combined plot
+combined_plot
 ```
 
 ## Composite Plot 2
+
+To facilitate the composite plot, the legend for the plots are hidden
+
+```{r}
+hist_plot_apt <- hist_plot_apt +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank())
+
+hist_plot_c <- hist_plot_c +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank())
+
+hist_plot_d <- hist_plot_d +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank())
+
+hist_plot_ec <- hist_plot_ec +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank())
+
+hist_plot_sd <- hist_plot_sd +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank())
+
+hist_plot_t <- hist_plot_t +
+  theme(axis.line = element_blank(),
+        axis.text = element_blank(),
+        axis.title = element_blank())
+```
 
 ```{r}
 hist_plot_apt / hist_plot_c / hist_plot_d / hist_plot_ec / hist_plot_sd / hist_plot_t
