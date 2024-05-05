@@ -610,10 +610,6 @@ head(for_raincloud)
 
 Distribution of Transacted Price by Property Type
 
-```{r}
-median_price
-```
-
 ::: panel-tabset
 ## Plot
 
@@ -644,7 +640,7 @@ prop_price_dist <- ggplot(for_raincloud,
        y = "Transacted Price") +
    theme(legend.position = "none",plot.title = element_text(size = 10)) +
    geom_hline(yintercept = median_price, linetype = "dotted", color = "red") +
-  annotate("text", x = 0.5, y = median_price, label = "Median: 1.6M", vjust = -11, colour = "red")
+  annotate("text", x = 0.5, y = median_price, label = "Median: 1.6M", vjust = -6, colour = "red")
 
 
 prop_price_dist
@@ -680,7 +676,7 @@ prop_price_dist <- ggplot(for_raincloud,
        y = "Transacted Price") +
    theme(legend.position = "none",plot.title = element_text(size = 10)) +
    geom_hline(yintercept = median_price, linetype = "dotted", color = "red") +
-  annotate("text", x = 0.5, y = median_price, label = "Median: 1.6M", vjust = -11, colour = "red")
+  annotate("text", x = 0.5, y = median_price, label = "Median: 1.6M", vjust = -6, colour = "red")
 
 
 prop_price_dist
