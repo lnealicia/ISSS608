@@ -32,25 +32,26 @@ In "Visualization 1 - How has transacted price varied over the 2024 Q1 and 2023"
 
 ### Aesthetics
 
-+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| Pros                                                                                                                                                            | Cons                                                                                                                                                                               |
-+:================================================================================================================================================================+:===================================================================================================================================================================================+
-| -   The presented charts are relatively well spaced, so while there is a lot of information, chart elements are not overlaid on top of each other and obscured. | -   At first glance, one could mistakenly assume that the 3 general colour groups i.e. blue, green, orange were meant to be a grouping, where:                                     |
-|                                                                                                                                                                 |                                                                                                                                                                                    |
-|                                                                                                                                                                 |     -   Group 1: Apartment, Condominium                                                                                                                                            |
-|                                                                                                                                                                 |                                                                                                                                                                                    |
-|                                                                                                                                                                 |     -   Group 2: Detached House, Semi-detached House, Terrace House                                                                                                                |
-|                                                                                                                                                                 |                                                                                                                                                                                    |
-|                                                                                                                                                                 |     -   Group 3: Executive Condominium                                                                                                                                             |
-|                                                                                                                                                                 |                                                                                                                                                                                    |
-|                                                                                                                                                                 | -   In addition, the light colours chosen, when presented with a light background in the raincloud plot, does not have good contrast.                                              |
-|                                                                                                                                                                 |                                                                                                                                                                                    |
-|                                                                                                                                                                 | -   It is unclear what the different shades of gray used for the line-bar chart represents                                                                                         |
-+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-| -   Colour theme of the plot is consistently applied, making reference between presented charts quick and easy                                                  | -   In-consistent Y axis for bar-line chart                                                                                                                                        |
-|                                                                                                                                                                 |                                                                                                                                                                                    |
-|                                                                                                                                                                 |     -   The right Y-axis label formats are not consistent. The top 3 charts have a typical number format, but the bottom 3 charts presents the numbers with a scientific notation. |
-+-----------------------------------------------------------------------------------------------------------------------------------------------------------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Pros                                                                                                                                                            | Cons                                                                                                                                                                 |
++:================================================================================================================================================================+:=====================================================================================================================================================================+
+| -   The presented charts are relatively well spaced, so while there is a lot of information, chart elements are not overlaid on top of each other and obscured. | -   At first glance, one could mistakenly assume that the 3 general colour groups i.e. blue, green, orange were meant to be a grouping, where:                       |
+|                                                                                                                                                                 |                                                                                                                                                                      |
+| ```{=html}                                                                                                                                                      |     -   Group 1: Apartment, Condominium                                                                                                                              |
+| <!-- -->                                                                                                                                                        |                                                                                                                                                                      |
+| ```                                                                                                                                                             |     -   Group 2: Detached House, Semi-detached House, Terrace House                                                                                                  |
+| -   Colour theme of the plot is consistently applied, making reference between presented charts quick and easy                                                  |                                                                                                                                                                      |
+|                                                                                                                                                                 |     -   Group 3: Executive Condominium                                                                                                                               |
+|                                                                                                                                                                 |                                                                                                                                                                      |
+|                                                                                                                                                                 | -   In addition, the light colours chosen, when presented with a light background in the raincloud plot, does not have good contrast.                                |
+|                                                                                                                                                                 |                                                                                                                                                                      |
+|                                                                                                                                                                 | -   Not immediately obvious what the different shades of gray used for the line-bar chart represents, especially for bar charts where the bars have similar Y values |
+|                                                                                                                                                                 |                                                                                                                                                                      |
+|                                                                                                                                                                 | -   In-consistent Y axis labels for bar-line chart                                                                                                                   |
+|                                                                                                                                                                 |                                                                                                                                                                      |
+|                                                                                                                                                                 |     -   Abbreviations such as "EC", "Apt", "Condo" is not used anywhere else in the plot                                                                             |
+|                                                                                                                                                                 |     -   Left Y axis has "Median Price" labeled for the second and fifth plot only, which could cause confusion as to why the rest of the plots are not labeled       |
++-----------------------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 ### Clarity
 
@@ -62,10 +63,11 @@ In "Visualization 1 - How has transacted price varied over the 2024 Q1 and 2023"
 |                                                                                                                                                     |     -   Timeline? In the bar-line chart and stacked bar chart, it appears to be separating timeline of interest, but it is unclear whether the right or left side is the timeline of interest.                                                                                                                             |
 |                                                                                                                                                     |                                                                                                                                                                                                                                                                                                                            |
 |                                                                                                                                                     |     -   Mean/Median? In the raincloud plot, there is no timeline per se, so it seems to denote the mean or median transacted price                                                                                                                                                                                         |
-+-----------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-|                                                                                                                                                     | -   In-consistent Y axis for bar-line chart                                                                                                                                                                                                                                                                                |
 |                                                                                                                                                     |                                                                                                                                                                                                                                                                                                                            |
-|                                                                                                                                                     |     -   Left Y-axis does not show the same scale across property types e.g. EC ranges from 0 to 500, and Apartment ranges from 0 to 1500. This makes direct comparison a little more tricky                                                                                                                                |
+|                                                                                                                                                     | ```{=html}                                                                                                                                                                                                                                                                                                                 |
+|                                                                                                                                                     | <!-- -->                                                                                                                                                                                                                                                                                                                   |
+|                                                                                                                                                     | ```                                                                                                                                                                                                                                                                                                                        |
+|                                                                                                                                                     | -   In-consistent Y axis for bar-line chart                                                                                                                                                                                                                                                                                |
 |                                                                                                                                                     |                                                                                                                                                                                                                                                                                                                            |
 |                                                                                                                                                     |     -   Right Y-axis, includes both numbers and scientific notation, making it challenging to interpret. Specifically, the lack of clear spacing between the digits in the numerical format makes it difficult to read, while the scientific notation may not be readily understandable to individuals unfamiliar with it. |
 +-----------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
@@ -555,27 +557,7 @@ hist_plot
 
 Only select outliers within values defined in `upper_bound` will be plotted to maintain visibility of the raincloud plot.
 
-::: panel-tabset
-## Overview of Dataframe
-
-```{r,echo=FALSE}
-
-# Calculate the upper bound price at 97.5%
-upper_bound <- quantile(realis_clean2$`Transacted Price ($)`, 0.975)
-print(paste("Upper bound price at 97.5%:", upper_bound))
-
-# Filter realis_clean2 to include only rows where Transacted Price ($) is less than or equal to the upper bound
-for_raincloud <- realis_clean2[realis_clean2$`Transacted Price ($)` <= upper_bound, ]
-
-# View the first few rows of the new dataframe
-head(for_raincloud)
-
-```
-
-## Code
-
-```{r,eval=FALSE}
-
+```{r}
 # Calculate the upper bound price at 97.5%
 upper_bound <- quantile(realis_clean2$`Transacted Price ($)`, 0.975)
 print(paste("Upper bound price at 97.5%:", upper_bound))
@@ -586,7 +568,8 @@ for_raincloud <- realis_clean2[realis_clean2$`Transacted Price ($)` <= upper_bou
 # View the first few rows of the new dataframe
 head(for_raincloud)
 ```
-:::
+
+Distribution of Transacted Price by Property Type
 
 ::: panel-tabset
 ## Plot
@@ -647,7 +630,7 @@ prop_price_dist
 ```
 :::
 
-## Transaction Price & No. of Unit sold by Property Type
+## Transaction Price & No. of Units sold by Property Type
 
 The code chunk below:
 
@@ -677,7 +660,6 @@ hist_plot_apt <- ggplot(data = apt_by_month, aes(x = year_month, y = total_units
   ) +
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
-  annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour = "blueviolet") +
   scale_x_date(date_breaks = "1 month", date_labels = "%b-%y") +
   labs(x = NULL)
 
@@ -685,41 +667,14 @@ hist_plot_apt
 
 ```
 
-## Executive Condominium
-
-```{r}
-
-# summary(ec_by_month) 
-# max unit sold: 459, max avg price = 1504000
-
-ec_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Executive Condominium")
-
-#Creating the graph
-hist_plot_ec <- ggplot(data = ec_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
-  geom_col(fill = "royalblue") +
-  geom_line(aes(y = avg_price * 1500 / 2000000), color = "blueviolet", linewidth = 1) +
-  scale_y_continuous(
-    name = "No. of Units Sold",
-    limits = c(0, 1500),
-    sec.axis = sec_axis(~. * 2000000 / 1500, name = "Median Price", labels = scales::number_format(scale = 1e-6, suffix = "M"))
-  ) +
-  theme(legend.position = "none",
-        axis.text.x = element_text(angle = 90, hjust = 1)) +  
-  annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour = "blueviolet") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%b-%y") +
-  labs(x = NULL)
-
-hist_plot_ec
-```
-
 ## Condominium
 
 ```{r}
+
 # summary(c_by_month)
 # max unit sold: 1108, max price: 1780000
 
 c_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Condominium")
-
 
 #Creating the graph
 hist_plot_c <- ggplot(data = c_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
@@ -732,11 +687,37 @@ hist_plot_c <- ggplot(data = c_by_month, aes(x = year_month, y = total_units, fi
   ) +
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
-  annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour = "blueviolet") +
   scale_x_date(date_breaks = "1 month", date_labels = "%b-%y") +
   labs(x = NULL)
 
-hist_plot_c
+hist_plot_ec
+```
+
+## Executive Condominium
+
+```{r}
+
+# summary(ec_by_month) 
+# max unit sold: 459, max avg price = 1504000
+
+ec_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == "Executive Condominium")
+
+
+#Creating the graph
+hist_plot_ec <- ggplot(data = ec_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
+  geom_col(fill = "royalblue") +
+  geom_line(aes(y = avg_price * 1500 / 2000000), color = "blueviolet", linewidth = 1) +
+  scale_y_continuous(
+    name = "No. of Units Sold",
+    limits = c(0, 1500),
+    sec.axis = sec_axis(~. * 2000000 / 1500, name = "Median Price", labels = scales::number_format(scale = 1e-6, suffix = "M"))
+  ) +
+  theme(legend.position = "none",
+        axis.text.x = element_text(angle = 90, hjust = 1)) +  
+  scale_x_date(date_breaks = "1 month", date_labels = "%b-%y") +
+  labs(x = NULL)
+
+hist_plot_ec
 ```
 
 ## Terrace House
@@ -752,15 +733,14 @@ t_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == 
 #Creating the graph
 hist_plot_t <- ggplot(data = t_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
   geom_col(fill = "deepskyblue") +
-  geom_line(aes(y = avg_price * 1500 / 4000000), color = "blueviolet", linewidth = 1) +
+  geom_line(aes(y = avg_price * 100 / 15000000), color = "blueviolet", linewidth = 1) +
   scale_y_continuous(
     name = "No. of Units Sold",
-    limits = c(0, 1500),
-    sec.axis = sec_axis(~. * 4000000 / 1500, name = "Median Price", labels = scales::number_format(scale = 1e-6, suffix = "M"))
+    limits = c(0, 100),
+    sec.axis = sec_axis(~. * 15000000 / 100, name = "Median Price", labels = scales::number_format(scale = 1e-6, suffix = "M"))
   ) +
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
-  annotate("text", x = as.Date("2023-12-01"), y = 1500, label = "Median Price", colour = "blueviolet") +
   scale_x_date(date_breaks = "1 month", date_labels = "%b-%y")  +
   labs(x = NULL)
 
@@ -780,15 +760,14 @@ sd_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` ==
 #Creating the graph
 hist_plot_sd <- ggplot(data = sd_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
   geom_col(fill = "cornflowerblue") +
-  geom_line(aes(y = avg_price * 1500 / 7000000), color = "blueviolet", linewidth = 1) +
+  geom_line(aes(y = avg_price * 100 / 15000000), color = "blueviolet", linewidth = 1) +
   scale_y_continuous(
     name = "No. of Units Sold",
-    limits = c(0, 1500),
-    sec.axis = sec_axis(~. * 7000000 / 1500, name = "Median Price", labels = scales::number_format(scale = 1e-6, suffix = "M"))
+    limits = c(0, 100),
+    sec.axis = sec_axis(~. * 15000000 / 100, name = "Median Price", labels = scales::number_format(scale = 1e-6, suffix = "M"))
   ) +
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
-  annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour = "blueviolet") +
   scale_x_date(date_breaks = "1 month", date_labels = "%b-%y")  +
   labs(x = NULL)
 
@@ -806,15 +785,14 @@ d_by_month <- subset(sale_by_prop_month,  sale_by_prop_month$`Property Type` == 
 
 hist_plot_d <- ggplot(data = d_by_month, aes(x = year_month, y = total_units, fill = total_units)) +
   geom_col(fill = "lightblue") +
-  geom_line(aes(y = avg_price * 1500 / 15000000), color = "blueviolet", linewidth = 1) +
+  geom_line(aes(y = avg_price * 100 / 15000000), color = "blueviolet", linewidth = 1) +
   scale_y_continuous(
     name = "No. of Units Sold",
-    limits = c(0, 1500),
-    sec.axis = sec_axis(~. * 15000000 / 1500, name = "Median Price", labels = scales::number_format(scale = 1e-6, suffix = "M"))
+    limits = c(0, 100),
+    sec.axis = sec_axis(~. * 15000000 / 100, name = "Median Price", labels = scales::number_format(scale = 1e-6, suffix = "M"))
   ) +
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
-  annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour = "blueviolet") +
   scale_x_date(date_breaks = "1 month", date_labels = "%b-%y")  +
   labs(x = NULL)
 
@@ -834,13 +812,13 @@ Patchwork is used to create the composite plot. Since the color scheme remains c
 
 ```{r}
 # Combine the plots
-combined_plot1 <- hist_plot + prop_price_dist
+cplot1 <- hist_plot + prop_price_dist
 
 # Set the height of the combined plot
-combined_plot1 <- combined_plot1 + plot_layout(heights = c(1, 4))
+cplot1 <- cplot1 + plot_layout(heights = c(1, 4))
 
 # Display the combined plot
-combined_plot1
+cplot1
 ```
 
 ## Composite Plot 2
@@ -887,6 +865,8 @@ In the plot below, we see that:
 
 -   Due to the scale on the left Y-axis, bar charts for Detached House, Semi Detached House and Terrace House are difficult to interpret from the plot
 
+-   Due to the scales of the Y axis, the plots should also be rearranged accordingly for easy visual comparison
+
 ::: panel-tabset
 ## Plot
 
@@ -906,11 +886,11 @@ Therefore, we revise the plot as follows:
 
 -   Hide all Y axis labels
 
--   Only show Y axis label i.e. "Number of Units" and "Median Price" for third plot i.e. Detached House. This will serve as an overall Y-axis label . It should be clear that this label applies to all plots in the composite plots
+-   Only show Y axis label i.e. "Number of Units" and "Median Price" for third plot i.e. Executive Condominium. This will serve as an overall Y-axis label . It should be clear that this label applies to all plots in the composite plots
 
 -   Only last plot i.e. Terrace House, will show X-axis label "Sale date". It should be clear that this label applies to all above plots as well
 
--   Show data labels for Detached House, Semi Detached House and Terrace House only
+-   Rearrange the plots to show in this order: Apartment, Condominium, Executive Condominium, Detached House, Semi Detached House, Terrace House
 
 ```{r}
 hist_plot_apt <- hist_plot_apt +
@@ -925,9 +905,9 @@ hist_plot_c <- hist_plot_c +
         axis.ticks.x = element_blank(),
         axis.title.y = element_blank())
 
-hist_plot_d <- hist_plot_d + geom_text(aes(label = total_units), position = position_stack(vjust = 0))
+# his_plot_ec excluded
 
-hist_plot_ec <- hist_plot_ec +
+hist_plot_d <- hist_plot_d +
   labs(x = NULL, y = NULL) +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
@@ -937,16 +917,14 @@ hist_plot_sd <- hist_plot_sd +
   labs(x = NULL, y = NULL) +
   theme(axis.text.x = element_blank(),
         axis.ticks.x = element_blank(),
-        axis.title.y = element_blank()) +
-   geom_text(aes(label = total_units), position = position_stack(vjust = -1))
+        axis.title.y = element_blank())
 
 # hist_plot_t x axis to turn back on
 hist_plot_t <- hist_plot_t +
   labs(x = NULL, y = NULL) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1),
         axis.ticks.x = element_line(),
-        axis.title.y = element_blank()) +
-   geom_text(aes(label = total_units), position = position_stack(vjust = 2))
+        axis.title.y = element_blank())
 ```
 
 Revised plot
@@ -955,13 +933,15 @@ Revised plot
 ## Plot
 
 ```{r,echo=FALSE}
-hist_plot_apt / hist_plot_c / hist_plot_d / hist_plot_ec / hist_plot_sd / hist_plot_t
+
+hist_plot_apt + hist_plot_c + hist_plot_ec + hist_plot_d + hist_plot_sd + hist_plot_t +  plot_layout(ncol = 1,axis_titles = "collect") 
+
 ```
 
 ## Code
 
 ```{r,eval=FALSE}
-hist_plot_apt / hist_plot_c / hist_plot_d / hist_plot_ec / hist_plot_sd / hist_plot_t
+hist_plot_apt + hist_plot_c + hist_plot_ec + hist_plot_d + hist_plot_sd + hist_plot_t +  plot_layout(ncol = 1,axis_titles = "collect") 
 ```
 :::
 
