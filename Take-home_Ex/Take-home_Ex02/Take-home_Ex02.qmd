@@ -661,6 +661,7 @@ hist_plot_apt <- ggplot(data = apt_by_month, aes(x = year_month, y = total_units
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   scale_x_date(date_breaks = "1 month", date_labels = "%b-%y") +
+  scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%b-%y")) +
   labs(x = NULL)
 
 hist_plot_apt
@@ -688,9 +689,10 @@ hist_plot_c <- ggplot(data = c_by_month, aes(x = year_month, y = total_units, fi
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   scale_x_date(date_breaks = "1 month", date_labels = "%b-%y") +
+  scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%b-%y")) +
   labs(x = NULL)
 
-hist_plot_ec
+hist_plot_c
 ```
 
 ## Executive Condominium
@@ -715,6 +717,7 @@ hist_plot_ec <- ggplot(data = ec_by_month, aes(x = year_month, y = total_units, 
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   scale_x_date(date_breaks = "1 month", date_labels = "%b-%y") +
+  scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%b-%y")) +
   labs(x = NULL)
 
 hist_plot_ec
@@ -742,6 +745,7 @@ hist_plot_t <- ggplot(data = t_by_month, aes(x = year_month, y = total_units, fi
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   scale_x_date(date_breaks = "1 month", date_labels = "%b-%y")  +
+  scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%b-%y")) +
   labs(x = NULL)
 
 hist_plot_t
@@ -769,6 +773,7 @@ hist_plot_sd <- ggplot(data = sd_by_month, aes(x = year_month, y = total_units, 
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   scale_x_date(date_breaks = "1 month", date_labels = "%b-%y")  +
+  scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%b-%y")) +
   labs(x = NULL)
 
 hist_plot_sd
@@ -794,6 +799,7 @@ hist_plot_d <- ggplot(data = d_by_month, aes(x = year_month, y = total_units, fi
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   scale_x_date(date_breaks = "1 month", date_labels = "%b-%y")  +
+  scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%b-%y")) +
   labs(x = NULL)
 
 hist_plot_d
@@ -812,10 +818,7 @@ Patchwork is used to create the composite plot. Since the color scheme remains c
 
 ```{r}
 # Combine the plots
-cplot1 <- hist_plot + prop_price_dist
-
-# Set the height of the combined plot
-cplot1 <- cplot1 + plot_layout(heights = c(1, 4))
+cplot1 <- hist_plot + prop_price_dist + plot_layout(heights = c(1, 4), ncol =1)
 
 # Display the combined plot
 cplot1
@@ -934,16 +937,24 @@ Revised plot
 
 ```{r,echo=FALSE}
 
-hist_plot_apt + hist_plot_c + hist_plot_ec + hist_plot_d + hist_plot_sd + hist_plot_t +  plot_layout(ncol = 1,axis_titles = "collect") 
+cplot2 <- hist_plot_apt + hist_plot_c + hist_plot_ec + hist_plot_d + hist_plot_sd + hist_plot_t +  plot_layout(ncol = 1,axis_titles = "collect") 
+
+cplot2
 
 ```
 
 ## Code
 
 ```{r,eval=FALSE}
-hist_plot_apt + hist_plot_c + hist_plot_ec + hist_plot_d + hist_plot_sd + hist_plot_t +  plot_layout(ncol = 1,axis_titles = "collect") 
+cplot2 <- hist_plot_apt + hist_plot_c + hist_plot_ec + hist_plot_d + hist_plot_sd + hist_plot_t +  plot_layout(ncol = 1,axis_titles = "collect") 
+
+cplot2
 ```
 :::
+
+```{r}
+cplot1 | cplot2
+```
 
 # Comparison
 
@@ -952,3 +963,7 @@ hist_plot_apt + hist_plot_c + hist_plot_ec + hist_plot_d + hist_plot_sd + hist_p
 ![](images/clipboard-539214968.png)
 
 ## After
+
+While both Y axis in the bar-line charts are not standardised, making direct comparison less intuitive, if we standardise the values, it would compromise the visibility of bars with extremely small values e.g. Number of Units Sold: Detached House = 34 vs Apartment = 1444. As such, a compromise was made to have 2 scales for each Y axis.
+
+For the left Y axis, 0-100 and 0-150. and for the right Y axis, 0-2M and 0-15M.
