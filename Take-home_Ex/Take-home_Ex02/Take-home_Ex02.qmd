@@ -609,7 +609,7 @@ prop_price_dist <- ggplot(for_raincloud,
   scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M")) +
   scale_fill_manual(values = prop_colors)  + 
   scale_x_discrete() + 
-  labs(title = "Distribution of Transacted Price per Property Type", 
+  labs(title = "Distribution of Transacted Price by Property Type", 
        x = "", 
        y = "Transacted Price") +
    theme(legend.position = "none")
@@ -837,7 +837,7 @@ Patchwork is used to create the composite plot. Since the color scheme remains c
 combined_plot1 <- hist_plot + prop_price_dist
 
 # Set the height of the combined plot
-combined_plot1 <- combined_plot + plot_layout(heights = c(1, 4))
+combined_plot1 <- combined_plot1 + plot_layout(heights = c(1, 4))
 
 # Display the combined plot
 combined_plot1
