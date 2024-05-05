@@ -379,11 +379,14 @@ Diving into individual private residential purchases, the visualization data set
 realis_vis <- anti_join(realis_clean2, enbloc_set, by = c("Tenure","Number of Units","Type of Sale"))
 ```
 
-Define colours
+The following colours will be used for the subsequent visualisations:
 
-```{r}
+::: panel-tabset
+## Colour Legend
 
-# Define the property colors
+```{r,echo=FALSE}
+# Define the property types and colors
+prop_types <- c("Apartment", "Condominium", "Detached House", "Executive Condominium", "Semi-Detached House", "Terrace House")
 prop_colors <- c("Apartment" = "steelblue", 
                  "Condominium" = "skyblue", 
                  "Detached House" = "lightblue",
@@ -391,31 +394,57 @@ prop_colors <- c("Apartment" = "steelblue",
                  "Semi-Detached House" = "cornflowerblue", 
                  "Terrace House" = "deepskyblue")
 
-# Create a data frame for the legend
-legend_data <- data.frame(Property_Type = names(prop_colors), Color = prop_colors)
+# Create a data frame with each property type and a constant y-value
+data <- data.frame(Property_Type = prop_types, y = 1)
 
-# Plot a legend using ggplot2
-legend_plot <- ggplot(legend_data, aes(x = "", y = "", fill = Property_Type)) +
-               geom_tile() +
-               scale_fill_manual(values = prop_colors) +
-               theme_void() +
-               theme(legend.position = "right")
+# Plot the bar chart
+bar_chart <- ggplot(data, aes(x = Property_Type, y = y, fill = Property_Type)) +
+             geom_bar(stat = "identity") +
+             scale_fill_manual(values = prop_colors) +
+             theme_minimal() +
+             theme(axis.title.y = element_blank(),  # Turn off y-axis title
+                   axis.text.y = element_blank(),   # Turn off y-axis labels
+                   axis.ticks.y = element_blank(),  # Turn off y-axis ticks
+                   axis.text.x = element_text(angle = 90, hjust = 1),
+                   legend.position = "none")
 
-# Display the legend plot
-legend_plot
-
+# Display the bar chart
+bar_chart
 ```
 
-Removing outliers
+## Code
 
-```{r}
-upper_bound <- quantile(realis_clean2$`Transacted Price ($)`, 0.975)
-print(paste("Upper bound price at 97.5%", upper_bound))
+```{r,eval=FALSE}
+# Define the property types and colors
+prop_types <- c("Apartment", "Condominium", "Detached House", "Executive Condominium", "Semi-Detached House", "Terrace House")
+prop_colors <- c("Apartment" = "steelblue", 
+                 "Condominium" = "skyblue", 
+                 "Detached House" = "lightblue",
+                 "Executive Condominium" = "royalblue", 
+                 "Semi-Detached House" = "cornflowerblue", 
+                 "Terrace House" = "deepskyblue")
+
+# Create a data frame with each property type and a constant y-value
+data <- data.frame(Property_Type = prop_types, y = 1)
+
+# Plot the bar chart
+bar_chart <- ggplot(data, aes(x = Property_Type, y = y, fill = Property_Type)) +
+             geom_bar(stat = "identity") +
+             scale_fill_manual(values = prop_colors) +
+             theme_minimal() +
+             theme(axis.title.y = element_blank(),  # Turn off y-axis title
+                   axis.text.y = element_blank(),   # Turn off y-axis labels
+                   axis.ticks.y = element_blank(),  # Turn off y-axis ticks
+                   axis.text.x = element_text(angle = 90, hjust = 1))  # Rotate x-axis labels
+
+# Display the bar chart
+bar_chart
 ```
+:::
 
 ## No. of Property Sold per Property Type
 
-Data Wrangling
+### Data Wrangling
 
 ```{r}
 sale_by_prop_month <- realis_clean2 %>% 
@@ -441,7 +470,7 @@ month_sale <- dcast(sale_by_prop_month_2, `Property Type` ~ `label`, value.var =
 month_price <- dcast(sale_by_prop_month_2, `Property Type` ~ `label`, value.var = "avg_price")
 ```
 
-Histogram Plot
+### Histogram Plot
 
 ::: panel-tabset
 ## Plot
@@ -461,13 +490,13 @@ hist_plot <- ggplot(data = sale_by_prop_month,
                     aes(x = year_month, y = total_units, fill = `Property Type`)) + 
   geom_col(color = "grey30") + 
   labs(title = "Distribution of Units Sold per Month", 
-       x = "Month", 
+       x = "", 
        y = "No. of Units Sold") +
  scale_fill_manual(values = prop_colors) +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   lims(x = as.Date(c("2023-01-01", "2024-03-01"))) +
   scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),
-                     labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%m-%Y")) +
+                     labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%b-%y")) +
   geom_hline(yintercept = mean_value, linetype = "dotted", color = "red") +
   annotate("text", x = as.Date("2023-12-01"), y = mean_value, label = paste("Mean:", round(mean_value, 2)), vjust = -3, colour="red")
 
@@ -479,41 +508,54 @@ hist_plot
 
 ```{r,eval=FALSE}
 
-# Sum the total number of units sold per month
-monthly_sum <- sale_by_prop_month %>%
-  group_by(year_month) %>%
-  summarise(total_units_sum = sum(total_units))
-
-# Calculate the mean of the total number of units sold per month
-mean_value <- mean(monthly_sum$total_units_sum)
-
-# Plot the histogram with a mean line
-hist_plot <- ggplot(data = sale_by_prop_month, 
-                    aes(x = year_month, y = total_units, fill = `Property Type`)) + 
-  geom_col(color = "grey30") + 
-  labs(title = "Distribution of Units Sold per Month", 
-       x = "Month", 
-       y = "No. of Units Sold") +
- scale_fill_manual(values = prop_colors) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
-  lims(x = as.Date(c("2023-01-01", "2024-03-01"))) +
-  scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),
-                     labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%m-%Y")) +
-  geom_hline(yintercept = mean_value, linetype = "dotted", color = "red") +
-  annotate("text", x = as.Date("2023-12-01"), y = mean_value, label = paste("Mean:", round(mean_value, 2)), vjust = -3, colour="red")
-
-hist_plot
+scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),
+                     labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%b-%y"))
 ```
 :::
 
-Raincloud Plot
+### Raincloud Plot
+
+Only select outliers within values defined in `upper_bound` will be plotted to maintain visibility of the raincloud plot.
+
+::: panel-tabset
+## Overview of Dataframe
+
+```{r,echo=FALSE}
+
+# Calculate the upper bound price at 97.5%
+upper_bound <- quantile(realis_clean2$`Transacted Price ($)`, 0.975)
+print(paste("Upper bound price at 97.5%:", upper_bound))
+
+# Filter realis_clean2 to include only rows where Transacted Price ($) is less than or equal to the upper bound
+for_raincloud <- realis_clean2[realis_clean2$`Transacted Price ($)` <= upper_bound, ]
+
+# View the first few rows of the new dataframe
+head(for_raincloud)
+
+```
+
+## Code
+
+```{r,eval=FALSE}
+
+# Calculate the upper bound price at 97.5%
+upper_bound <- quantile(realis_clean2$`Transacted Price ($)`, 0.975)
+print(paste("Upper bound price at 97.5%:", upper_bound))
+
+# Filter realis_clean2 to include only rows where Transacted Price ($) is less than or equal to the upper bound
+for_raincloud <- realis_clean2[realis_clean2$`Transacted Price ($)` <= upper_bound, ]
+
+# View the first few rows of the new dataframe
+head(for_raincloud)
+```
+:::
 
 ::: panel-tabset
 ## Plot
 
 ```{r, echo=FALSE}
 
-prop_price_dist <- ggplot(realis_clean2, 
+prop_price_dist <- ggplot(for_raincloud, 
                      aes(x = `Property Type`, y = `Transacted Price ($)`, fill = `Property Type` )) +
   stat_halfeye(adjust = 0.5,
                justification = -0.2,
@@ -526,12 +568,13 @@ prop_price_dist <- ggplot(realis_clean2,
             binwidth = .5,
             dotsize = 2) +
    coord_flip() +
-  ylim(0, upper_bound) + 
+  scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M")) +
   scale_fill_manual(values = prop_colors)  + 
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) + 
-  labs(title = "Spread of Transacted Price per Property Type", 
-       x = "Property Type", 
-       y = "Transacted Price")
+  scale_x_discrete() + 
+  labs(title = "Distribution of Transacted Price per Property Type", 
+       x = "", 
+       y = "Transacted Price") +
+   theme(legend.position = "none")
 
 prop_price_dist
 
@@ -541,7 +584,7 @@ prop_price_dist
 
 ```{r, eval=FALSE}
 
-prop_price_dist <- ggplot(realis_clean2, 
+prop_price_dist <- ggplot(for_raincloud, 
                      aes(x = `Property Type`, y = `Transacted Price ($)`, fill = `Property Type` )) +
   stat_halfeye(adjust = 0.5,
                justification = -0.2,
@@ -554,18 +597,19 @@ prop_price_dist <- ggplot(realis_clean2,
             binwidth = .5,
             dotsize = 2) +
    coord_flip() +
-  ylim(0, upper_bound) + 
+  scale_y_continuous(labels = scales::number_format(scale = 1e-6, suffix = "M")) +
   scale_fill_manual(values = prop_colors)  + 
-  scale_x_discrete(labels = function(x) str_wrap(x, width = 10)) + 
-  labs(title = "Spread of Transacted Price per Property Type", 
+  scale_x_discrete() + 
+  labs(title = "Distribution of Transacted Price per Property Type", 
        x = "Property Type", 
-       y = "Transacted Price")
+       y = "Transacted Price") +
+   theme(legend.position = "none")
 
 prop_price_dist
 ```
 :::
 
-## Transaction Price & No. of Unit sold per Property Type
+## Transaction Price & No. of Unit sold by Property Type
 
 The code chunk below:
 
@@ -596,7 +640,8 @@ hist_plot_apt <- ggplot(data = apt_by_month, aes(x = year_month, y = total_units
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour = "blueviolet") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%m-%Y")  
+  scale_x_date(date_breaks = "1 month", date_labels = "%b-%y") +
+  labs(x = NULL)
 
 hist_plot_apt
 
@@ -623,7 +668,8 @@ hist_plot_ec <- ggplot(data = ec_by_month, aes(x = year_month, y = total_units, 
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour = "blueviolet") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%m-%Y")  
+  scale_x_date(date_breaks = "1 month", date_labels = "%b-%y") +
+  labs(x = NULL)
 
 hist_plot_ec
 ```
@@ -649,7 +695,8 @@ hist_plot_c <- ggplot(data = c_by_month, aes(x = year_month, y = total_units, fi
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour = "blueviolet") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%m-%Y")  
+  scale_x_date(date_breaks = "1 month", date_labels = "%b-%y") +
+  labs(x = NULL)
 
 hist_plot_c
 ```
@@ -676,7 +723,8 @@ hist_plot_t <- ggplot(data = t_by_month, aes(x = year_month, y = total_units, fi
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   annotate("text", x = as.Date("2023-12-01"), y = 1500, label = "Median Price", colour = "blueviolet") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%m-%Y")  
+  scale_x_date(date_breaks = "1 month", date_labels = "%b-%y")  +
+  labs(x = NULL)
 
 hist_plot_t
 ```
@@ -703,7 +751,8 @@ hist_plot_sd <- ggplot(data = sd_by_month, aes(x = year_month, y = total_units, 
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour = "blueviolet") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%m-%Y")  
+  scale_x_date(date_breaks = "1 month", date_labels = "%b-%y")  +
+  labs(x = NULL)
 
 hist_plot_sd
 ```
@@ -728,7 +777,8 @@ hist_plot_d <- ggplot(data = d_by_month, aes(x = year_month, y = total_units, fi
   theme(legend.position = "none",
         axis.text.x = element_text(angle = 90, hjust = 1)) +  
   annotate("text", x = as.Date("2023-12-01"), y = 1400, label = "Median Price", colour = "blueviolet") +
-  scale_x_date(date_breaks = "1 month", date_labels = "%m-%Y")  
+  scale_x_date(date_breaks = "1 month", date_labels = "%b-%y")  +
+  labs(x = NULL)
 
 hist_plot_d
 ```
