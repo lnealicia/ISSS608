@@ -548,7 +548,7 @@ mean_value <- mean(monthly_sum$total_units_sum)
 hist_plot <- ggplot(data = sale_by_prop_month, 
                     aes(x = year_month, y = total_units, fill = `Property Type`)) + 
   geom_col(color = "grey30") + 
-  labs(title = "Distribution of Units Sold per Month", 
+  labs(title = "Distribution of Units Sold", 
        x = "", 
        y = "No. of Units Sold") +
  scale_fill_manual(values = prop_colors) +
@@ -1020,6 +1020,8 @@ cplot2
 ```
 :::
 
+## Overall Composite Plot
+
 ```{r}
 cplot1 | cplot2
 ```
@@ -1032,7 +1034,7 @@ cplot1 | cplot2
 
 ## After
 
-### ![](images/clipboard-3737689332.png)
+### ![](images/clipboard-2948162703.png)
 
 ::: callout-note
 Thank you Jing Yi for providing your take home exercise 1 for my learning!
