@@ -555,7 +555,7 @@ hist_plot <- ggplot(data = sale_by_prop_month,
   scale_x_continuous(breaks = seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"),
                      labels = format(seq(as.Date("2023-01-01"), as.Date("2024-03-01"), by = "1 month"), "%b-%y")) +
   geom_hline(yintercept = mean_value, linetype = "dotted", color = "red") +
-  annotate("text", x = as.Date("2023-12-01"), y = mean_value, label = paste("Mean:", round(mean_value, 2)), vjust = -3, colour="red")
+  annotate("text", x = as.Date("2023-12-01"), y = mean_value, label = paste("Mean:", round(mean_value, 2)), vjust = 0, colour="red")
 
 hist_plot
 
@@ -610,11 +610,19 @@ head(for_raincloud)
 
 Distribution of Transacted Price by Property Type
 
+```{r}
+median_price
+```
+
 ::: panel-tabset
 ## Plot
 
 ```{r, echo=FALSE}
 
+# Calculate the median transacted price
+median_price <- median(for_raincloud$`Transacted Price ($)`)
+
+# Create the plot
 prop_price_dist <- ggplot(for_raincloud, 
                      aes(x = `Property Type`, y = `Transacted Price ($)`, fill = `Property Type` )) +
   stat_halfeye(adjust = 0.5,
@@ -634,7 +642,10 @@ prop_price_dist <- ggplot(for_raincloud,
   labs(title = "Distribution of Transacted Price\nby Property Type", 
        x = "", 
        y = "Transacted Price") +
-   theme(legend.position = "none",plot.title = element_text(size = 10))
+   theme(legend.position = "none",plot.title = element_text(size = 10)) +
+   geom_hline(yintercept = median_price, linetype = "dotted", color = "red") +
+  annotate("text", x = 0.5, y = median_price, label = "Median: 1.6M", vjust = -11, colour = "red")
+
 
 prop_price_dist
 
@@ -644,6 +655,10 @@ prop_price_dist
 
 ```{r, eval=FALSE}
 
+# Calculate the median transacted price
+median_price <- median(for_raincloud$`Transacted Price ($)`)
+
+# Create the plot
 prop_price_dist <- ggplot(for_raincloud, 
                      aes(x = `Property Type`, y = `Transacted Price ($)`, fill = `Property Type` )) +
   stat_halfeye(adjust = 0.5,
@@ -663,7 +678,10 @@ prop_price_dist <- ggplot(for_raincloud,
   labs(title = "Distribution of Transacted Price\nby Property Type", 
        x = "", 
        y = "Transacted Price") +
-   theme(legend.position = "none",plot.title = element_text(size = 10))
+   theme(legend.position = "none",plot.title = element_text(size = 10)) +
+   geom_hline(yintercept = median_price, linetype = "dotted", color = "red") +
+  annotate("text", x = 0.5, y = median_price, label = "Median: 1.6M", vjust = -11, colour = "red")
+
 
 prop_price_dist
 ```
