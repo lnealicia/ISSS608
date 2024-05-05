@@ -36,10 +36,10 @@ In "Visualization 1 - How has transacted price varied over the 2024 Q1 and 2023"
 | Pros                                                                                                                                                            | Cons                                                                                                                                                                 |
 +:================================================================================================================================================================+:=====================================================================================================================================================================+
 | -   The presented charts are relatively well spaced, so while there is a lot of information, chart elements are not overlaid on top of each other and obscured. | -   At first glance, one could mistakenly assume that the 3 general colour groups i.e. blue, green, orange were meant to be a grouping, where:                       |
+| -   Colour theme of the plot is consistently applied, making reference between presented charts quick and easy                                                  |                                                                                                                                                                      |
+|                                                                                                                                                                 |     -   Group 1: Apartment, Condominium                                                                                                                              |
 |                                                                                                                                                                 |                                                                                                                                                                      |
-| <!-- -->                                                                                                                                                        |     -   Group 1: Apartment, Condominium                                                                                                                              |
-|                                                                                                                                                                 |                                                                                                                                                                      |
-| -   Colour theme of the plot is consistently applied, making reference between presented charts quick and easy                                                  |     -   Group 2: Detached House, Semi-detached House, Terrace House                                                                                                  |
+|                                                                                                                                                                 |     -   Group 2: Detached House, Semi-detached House, Terrace House                                                                                                  |
 |                                                                                                                                                                 |                                                                                                                                                                      |
 |                                                                                                                                                                 |     -   Group 3: Executive Condominium                                                                                                                               |
 |                                                                                                                                                                 |                                                                                                                                                                      |
@@ -70,6 +70,8 @@ In "Visualization 1 - How has transacted price varied over the 2024 Q1 and 2023"
 +----------------------------------------------------------------------------------------------------------------------------------------------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
 # Alternative Design
+
+![](images/Picture1-01.png)
 
 ## **Aesthetics**
 
@@ -110,6 +112,10 @@ In "Visualization 1 - How has transacted price varied over the 2024 Q1 and 2023"
 |                                                                                                                                                                                                                                                                                                                            |                                                                                                                                         |
 |     -   Right Y-axis, includes both numbers and scientific notation, making it challenging to interpret. Specifically, the lack of clear spacing between the digits in the numerical format makes it difficult to read, while the scientific notation may not be readily understandable to individuals unfamiliar with it. |                                                                                                                                         |
 +----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------+
+
+## Sketch
+
+![](images/Picture2.png)
 
 # Getting Started
 
