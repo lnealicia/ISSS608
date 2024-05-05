@@ -101,11 +101,13 @@ The code chunk below loads the following packages using uses `p_load()` of pacma
 +-----------------------+--------------------------------------------------------------------------------------+
 | knitr                 | For elegant, flexible and fast report generation of underlying dataframes.           |
 +-----------------------+--------------------------------------------------------------------------------------+
+| cowplot               | Allows for customised arranging of plot elements                                     |
++-----------------------+--------------------------------------------------------------------------------------+
 
 ```{r}
 pacman::p_load(ggrepel, patchwork, 
                ggthemes, hrbrthemes,
-               tidyverse, readr, ggdist, ggridges, colorspace, knitr, forcats, reshape2, png, grid) 
+               tidyverse, readr, ggdist, ggridges, colorspace, knitr, forcats, reshape2, png, grid, cowplot) 
 ```
 
 ## Importing the Data
@@ -832,13 +834,13 @@ Patchwork is used to create the composite plot. Since the color scheme remains c
 
 ```{r}
 # Combine the plots
-combined_plot <- hist_plot + prop_price_dist
+combined_plot1 <- hist_plot + prop_price_dist
 
 # Set the height of the combined plot
-combined_plot <- combined_plot + plot_layout(heights = c(1, 4))
+combined_plot1 <- combined_plot + plot_layout(heights = c(1, 4))
 
 # Display the combined plot
-combined_plot
+combined_plot1
 ```
 
 ## Composite Plot 2
@@ -888,7 +890,9 @@ In the plot below, we can see that:
 
 ```{r, echo=FALSE}
 
-hist_plot_apt / hist_plot_c / hist_plot_d / hist_plot_ec / hist_plot_sd / hist_plot_t
+combined_plot2 <- hist_plot_apt / hist_plot_c / hist_plot_d / hist_plot_ec / hist_plot_sd / hist_plot_t
+
+combined_plot2
 ```
 
 ## Code
@@ -900,7 +904,7 @@ hist_plot_apt / hist_plot_c / hist_plot_d / hist_plot_ec / hist_plot_sd / hist_p
 
 Therefore, we revise the plot as follows:
 
--   Only third plot i.e. Detached House, will show Y-axis label "Number of Units" and "Median Price". It should be clear that this label applies to all plots in the composite plots
+-   Hide all Y axis labels
 
 -   Only last plot i.e. Terrace House, will show X-axis label "Sale date". It should be clear that this label applies to all above plots as well
 
@@ -917,7 +921,11 @@ hist_plot_c <- hist_plot_c +
         axis.ticks.x = element_blank(),
         axis.title.y = element_blank())
 
-# hist_plot_d not included
+hist_plot_d <- hist_plot_d +
+  labs(x = NULL, y = NULL) +
+  theme(axis.text.x = element_blank(),
+        axis.ticks.x = element_blank(),
+        axis.title.y = element_blank())
 
 hist_plot_ec <- hist_plot_ec +
   labs(x = NULL, y = NULL) +
@@ -937,7 +945,17 @@ hist_plot_t <- hist_plot_t +
   theme(axis.text.x = element_text(angle = 90, hjust = 1),
         axis.ticks.x = element_line(),
         axis.title.y = element_blank())
+```
 
+-   Create overall Y-axis label "Number of Units" and "Median Price". It should be clear that this label applies to all plots in the composite plots
+
+```{r}
+# Create an overall y-axis label
+pri_y <- ggdraw() + draw_label("Number of Units Sold", angle = 90, size = 10, color = "black")
+sec_y <- ggdraw() + draw_label("Median Price", angle = 90, size = 10, color = "black")
+
+# Combine the individual plots with the overall y-axis label
+combined_plot3 <- pri_y | (hist_plot_apt / hist_plot_c / hist_plot_d / hist_plot_ec / hist_plot_sd / hist_plot_t) | sec_y
 ```
 
 In the revised plot below, we can see that:
@@ -950,12 +968,20 @@ In the revised plot below, we can see that:
 ## Plot
 
 ```{r,echo=FALSE}
-hist_plot_apt / hist_plot_c / hist_plot_d / hist_plot_ec / hist_plot_sd / hist_plot_t
+combined_plot3
 ```
 
 ## Code
 
 ```{r,eval=FALSE}
-hist_plot_apt / hist_plot_c / hist_plot_d / hist_plot_ec / hist_plot_sd / hist_plot_t
+combined_plot2
 ```
 :::
+
+# Comparison
+
+## Before
+
+![](images/clipboard-539214968.png)
+
+## After
