@@ -1,0 +1,293 @@
+---
+title: "Hands-on Exercise 4 -  Visualising and Analysing Text Data"
+author: "Alicia Loh"
+date: "9 May, 2024"
+date-modified: last-modified
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: false
+---
+
+Learning Objectives:
+
+-   understand tidytext framework for processing, analysing and visualising text data,
+
+-   write function for importing multiple files into R,
+
+-   combine multiple files into a single data frame,
+
+-   clean and wrangle text data by using tidyverse approach,
+
+-   visualise words with Word Cloud,
+
+-   compute term frequency–inverse document frequency (TF-IDF) using tidytext method, and
+
+-   visualising texts and terms relationship.
+
+# Getting Started
+
+## Installing and loading the required libraries
+
+The following R packages will be used:
+
+-   tidytext, tidyverse (mainly readr, purrr, stringr, ggplot2)
+
+-   widyr,
+
+-   wordcloud and ggwordcloud,
+
+-   textplot (required igraph, tidygraph and ggraph, )
+
+-   DT,
+
+-   lubridate and hms.
+
+Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
+
+```{r}
+pacman::p_load(tidytext, widyr, wordcloud, DT, ggwordcloud, textplot, lubridate, hms,tidyverse, tidygraph, ggraph, igraph)
+```
+
+## **Importing Multiple Text Files from Multiple Folders**
+
+### **Creating a folder list**
+
+```{r}
+news20 <- "data/20news/"
+```
+
+### **Define a function to read all files from a folder into a data frame**
+
+```{r}
+read_folder <- function(infolder) {
+  tibble(file = dir(infolder, 
+                    full.names = TRUE)) %>%
+    mutate(text = map(file, 
+                      read_lines)) %>%
+    transmute(id = basename(file), 
+              text) %>%
+    unnest(text)
+}
+```
+
+## **Importing Multiple Text Files from Multiple Folders**
+
+### **Reading in all the messages from the 20news folder**
+
+-   [`read_lines()`](https://readr.tidyverse.org/reference/read_lines.html) of [**readr**](https://readr.tidyverse.org/) package is used to read up to n_max lines from a file.
+
+-   [`map()`](https://purrr.tidyverse.org/reference/map.html) of [**purrr**](https://purrr.tidyverse.org/) package is used to transform their input by applying a function to each element of a list and returning an object of the same length as the input.
+
+-   [`unnest()`](https://tidyr.tidyverse.org/reference/nest.html) of **dplyr** package is used to flatten a list-column of data frames back out into regular columns.
+
+-   [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) of **dplyr** is used to add new variables and preserves existing ones;
+
+-   [`transmute()`](https://dplyr.tidyverse.org/reference/mutate.html) of **dplyr** is used to add new variables and drops existing ones.
+
+-   [`read_rds()`](https://readr.tidyverse.org/reference/read_rds.html) is used to save the extracted and combined data frame as rds file for future use.
+
+```{r}
+raw_text <- tibble(folder = 
+                     dir(news20, 
+                         full.names = TRUE)) %>%
+  mutate(folder_out = map(folder, 
+                          read_folder)) %>%
+  unnest(cols = c(folder_out)) %>%
+  transmute(newsgroup = basename(folder), 
+            id, text)
+write_rds(raw_text, "data/rds/news20.rds")
+```
+
+##  **Initial EDA**
+
+Figure below shows the frequency of messages by newsgroup.
+
+::: panel-tabset
+## Plot
+
+```{r, echo=FALSE}
+
+raw_text <- read_rds("data/rds/news20.rds")
+raw_text %>%
+  group_by(newsgroup) %>%
+  summarize(messages = n_distinct(id)) %>%
+  ggplot(aes(messages, newsgroup)) +
+  geom_col(fill = "lightblue") +
+  labs(y = NULL)
+```
+
+## Code
+
+```{r, eval=FALSE}
+
+raw_text <- read_rds("data/rds/news20.rds")
+raw_text %>%
+  group_by(newsgroup) %>%
+  summarize(messages = n_distinct(id)) %>%
+  ggplot(aes(messages, newsgroup)) +
+  geom_col(fill = "lightblue") +
+  labs(y = NULL)
+```
+:::
+
+## **Introducing tidytext**
+
+-   Using tidy data principles in processing, analysing and visualising text data.
+
+-   Much of the infrastructure needed for text mining with tidy data frames already exists in packages like ‘dplyr’, ‘broom’, ‘tidyr’, and ‘ggplot2’.
+
+### **Removing header and automated email signitures**
+
+Each message contains certain structural elements and additional text that are undesirable for inclusion in the analysis. For example:
+
+-   Header containing fields such as “from:” or “in_reply_to:”
+
+-   Automated email signatures, which occur after a line like “–”.
+
+The code chunk below uses:
+
+-   [`cumsum()`](https://rdrr.io/r/base/cumsum.html) of base R to return a vector whose elements are the cumulative sums of the elements of the argument.
+
+-   [`str_detect()`](https://stringr.tidyverse.org/reference/str_detect.html) from **stringr** to detect the presence or absence of a pattern in a string.
+
+```{r}
+cleaned_text <- raw_text %>%
+  group_by(newsgroup, id) %>%
+  filter(cumsum(text == "") > 0,
+         cumsum(str_detect(
+           text, "^--")) == 0) %>%
+  ungroup()
+```
+
+### **Removing lines with nested text representing quotes from other users**
+
+Regular expressions are used to remove with nested text representing quotes from other users.
+
+-   [`str_detect()`](https://stringr.tidyverse.org/reference/str_detect.html) from **stringr** is used to detect the presence or absence of a pattern in a string.
+
+-   [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) of **dplyr** package is used to subset a data frame, retaining all rows that satisfy the specified conditions.
+
+```{r}
+cleaned_text <- cleaned_text %>%
+  filter(str_detect(text, "^[^>]+[A-Za-z\\d]")
+         | text == "",
+         !str_detect(text, 
+                     "writes(:|\\.\\.\\.)$"),
+         !str_detect(text, 
+                     "^In article <")
+  )
+```
+
+### **Text Data Processing**
+
+-    [`unnest_tokens()`](https://www.rdocumentation.org/packages/tidytext/versions/0.3.1/topics/unnest_tokens) of **tidytext** package is used to split the dataset into tokens
+
+-    [`stop_words()`](https://rdrr.io/cran/tidytext/man/stop_words.html) is used to remove stop-words
+
+```{r}
+usenet_words <- cleaned_text %>%
+  unnest_tokens(word, text) %>%
+  filter(str_detect(word, "[a-z']$"),
+         !word %in% stop_words$word)
+```
+
+Headers, signatures and formatting have been removed. The code chunk below calculates individual word frequncies to explore common words in the dataset.
+
+```{r}
+usenet_words %>%
+  count(word, sort = TRUE)
+```
+
+Word frequencies within newsgroup
+
+```{r}
+words_by_newsgroup <- usenet_words %>%
+  count(newsgroup, word, sort = TRUE) %>%
+  ungroup()
+```
+
+### **Visualising Words in newsgroups**
+
+-   `wordcloud()` of **wordcloud** package is used to plot a static wordcloud
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+wordcloud(words_by_newsgroup$word,
+          words_by_newsgroup$n,
+          max.words = 300)
+```
+
+## Code
+
+```{r,eval=FALSE}
+wordcloud(words_by_newsgroup$word,
+          words_by_newsgroup$n,
+          max.words = 300)
+```
+:::
+
+A DT table can be used to complement the visual discovery.
+
+::: panel-tabset
+## Table
+
+```{r, echo=FALSE}
+# Create a data frame with word frequency data
+word_freq_table <- data.frame(Word = words_by_newsgroup$word,
+                              Frequency = words_by_newsgroup$n)
+
+# Render the DataTable
+datatable(word_freq_table, 
+          options = list(pageLength = 10))
+```
+
+## Code
+
+```{r,eval=FALSE}
+# Create a data frame with word frequency data
+word_freq_table <- data.frame(Word = words_by_newsgroup$word,
+                              Frequency = words_by_newsgroup$n)
+
+# Render the DataTable
+datatable(word_freq_table, 
+          options = list(pageLength = 10))
+```
+:::
+
+### **Visualising Words in newsgroups**
+
+ [**ggwordcloud**](https://lepennec.github.io/ggwordcloud/) package is used to plot the wordcloud below
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+set.seed(1234)
+
+words_by_newsgroup %>%
+  filter(n > 0) %>%
+ggplot(aes(label = word,
+           size = n)) +
+  geom_text_wordcloud() +
+  theme_minimal() +
+  facet_wrap(~newsgroup)
+```
+
+## Code
+
+```{r,eval=FALSE}
+set.seed(1234)
+
+words_by_newsgroup %>%
+  filter(n > 0) %>%
+ggplot(aes(label = word,
+           size = n)) +
+  geom_text_wordcloud() +
+  theme_minimal() +
+  facet_wrap(~newsgroup)
+```
+:::
