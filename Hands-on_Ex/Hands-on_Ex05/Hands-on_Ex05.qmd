@@ -90,13 +90,13 @@ read_folder <- function(infolder) {
 
 ```{r}
 raw_text <- tibble(folder = 
-                     dir(news20, 
+                     dir("data/news20", 
                          full.names = TRUE)) %>%
-  mutate(folder_out = map(folder, 
-                          read_folder)) %>%
-  unnest(cols = c(folder_out)) %>%
+  mutate(text = map_chr(folder, read_folder)) %>%
   transmute(newsgroup = basename(folder), 
-            id, text)
+            id = 'id', 
+            text = text)
+
 write_rds(raw_text, "data/rds/news20.rds")
 ```
 

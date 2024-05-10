@@ -1,0 +1,1566 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Alicia Loh">
+
+<title>ISSS608 - Take-home Exercise 1 - Creating Data Visualisation Beyond Default</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed">
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">ISSS608</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+      <i class="bi bi-pencil-square" role="img">
+</i> 
+ <span class="menu-text">Hands-on Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_1.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 3 Part I</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_2.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 3 Part II</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4 Part I</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_2.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4 Part II</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_3.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 4 Part III</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 5</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+      <i class="bi bi-book-half" role="img">
+</i> 
+ <span class="menu-text">In-class Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex01/In-class_Ex01.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex02/In-class_Ex02.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex04/In-class_Ex04.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 4</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home-exercise" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+      <i class="bi bi-person-fill" role="img">
+</i> 
+ <span class="menu-text">Take-home Exercise</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home-exercise">    
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex01/Take-home_Ex01_geo.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 1 (Geographical Distribution)</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 2</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html" rel="" target="">
+ <span class="dropdown-text">Take-home Exercise 3</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html" rel="" target="">
+ <span class="menu-text">About</span></a>
+  </li>  
+</ul>
+            <div class="quarto-navbar-tools tools-wide">
+    <a href="https://www.linkedin.com/in/lnealicia/" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
+    <a href="https://github.com/lnealicia/" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://public.tableau.com/app/profile/lne.alicia/vizzes" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-bar-chart-fill"></i></a>
+</div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#context" id="toc-context" class="nav-link active" data-scroll-target="#context"><strong>Context</strong></a></li>
+  <li><a href="#the-task" id="toc-the-task" class="nav-link" data-scroll-target="#the-task"><strong>The Task</strong></a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><strong>The Data</strong></a>
+  <ul class="collapse">
+  <li><a href="#downloading-the-dataset" id="toc-downloading-the-dataset" class="nav-link" data-scroll-target="#downloading-the-dataset">Downloading the Dataset</a></li>
+  <li><a href="#the-designing-tool" id="toc-the-designing-tool" class="nav-link" data-scroll-target="#the-designing-tool"><strong>The Designing Tool</strong></a></li>
+  </ul></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started">Getting Started</a>
+  <ul class="collapse">
+  <li><a href="#installing-and-loading-the-required-libraries" id="toc-installing-and-loading-the-required-libraries" class="nav-link" data-scroll-target="#installing-and-loading-the-required-libraries">Installing and loading the required libraries</a></li>
+  <li><a href="#importing-the-data" id="toc-importing-the-data" class="nav-link" data-scroll-target="#importing-the-data">Importing the Data</a></li>
+  <li><a href="#view-data" id="toc-view-data" class="nav-link" data-scroll-target="#view-data">View Data</a></li>
+  <li><a href="#data-preparation" id="toc-data-preparation" class="nav-link" data-scroll-target="#data-preparation">Data Preparation</a>
+  <ul class="collapse">
+  <li><a href="#standardise-date-format" id="toc-standardise-date-format" class="nav-link" data-scroll-target="#standardise-date-format">Standardise Date Format</a></li>
+  <li><a href="#keep-relevant-rows" id="toc-keep-relevant-rows" class="nav-link" data-scroll-target="#keep-relevant-rows">Keep Relevant Rows</a></li>
+  <li><a href="#keep-relevant-columns" id="toc-keep-relevant-columns" class="nav-link" data-scroll-target="#keep-relevant-columns">Keep Relevant Columns</a></li>
+  <li><a href="#separate-data-by-quarters" id="toc-separate-data-by-quarters" class="nav-link" data-scroll-target="#separate-data-by-quarters">Separate Data by Quarters</a></li>
+  <li><a href="#view-data-4" id="toc-view-data-4" class="nav-link" data-scroll-target="#view-data-4">View Data</a></li>
+  </ul></li>
+  </ul></li>
+  <li><a href="#visualisation" id="toc-visualisation" class="nav-link" data-scroll-target="#visualisation">Visualisation</a>
+  <ul class="collapse">
+  <li><a href="#number-of-units-sold" id="toc-number-of-units-sold" class="nav-link" data-scroll-target="#number-of-units-sold">Number of Units Sold</a>
+  <ul class="collapse">
+  <li><a href="#summarise-number-of-units-sold-by-property-type" id="toc-summarise-number-of-units-sold-by-property-type" class="nav-link" data-scroll-target="#summarise-number-of-units-sold-by-property-type">Summarise Number of Units Sold by Property Type</a></li>
+  <li><a href="#composite-plot" id="toc-composite-plot" class="nav-link" data-scroll-target="#composite-plot">Composite Plot</a></li>
+  </ul></li>
+  <li><a href="#price-distribution" id="toc-price-distribution" class="nav-link" data-scroll-target="#price-distribution">Price Distribution</a>
+  <ul class="collapse">
+  <li><a href="#drop-extreme-outlier" id="toc-drop-extreme-outlier" class="nav-link" data-scroll-target="#drop-extreme-outlier">Drop Extreme Outlier</a></li>
+  <li><a href="#price-distribution-by-property-type" id="toc-price-distribution-by-property-type" class="nav-link" data-scroll-target="#price-distribution-by-property-type">Price Distribution by Property Type</a></li>
+  <li><a href="#composite-plot-1" id="toc-composite-plot-1" class="nav-link" data-scroll-target="#composite-plot-1">Composite Plot</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Take-home Exercise 1 - Creating Data Visualisation Beyond Default</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Alicia Loh </p>
+          </div>
+  </div>
+    
+  
+    <div>
+    <div class="quarto-title-meta-heading">Modified</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date-modified">April 24, 2024</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<p><img src="images/clipboard-3122103337.png" class="img-fluid" width="700"></p>
+<section id="context" class="level1">
+<h1><strong>Context</strong></h1>
+<p>There are two major residential property market in Singapore, namely public and private housing. Public housing aims to meet the basic need of the general public with monthly household income less than or equal to S$14,000. For families with monthly household income more than S$14,000, they need to turn to the private residential market.</p>
+</section>
+<section id="the-task" class="level1">
+<h1><strong>The Task</strong></h1>
+<p>Assuming the role of a graphical editor of a median company, a minimum two and maximum three of data visualisations are prepared to reveal the private residential market and sub-markets of Singapore for the 1st quarter of 2024.</p>
+</section>
+<section id="the-data" class="level1">
+<h1><strong>The Data</strong></h1>
+<p><img src="images/clipboard-3619198007.png" class="img-fluid" width="177"></p>
+<p>To accomplish the task, transaction data of <a href="https://www.ura.gov.sg/reis/index">REALIS</a> will be used.</p>
+<section id="downloading-the-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="downloading-the-dataset">Downloading the Dataset</h2>
+<ol type="1">
+<li><p>Access Dataset via <a href="https://www-ura-gov-sg.libproxy.smu.edu.sg/reis/ipLoginNotice"><strong>SMU e-library</strong></a><br>
+<a href="images/clipboard-1634732179.png"><img src="images/clipboard-1634732179.png" class="img-fluid"></a></p></li>
+<li><p>After logging in with SMU credentials, navigate to “<strong>Residential</strong>” tab<br>
+<a href="images/clipboard-3969337604.png"><img src="images/clipboard-3969337604.png" class="img-fluid"></a></p></li>
+<li><p>Under <strong>Property Types</strong>, “Select All”</p></li>
+<li><p>Under <strong>Sale Date</strong>, select “2023 Jan” - “2024 Mar”</p></li>
+<li><p>Click “Search”</p></li>
+<li><p>Click “Download”</p></li>
+<li><p>Due to the size of the dataset, it is split into multiple segments. Download all in .csv format<br>
+<a href="images/clipboard-2283550883.png"><img src="images/clipboard-2283550883.png" class="img-fluid"></a></p></li>
+</ol>
+</section>
+<section id="the-designing-tool" class="level2">
+<h2 class="anchored" data-anchor-id="the-designing-tool"><strong>The Designing Tool</strong></h2>
+<p>The data will be processed using the appropriate <strong>tidyverse</strong> family of packages and the statistical graphics will be prepared using <strong>ggplot2</strong> and its extensions.</p>
+</section>
+</section>
+<section id="getting-started" class="level1">
+<h1>Getting Started</h1>
+<section id="installing-and-loading-the-required-libraries" class="level2">
+<h2 class="anchored" data-anchor-id="installing-and-loading-the-required-libraries">Installing and loading the required libraries</h2>
+<p>Note: Ensure that the <a href="https://cran.r-project.org/web/packages/pacman/">pacman</a> package has already been installed.</p>
+<p>The code chunk below loads the following packages using uses <code>p_load()</code> of pacman package:</p>
+<ul>
+<li><p><a href="https://www.tidyverse.org/"><strong>tidyverse</strong></a>: (i.e.&nbsp;readr, tidyr, <a href="https://dplyr.tidyverse.org/">dplyr</a>, <a href="https://ggplot2.tidyverse.org/">ggplot2</a>, <a href="https://lubridate.tidyverse.org/">lubridate</a>) for performing data science tasks such as importing, tidying, and wrangling data, as well as creating graphics based on The Grammar of Graphics</p></li>
+<li><p><a href="https://seananderson.ca/2013/10/19/reshape/"><strong>reshape2</strong></a> for transforming data between wide and long formats</p></li>
+<li><p><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html"><strong>ggthemes</strong></a>: provides some extra themes, geoms, and scales for ‘ggplot2’.</p></li>
+<li><p><a href="https://mjskay.github.io/ggdist/"><strong>ggdist</strong></a>: a ggplot2 extension specially designed for visualising distribution and uncertainty</p></li>
+<li><p><a href="https://patchwork.data-imaginist.com/articles/guides/assembly.html"><strong>patchwork</strong></a>: an R package for preparing composite figure created using ggplot2.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, reshape2, ggthemes, ggdist, patchwork)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="importing-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="importing-the-data">Importing the Data</h2>
+<ul>
+<li><p>The data has been split into multiple .csv files</p></li>
+<li><p><strong><code>list.files()</code></strong> list all CSV files in the specified directory.</p></li>
+<li><p>After looping through each CSV file, read it into a data frame using <strong><code>read_csv()</code></strong>, and store it in a list.</p></li>
+<li><p><strong><code>bind_rows()</code></strong> combines all data frames in the list into a single big data frame.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>csv_directory <span class="ot">&lt;-</span> <span class="st">"data/"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>csv_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(csv_directory, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.csv$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>realis <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (file <span class="cf">in</span> csv_files) {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  realis[[file]] <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(file)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>realis_all <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(realis)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="view-data" class="level2">
+<h2 class="anchored" data-anchor-id="view-data">View Data</h2>
+<ul>
+<li><strong><code>names()</code></strong> function prints the names of the columns in the tibble data frame.</li>
+<li><strong><code>glimpse()</code></strong> function gives a quick overview of the tibble data frame</li>
+</ul>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Column Names</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">Overview of Tibble Data Frame</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>col_names <span class="ot">&lt;-</span> <span class="fu">names</span>(realis_all)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>col_names</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "Project Name"                "Transacted Price ($)"       
+ [3] "Area (SQFT)"                 "Unit Price ($ PSF)"         
+ [5] "Sale Date"                   "Address"                    
+ [7] "Type of Sale"                "Type of Area"               
+ [9] "Area (SQM)"                  "Unit Price ($ PSM)"         
+[11] "Nett Price($)"               "Property Type"              
+[13] "Number of Units"             "Tenure"                     
+[15] "Completion Date"             "Purchaser Address Indicator"
+[17] "Postal Code"                 "Postal District"            
+[19] "Postal Sector"               "Planning Region"            
+[21] "Planning Area"              </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(realis_all)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 26,806
+Columns: 21
+$ `Project Name`                &lt;chr&gt; "THE REEF AT KING'S DOCK", "URBAN TREASU…
+$ `Transacted Price ($)`        &lt;dbl&gt; 2317000, 1823500, 1421112, 1258112, 1280…
+$ `Area (SQFT)`                 &lt;dbl&gt; 882.65, 882.65, 1076.40, 1033.34, 871.88…
+$ `Unit Price ($ PSF)`          &lt;dbl&gt; 2625, 2066, 1320, 1218, 1468, 1767, 1095…
+$ `Sale Date`                   &lt;chr&gt; "01 Jan 2023", "02 Jan 2023", "02 Jan 20…
+$ Address                       &lt;chr&gt; "12 HARBOURFRONT AVENUE #05-32", "205 JA…
+$ `Type of Sale`                &lt;chr&gt; "New Sale", "New Sale", "New Sale", "New…
+$ `Type of Area`                &lt;chr&gt; "Strata", "Strata", "Strata", "Strata", …
+$ `Area (SQM)`                  &lt;dbl&gt; 82.0, 82.0, 100.0, 96.0, 81.0, 308.7, 42…
+$ `Unit Price ($ PSM)`          &lt;dbl&gt; 28256, 22238, 14211, 13105, 15802, 19015…
+$ `Nett Price($)`               &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", …
+$ `Property Type`               &lt;chr&gt; "Condominium", "Condominium", "Executive…
+$ `Number of Units`             &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ Tenure                        &lt;chr&gt; "99 yrs from 12/01/2021", "Freehold", "9…
+$ `Completion Date`             &lt;chr&gt; "Uncompleted", "Uncompleted", "Uncomplet…
+$ `Purchaser Address Indicator` &lt;chr&gt; "HDB", "Private", "HDB", "HDB", "HDB", "…
+$ `Postal Code`                 &lt;chr&gt; "097996", "419535", "269343", "269294", …
+$ `Postal District`             &lt;chr&gt; "04", "14", "27", "27", "28", "19", "10"…
+$ `Postal Sector`               &lt;chr&gt; "09", "41", "26", "26", "79", "54", "27"…
+$ `Planning Region`             &lt;chr&gt; "Central Region", "East Region", "North …
+$ `Planning Area`               &lt;chr&gt; "Bukit Merah", "Bedok", "Yishun", "Yishu…</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>realis_all contains:</strong></p>
+<ul>
+<li><p>Public and Private residential property transaction data from 1st January 2023 to 31st March 2024.</p></li>
+<li><p>There are 26,806 rows and 21 columns.</p></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="data-preparation" class="level2">
+<h2 class="anchored" data-anchor-id="data-preparation">Data Preparation</h2>
+<section id="standardise-date-format" class="level3">
+<h3 class="anchored" data-anchor-id="standardise-date-format">Standardise Date Format</h3>
+<p>The “Sales Date” column is currently a <em>cha</em> type. It needs to be converted into date format.</p>
+<p><strong><code>dmy()</code></strong> is a function from the <a href="https://lubridate.tidyverse.org/"><strong>lubridate</strong></a> package that converts character strings to date format in the day-month-year (DMY) order.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Standardise Date Format</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">View Data</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>realis_all<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="ot">&lt;-</span> <span class="fu">dmy</span>(realis_all<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(realis_all<span class="sc">$</span><span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "2023-01-01" "2023-01-02" "2023-01-02" "2023-01-02" "2023-01-03"
+[6] "2023-01-03"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="keep-relevant-rows" class="level3">
+<h3 class="anchored" data-anchor-id="keep-relevant-rows">Keep Relevant Rows</h3>
+<p>Duplicate and empty rows are removed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>qa_pte_raw <span class="ot">&lt;-</span> realis_all <span class="sc">%&gt;%</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">drop_na</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<section id="view-data-2" class="level4">
+<h4 class="anchored" data-anchor-id="view-data-2">View Data</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(qa_pte_raw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 26,800
+Columns: 21
+$ `Project Name`                &lt;chr&gt; "THE REEF AT KING'S DOCK", "URBAN TREASU…
+$ `Transacted Price ($)`        &lt;dbl&gt; 2317000, 1823500, 1421112, 1258112, 1280…
+$ `Area (SQFT)`                 &lt;dbl&gt; 882.65, 882.65, 1076.40, 1033.34, 871.88…
+$ `Unit Price ($ PSF)`          &lt;dbl&gt; 2625, 2066, 1320, 1218, 1468, 1767, 1095…
+$ `Sale Date`                   &lt;date&gt; 2023-01-01, 2023-01-02, 2023-01-02, 202…
+$ Address                       &lt;chr&gt; "12 HARBOURFRONT AVENUE #05-32", "205 JA…
+$ `Type of Sale`                &lt;chr&gt; "New Sale", "New Sale", "New Sale", "New…
+$ `Type of Area`                &lt;chr&gt; "Strata", "Strata", "Strata", "Strata", …
+$ `Area (SQM)`                  &lt;dbl&gt; 82.0, 82.0, 100.0, 96.0, 81.0, 308.7, 42…
+$ `Unit Price ($ PSM)`          &lt;dbl&gt; 28256, 22238, 14211, 13105, 15802, 19015…
+$ `Nett Price($)`               &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", …
+$ `Property Type`               &lt;chr&gt; "Condominium", "Condominium", "Executive…
+$ `Number of Units`             &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ Tenure                        &lt;chr&gt; "99 yrs from 12/01/2021", "Freehold", "9…
+$ `Completion Date`             &lt;chr&gt; "Uncompleted", "Uncompleted", "Uncomplet…
+$ `Purchaser Address Indicator` &lt;chr&gt; "HDB", "Private", "HDB", "HDB", "HDB", "…
+$ `Postal Code`                 &lt;chr&gt; "097996", "419535", "269343", "269294", …
+$ `Postal District`             &lt;chr&gt; "04", "14", "27", "27", "28", "19", "10"…
+$ `Postal Sector`               &lt;chr&gt; "09", "41", "26", "26", "79", "54", "27"…
+$ `Planning Region`             &lt;chr&gt; "Central Region", "East Region", "North …
+$ `Planning Area`               &lt;chr&gt; "Bukit Merah", "Bedok", "Yishun", "Yishu…</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>qa_pte_raw contains:</strong></p>
+<ul>
+<li><p>Private residential property transaction data from 1st January 2023 to 31st March 2024</p></li>
+<li><p>There are 26,800 rows and 21 columns.</p></li>
+</ul>
+</div>
+</div>
+</section>
+</section>
+<section id="keep-relevant-columns" class="level3">
+<h3 class="anchored" data-anchor-id="keep-relevant-columns">Keep Relevant Columns</h3>
+<p>Not all 21 columns will be used for analysis e.g.&nbsp;contains overlapping information as another column. Only relevant columns will be kept.</p>
+<p>Columns to drop:</p>
+<ul>
+<li><p>Area (SQFT): Similar information as Area (SQM)</p></li>
+<li><p>Unit Price ($ PSF): Similar information as Unit Price ($ PSM)</p></li>
+<li><p>Nett Price ($): Similar information as Transacted Price ($)</p></li>
+<li><p>Postal District and Postal Sector: Overlapping information as Postal Code</p></li>
+</ul>
+<p>Columns to be dropped can be specified by prefixing the column names with a minus sign (-) when using the <strong><code>select()</code></strong> function from the <strong><code>dplyr</code></strong> package.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Keep Relevant Columns</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">View Data</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>qa_pte <span class="ot">&lt;-</span> qa_pte_raw <span class="sc">%&gt;%</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>        <span class="sc">-</span><span class="st">`</span><span class="at">Area (SQFT)</span><span class="st">`</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="sc">-</span><span class="st">`</span><span class="at">Unit Price ($ PSF)</span><span class="st">`</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>        <span class="sc">-</span><span class="st">`</span><span class="at">Postal District</span><span class="st">`</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>        <span class="sc">-</span><span class="st">`</span><span class="at">Postal Sector</span><span class="st">`</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(qa_pte)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 26,800
+Columns: 17
+$ `Project Name`                &lt;chr&gt; "THE REEF AT KING'S DOCK", "URBAN TREASU…
+$ `Transacted Price ($)`        &lt;dbl&gt; 2317000, 1823500, 1421112, 1258112, 1280…
+$ `Sale Date`                   &lt;date&gt; 2023-01-01, 2023-01-02, 2023-01-02, 202…
+$ Address                       &lt;chr&gt; "12 HARBOURFRONT AVENUE #05-32", "205 JA…
+$ `Type of Sale`                &lt;chr&gt; "New Sale", "New Sale", "New Sale", "New…
+$ `Type of Area`                &lt;chr&gt; "Strata", "Strata", "Strata", "Strata", …
+$ `Area (SQM)`                  &lt;dbl&gt; 82.0, 82.0, 100.0, 96.0, 81.0, 308.7, 42…
+$ `Unit Price ($ PSM)`          &lt;dbl&gt; 28256, 22238, 14211, 13105, 15802, 19015…
+$ `Nett Price($)`               &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", …
+$ `Property Type`               &lt;chr&gt; "Condominium", "Condominium", "Executive…
+$ `Number of Units`             &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ Tenure                        &lt;chr&gt; "99 yrs from 12/01/2021", "Freehold", "9…
+$ `Completion Date`             &lt;chr&gt; "Uncompleted", "Uncompleted", "Uncomplet…
+$ `Purchaser Address Indicator` &lt;chr&gt; "HDB", "Private", "HDB", "HDB", "HDB", "…
+$ `Postal Code`                 &lt;chr&gt; "097996", "419535", "269343", "269294", …
+$ `Planning Region`             &lt;chr&gt; "Central Region", "East Region", "North …
+$ `Planning Area`               &lt;chr&gt; "Bukit Merah", "Bedok", "Yishun", "Yishu…</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>qa_pte contains:</strong></p>
+<ul>
+<li><p>Private residential property transaction data from 1st January 2024 to 31st March 2024</p></li>
+<li><p>There are 26,800 rows and 14 columns.</p></li>
+<li><p>Columns:</p>
+<ul>
+<li><p>Project Name</p></li>
+<li><p>Transacted Price ($)</p></li>
+<li><p>Sale Date</p></li>
+<li><p>Address</p></li>
+<li><p>Type of Sale</p></li>
+<li><p>Type of Area</p></li>
+<li><p>Area (SQM)</p></li>
+<li><p>Unit Price ($ PSM)</p></li>
+<li><p>Nett Price</p></li>
+<li><p>Property Type</p></li>
+<li><p>Number of Units</p></li>
+<li><p>Tenure</p></li>
+<li><p>Completion Date</p></li>
+<li><p>Purchaser Address Indicator</p></li>
+<li><p>Postal Code</p></li>
+<li><p>Planning Region</p></li>
+<li><p>Planning Area</p></li>
+</ul></li>
+</ul>
+</div>
+</div>
+</section>
+<section id="separate-data-by-quarters" class="level3">
+<h3 class="anchored" data-anchor-id="separate-data-by-quarters">Separate Data by Quarters</h3>
+<p>The dataset contains 5 quarters:</p>
+<ul>
+<li><p>Quarter 1: 2023 Jan - Mar</p></li>
+<li><p>Quarter 2: 2023 Apr - Jun</p></li>
+<li><p>Quarter 3: 2023 Jul - Sep</p></li>
+<li><p>Quarter 4: 2023 Aug - Dec</p></li>
+<li><p>Quarter 5: 2024 Jan - Mar</p></li>
+</ul>
+<p>To allow for comparison between quarters, qa_pte will be split into the respective quarters by <code>Sale Date</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>q1 <span class="ot">&lt;-</span> qa_pte <span class="sc">%&gt;%</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="sc">&lt;=</span> <span class="st">"2023-03-31"</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>q2 <span class="ot">&lt;-</span> qa_pte <span class="sc">%&gt;%</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="sc">&gt;</span> <span class="st">"2023-03-31"</span> <span class="sc">&amp;</span> <span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="sc">&lt;=</span> <span class="st">"2023-06-30"</span>)</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>q3 <span class="ot">&lt;-</span> qa_pte <span class="sc">%&gt;%</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="sc">&gt;</span> <span class="st">"2023-06-30"</span> <span class="sc">&amp;</span> <span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="sc">&lt;=</span> <span class="st">"2023-09-30"</span>)</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>q4 <span class="ot">&lt;-</span> qa_pte <span class="sc">%&gt;%</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="sc">&gt;</span> <span class="st">"2023-09-30"</span> <span class="sc">&amp;</span> <span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="sc">&lt;=</span> <span class="st">"2023-12-31"</span>)</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>q5 <span class="ot">&lt;-</span> qa_pte <span class="sc">%&gt;%</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Sale Date</span><span class="st">`</span> <span class="sc">&gt;</span> <span class="st">"2023-12-31"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="view-data-4" class="level3">
+<h3 class="anchored" data-anchor-id="view-data-4">View Data</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Q1</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">Q2</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-3" role="tab" aria-controls="tabset-4-3" aria-selected="false">Q3</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-4" role="tab" aria-controls="tabset-4-4" aria-selected="false">Q4</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-5" role="tab" aria-controls="tabset-4-5" aria-selected="false">Q5</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(q1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 4,722
+Columns: 17
+$ `Project Name`                &lt;chr&gt; "THE REEF AT KING'S DOCK", "URBAN TREASU…
+$ `Transacted Price ($)`        &lt;dbl&gt; 2317000, 1823500, 1421112, 1258112, 1280…
+$ `Sale Date`                   &lt;date&gt; 2023-01-01, 2023-01-02, 2023-01-02, 202…
+$ Address                       &lt;chr&gt; "12 HARBOURFRONT AVENUE #05-32", "205 JA…
+$ `Type of Sale`                &lt;chr&gt; "New Sale", "New Sale", "New Sale", "New…
+$ `Type of Area`                &lt;chr&gt; "Strata", "Strata", "Strata", "Strata", …
+$ `Area (SQM)`                  &lt;dbl&gt; 82.0, 82.0, 100.0, 96.0, 81.0, 308.7, 42…
+$ `Unit Price ($ PSM)`          &lt;dbl&gt; 28256, 22238, 14211, 13105, 15802, 19015…
+$ `Nett Price($)`               &lt;chr&gt; "-", "-", "-", "-", "-", "-", "-", "-", …
+$ `Property Type`               &lt;chr&gt; "Condominium", "Condominium", "Executive…
+$ `Number of Units`             &lt;dbl&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ Tenure                        &lt;chr&gt; "99 yrs from 12/01/2021", "Freehold", "9…
+$ `Completion Date`             &lt;chr&gt; "Uncompleted", "Uncompleted", "Uncomplet…
+$ `Purchaser Address Indicator` &lt;chr&gt; "HDB", "Private", "HDB", "HDB", "HDB", "…
+$ `Postal Code`                 &lt;chr&gt; "097996", "419535", "269343", "269294", …
+$ `Planning Region`             &lt;chr&gt; "Central Region", "East Region", "North …
+$ `Planning Area`               &lt;chr&gt; "Bukit Merah", "Bedok", "Yishun", "Yishu…</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(q2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Project Name       Transacted Price ($)   Sale Date         
+ Length:6125        Min.   :  520000     Min.   :2023-04-01  
+ Class :character   1st Qu.: 1268000     1st Qu.:2023-04-24  
+ Mode  :character   Median : 1688000     Median :2023-05-13  
+                    Mean   : 2116310     Mean   :2023-05-13  
+                    3rd Qu.: 2350000     3rd Qu.:2023-05-31  
+                    Max.   :66800000     Max.   :2023-06-30  
+   Address          Type of Sale       Type of Area         Area (SQM)    
+ Length:6125        Length:6125        Length:6125        Min.   :  30.0  
+ Class :character   Class :character   Class :character   1st Qu.:  63.0  
+ Mode  :character   Mode  :character   Mode  :character   Median :  89.0  
+                                                          Mean   : 106.7  
+                                                          3rd Qu.: 119.0  
+                                                          Max.   :2339.0  
+ Unit Price ($ PSM) Nett Price($)      Property Type      Number of Units 
+ Min.   : 3364      Length:6125        Length:6125        Min.   : 1.000  
+ 1st Qu.:14838      Class :character   Class :character   1st Qu.: 1.000  
+ Median :19787      Mode  :character   Mode  :character   Median : 1.000  
+ Mean   :20665                                            Mean   : 1.002  
+ 3rd Qu.:26390                                            3rd Qu.: 1.000  
+ Max.   :57053                                            Max.   :11.000  
+    Tenure          Completion Date    Purchaser Address Indicator
+ Length:6125        Length:6125        Length:6125                
+ Class :character   Class :character   Class :character           
+ Mode  :character   Mode  :character   Mode  :character           
+                                                                  
+                                                                  
+                                                                  
+ Postal Code        Planning Region    Planning Area     
+ Length:6125        Length:6125        Length:6125       
+ Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character  
+                                                         
+                                                         
+                                                         </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(q3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Project Name       Transacted Price ($)   Sale Date         
+ Length:6200        Min.   :  440000     Min.   :2023-07-01  
+ Class :character   1st Qu.: 1280000     1st Qu.:2023-07-15  
+ Mode  :character   Median : 1642500     Median :2023-08-05  
+                    Mean   : 2017893     Mean   :2023-08-09  
+                    3rd Qu.: 2255250     3rd Qu.:2023-08-31  
+                    Max.   :32000000     Max.   :2023-09-30  
+   Address          Type of Sale       Type of Area         Area (SQM)   
+ Length:6200        Length:6200        Length:6200        Min.   : 30.0  
+ Class :character   Class :character   Class :character   1st Qu.: 67.0  
+ Mode  :character   Mode  :character   Mode  :character   Median : 91.0  
+                                                          Mean   :105.7  
+                                                          3rd Qu.:119.0  
+                                                          Max.   :995.0  
+ Unit Price ($ PSM) Nett Price($)      Property Type      Number of Units
+ Min.   : 2158      Length:6200        Length:6200        Min.   :1      
+ 1st Qu.:15071      Class :character   Class :character   1st Qu.:1      
+ Median :19048      Mode  :character   Mode  :character   Median :1      
+ Mean   :19857                                            Mean   :1      
+ 3rd Qu.:24048                                            3rd Qu.:1      
+ Max.   :59949                                            Max.   :2      
+    Tenure          Completion Date    Purchaser Address Indicator
+ Length:6200        Length:6200        Length:6200                
+ Class :character   Class :character   Class :character           
+ Mode  :character   Mode  :character   Mode  :character           
+                                                                  
+                                                                  
+                                                                  
+ Postal Code        Planning Region    Planning Area     
+ Length:6200        Length:6200        Length:6200       
+ Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character  
+                                                         
+                                                         
+                                                         </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-4-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(q4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Project Name       Transacted Price ($)   Sale Date         
+ Length:4851        Min.   :  570000     Min.   :2023-10-01  
+ Class :character   1st Qu.: 1285000     1st Qu.:2023-10-25  
+ Mode  :character   Median : 1649340     Median :2023-11-11  
+                    Mean   : 2147366     Mean   :2023-11-13  
+                    3rd Qu.: 2370000     3rd Qu.:2023-12-04  
+                    Max.   :33888000     Max.   :2023-12-31  
+   Address          Type of Sale       Type of Area         Area (SQM)    
+ Length:4851        Length:4851        Length:4851        Min.   :  30.0  
+ Class :character   Class :character   Class :character   1st Qu.:  67.0  
+ Mode  :character   Mode  :character   Mode  :character   Median :  96.0  
+                                                          Mean   : 110.7  
+                                                          3rd Qu.: 122.0  
+                                                          Max.   :1423.1  
+ Unit Price ($ PSM) Nett Price($)      Property Type      Number of Units
+ Min.   : 1484      Length:4851        Length:4851        Min.   :1.000  
+ 1st Qu.:14900      Class :character   Class :character   1st Qu.:1.000  
+ Median :18846      Mode  :character   Mode  :character   Median :1.000  
+ Mean   :19682                                            Mean   :1.001  
+ 3rd Qu.:23492                                            3rd Qu.:1.000  
+ Max.   :47026                                            Max.   :7.000  
+    Tenure          Completion Date    Purchaser Address Indicator
+ Length:4851        Length:4851        Length:4851                
+ Class :character   Class :character   Class :character           
+ Mode  :character   Mode  :character   Mode  :character           
+                                                                  
+                                                                  
+                                                                  
+ Postal Code        Planning Region    Planning Area     
+ Length:4851        Length:4851        Length:4851       
+ Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character  
+                                                         
+                                                         
+                                                         </code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-5-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(q5)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> Project Name       Transacted Price ($)   Sale Date         
+ Length:4902        Min.   :  555000     Min.   :2024-01-01  
+ Class :character   1st Qu.: 1330000     1st Qu.:2024-01-26  
+ Mode  :character   Median : 1688000     Median :2024-02-17  
+                    Mean   : 2100902     Mean   :2024-02-16  
+                    3rd Qu.: 2300000     3rd Qu.:2024-03-14  
+                    Max.   :39500000     Max.   :2024-03-31  
+   Address          Type of Sale       Type of Area         Area (SQM)    
+ Length:4902        Length:4902        Length:4902        Min.   :  30.0  
+ Class :character   Class :character   Class :character   1st Qu.:  71.0  
+ Mode  :character   Mode  :character   Mode  :character   Median :  94.0  
+                                                          Mean   : 111.5  
+                                                          3rd Qu.: 120.7  
+                                                          Max.   :1816.6  
+ Unit Price ($ PSM) Nett Price($)      Property Type      Number of Units
+ Min.   : 6183      Length:4902        Length:4902        Min.   :1      
+ 1st Qu.:15237      Class :character   Class :character   1st Qu.:1      
+ Median :18688      Mode  :character   Mode  :character   Median :1      
+ Mean   :19502                                            Mean   :1      
+ 3rd Qu.:23548                                            3rd Qu.:1      
+ Max.   :58099                                            Max.   :2      
+    Tenure          Completion Date    Purchaser Address Indicator
+ Length:4902        Length:4902        Length:4902                
+ Class :character   Class :character   Class :character           
+ Mode  :character   Mode  :character   Mode  :character           
+                                                                  
+                                                                  
+                                                                  
+ Postal Code        Planning Region    Planning Area     
+ Length:4902        Length:4902        Length:4902       
+ Class :character   Class :character   Class :character  
+ Mode  :character   Mode  :character   Mode  :character  
+                                                         
+                                                         
+                                                         </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="visualisation" class="level1">
+<h1>Visualisation</h1>
+<p>There are various types of Properties for Private residences.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(qa_pte<span class="sc">$</span><span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Condominium"           "Executive Condominium" "Terrace House"        
+[4] "Semi-Detached House"   "Apartment"             "Detached House"       </code></pre>
+</div>
+</div>
+<p>The different types in the dataset are:</p>
+<ul>
+<li><p>Condominium</p></li>
+<li><p>Terrace House</p></li>
+<li><p>Apartment</p></li>
+<li><p>Executive Condominium</p></li>
+<li><p>Semi-Detached House</p></li>
+<li><p>Detached House</p></li>
+</ul>
+<section id="number-of-units-sold" class="level2">
+<h2 class="anchored" data-anchor-id="number-of-units-sold">Number of Units Sold</h2>
+<p>Create bar chart plots for the price distribution of each private residence property type. A&nbsp;bar chart or graph that presents&nbsp;categorical data&nbsp;with rectangular bars with&nbsp;heights&nbsp;or&nbsp;lengths&nbsp;proportional to the values that they represent. They can be plotted vertically or horizontally.</p>
+<p>For each quarter, the data is grouped by property type, then summed by the number of units, in order to obtain the number of units sold per quarter.</p>
+<section id="summarise-number-of-units-sold-by-property-type" class="level3">
+<h3 class="anchored" data-anchor-id="summarise-number-of-units-sold-by-property-type">Summarise Number of Units Sold by Property Type</h3>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Q1 2023</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">Q2 2023</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-3" role="tab" aria-controls="tabset-5-3" aria-selected="false">Q3 2023</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-4" role="tab" aria-controls="tabset-5-4" aria-selected="false">Q4 2023</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-5" role="tab" aria-controls="tabset-5-5" aria-selected="false">Q1 2024</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>q1_units <span class="ot">&lt;-</span> q1 <span class="sc">%&gt;%</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">`</span><span class="at">Total Units</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Number of Units</span><span class="st">`</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>q1_units</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  `Property Type`       `Total Units`
+  &lt;chr&gt;                         &lt;dbl&gt;
+1 Apartment                      1662
+2 Condominium                    2267
+3 Detached House                   64
+4 Executive Condominium           535
+5 Semi-Detached House              88
+6 Terrace House                   212</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>q2_units <span class="ot">&lt;-</span> q2 <span class="sc">%&gt;%</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">`</span><span class="at">Total Units</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Number of Units</span><span class="st">`</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>q2_units</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  `Property Type`       `Total Units`
+  &lt;chr&gt;                         &lt;dbl&gt;
+1 Apartment                      2664
+2 Condominium                    2451
+3 Detached House                   50
+4 Executive Condominium           620
+5 Semi-Detached House             129
+6 Terrace House                   226</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-5-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>q3_units <span class="ot">&lt;-</span> q3 <span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">`</span><span class="at">Total Units</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Number of Units</span><span class="st">`</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>q3_units</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  `Property Type`       `Total Units`
+  &lt;chr&gt;                         &lt;dbl&gt;
+1 Apartment                      2578
+2 Condominium                    2250
+3 Detached House                   34
+4 Executive Condominium           954
+5 Semi-Detached House             127
+6 Terrace House                   259</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-5-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-4-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>q4_units <span class="ot">&lt;-</span> q4 <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">`</span><span class="at">Total Units</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Number of Units</span><span class="st">`</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>q4_units</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  `Property Type`       `Total Units`
+  &lt;chr&gt;                         &lt;dbl&gt;
+1 Apartment                      2028
+2 Condominium                    1918
+3 Detached House                   42
+4 Executive Condominium           582
+5 Semi-Detached House              90
+6 Terrace House                   197</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-5-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-5-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>q5_units <span class="ot">&lt;-</span> q5 <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(<span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="st">`</span><span class="at">Total Units</span><span class="st">`</span> <span class="ot">=</span> <span class="fu">sum</span>(<span class="st">`</span><span class="at">Number of Units</span><span class="st">`</span>), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>q5_units</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 2
+  `Property Type`       `Total Units`
+  &lt;chr&gt;                         &lt;dbl&gt;
+1 Apartment                      1853
+2 Condominium                    1858
+3 Detached House                   40
+4 Executive Condominium           843
+5 Semi-Detached House              93
+6 Terrace House                   216</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>The code chunk below plots the number of units by property type for each quarter.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">2023 Q1</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">2023 Q2</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-3" role="tab" aria-controls="tabset-6-3" aria-selected="false">2023 Q3</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-4" role="tab" aria-controls="tabset-6-4" aria-selected="false">2023 Q4</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-5" role="tab" aria-controls="tabset-6-5" aria-selected="false">2024 Q1</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>q1_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(q1_units<span class="sc">$</span><span class="st">`</span><span class="at">Total Units</span><span class="st">`</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>q1_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(q1_units, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Total Units</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Property Type"</span>, <span class="at">y =</span> <span class="st">"Total Units Sold"</span>) <span class="sc">+</span></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Q1 2023"</span>) <span class="sc">+</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">2700</span>) <span class="sc">+</span></span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_economist</span>() <span class="sc">+</span></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) <span class="sc">+</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> q1_mean, <span class="at">color =</span> <span class="st">"navy"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">5</span>, <span class="at">y =</span> q1_mean <span class="sc">+</span> <span class="dv">100</span>, </span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Mean:"</span>, <span class="fu">round</span>(q1_mean, <span class="dv">2</span>)), <span class="at">color =</span> <span class="st">"navy"</span>)</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>q1_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>q2_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(q2_units<span class="sc">$</span><span class="st">`</span><span class="at">Total Units</span><span class="st">`</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>q2_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(q2_units, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Total Units</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Property Type"</span>, <span class="at">y =</span> <span class="st">"Total Units Sold"</span>) <span class="sc">+</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Q2 2023"</span>) <span class="sc">+</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">2700</span>) <span class="sc">+</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_economist</span>() <span class="sc">+</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) <span class="sc">+</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> q2_mean, <span class="at">color =</span> <span class="st">"navy"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">5</span>, <span class="at">y =</span> q2_mean <span class="sc">+</span> <span class="dv">100</span>, </span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Mean:"</span>, <span class="fu">round</span>(q2_mean, <span class="dv">2</span>)), <span class="at">color =</span> <span class="st">"navy"</span>)</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>q2_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-6-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>q3_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(q3_units<span class="sc">$</span><span class="st">`</span><span class="at">Total Units</span><span class="st">`</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>q3_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(q3_units, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Total Units</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Property Type"</span>, <span class="at">y =</span> <span class="st">"Total Units Sold"</span>) <span class="sc">+</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Q3 2023"</span>) <span class="sc">+</span></span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">2700</span>) <span class="sc">+</span></span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_economist</span>() <span class="sc">+</span></span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) <span class="sc">+</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> q3_mean, <span class="at">color =</span> <span class="st">"navy"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">5</span>, <span class="at">y =</span> q3_mean <span class="sc">+</span> <span class="dv">100</span>, </span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Mean:"</span>, <span class="fu">round</span>(q3_mean, <span class="dv">2</span>)), <span class="at">color =</span> <span class="st">"navy"</span>)</span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>q3_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-6-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-4-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>q4_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(q4_units<span class="sc">$</span><span class="st">`</span><span class="at">Total Units</span><span class="st">`</span>)</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>q4_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(q4_units, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Total Units</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Property Type"</span>, <span class="at">y =</span> <span class="st">"Total Units Sold"</span>) <span class="sc">+</span></span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Q4 2023"</span>) <span class="sc">+</span></span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">2700</span>) <span class="sc">+</span></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_economist</span>() <span class="sc">+</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) <span class="sc">+</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> q4_mean, <span class="at">color =</span> <span class="st">"navy"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">5</span>, <span class="at">y =</span> q4_mean <span class="sc">+</span> <span class="dv">100</span>, </span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Mean:"</span>, <span class="fu">round</span>(q4_mean, <span class="dv">2</span>)), <span class="at">color =</span> <span class="st">"navy"</span>)</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>q4_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-6-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-5-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>q5_mean <span class="ot">&lt;-</span> <span class="fu">mean</span>(q5_units<span class="sc">$</span><span class="st">`</span><span class="at">Total Units</span><span class="st">`</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>q5_plot <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(q5_units, <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Total Units</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Property Type"</span>, <span class="at">y =</span> <span class="st">"Total Units Sold"</span>) <span class="sc">+</span></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Q1 2024"</span>) <span class="sc">+</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylim</span>(<span class="dv">0</span>, <span class="dv">2700</span>) <span class="sc">+</span></span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_economist</span>() <span class="sc">+</span></span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) <span class="sc">+</span></span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> q5_mean, <span class="at">color =</span> <span class="st">"navy"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
+<span id="cb44-11"><a href="#cb44-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>, <span class="at">x =</span> <span class="dv">5</span>, <span class="at">y =</span> q5_mean <span class="sc">+</span> <span class="dv">100</span>, </span>
+<span id="cb44-12"><a href="#cb44-12" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Mean:"</span>, <span class="fu">round</span>(q5_mean, <span class="dv">2</span>)), <span class="at">color =</span> <span class="st">"navy"</span>)</span>
+<span id="cb44-13"><a href="#cb44-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-14"><a href="#cb44-14" aria-hidden="true" tabindex="-1"></a>q5_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="composite-plot" class="level3">
+<h3 class="anchored" data-anchor-id="composite-plot">Composite Plot</h3>
+<p>Using <strong><code>patchwork</code></strong> package, the plots for Q1 2023 and Q1 2024 are stacked into 1 composite plot for a quarter on quarter analysis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>q1_plot <span class="sc">|</span> q5_plot</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Write Up
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Comparing bar chart plots for Q1 2023 and Q1 2024 (quarter on quarter), insights emerge regarding the mean number of units sold. In Q1 2023, the average stood at 804.67 units, edging slightly higher to 817.17 units in Q1 2024. This suggests a slight overall increase in property sales.</p>
+<p>While Apartments and Executive Condominiums experienced growth in sales volumes, Semi-Detached Houses and Terrace Houses maintained stable figures. Conversely, a decline was observed in the number of Condominiums and Detached Houses sold.</p>
+<p>Notably, Apartments and Condominiums, the predominant property types, experienced the most significant shifts in sales volumes, with Apartments witnessing the largest increase and Condominiums facing the most substantial decline.</p>
+</div>
+</div>
+</section>
+</section>
+<section id="price-distribution" class="level2">
+<h2 class="anchored" data-anchor-id="price-distribution">Price Distribution</h2>
+<p>Create box plots for the price distribution of each private residence property type. <a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html"><code>geom_boxplot()</code></a> displays continuous value list. It visualises five summary statistics (the median, two hinges and two whiskers), and all “outlying” points individually.</p>
+<p>Note: For better visibility, <strong><code>labels</code></strong> parameter with the function <strong><code>scales::number</code></strong>, formats the y-axis labels to include thousands separators.</p>
+<p>The code chunk below shows that in Q1 2023 for Condominiums, there are two points with value above 900 million that is affecting the rest of the box plot. Thus, the decision was made to remove those points, and replot the data without the extreme outliers.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">Plot</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false">Code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> q1, </span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>)) <span class="sc">+</span> </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Q1 2023"</span>,</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">x =</span> <span class="st">"Property Type"</span>,</span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">y =</span> <span class="st">"Transacted Price ($)"</span>) <span class="sc">+</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span>number) <span class="sc">+</span> </span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_economist</span>() <span class="sc">+</span></span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<section id="drop-extreme-outlier" class="level3">
+<h3 class="anchored" data-anchor-id="drop-extreme-outlier">Drop Extreme Outlier</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>q1_filtered <span class="ot">&lt;-</span> q1 <span class="sc">%&gt;%</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span> <span class="sc">&lt;=</span> <span class="dv">90000000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="price-distribution-by-property-type" class="level3">
+<h3 class="anchored" data-anchor-id="price-distribution-by-property-type">Price Distribution by Property Type</h3>
+<p>Note: For better visibility, <strong><code>labels</code></strong> parameter with the function <strong><code>scales::number(scale = 1e-6, suffix = "M")</code></strong> formats the y-axis labels to display in the millions unit, instead of the default scientific notation.</p>
+<div class="tabset-margin-container"></div><div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true">Q1 2023</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false">Q2 2023</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-3-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-3" role="tab" aria-controls="tabset-8-3" aria-selected="false">Q3 2023</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-4-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-4" role="tab" aria-controls="tabset-8-4" aria-selected="false">Q4 2023</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-5-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-5" role="tab" aria-controls="tabset-8-5" aria-selected="false">Q1 2024</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>q1_median <span class="ot">&lt;-</span> <span class="fu">median</span>(q1_filtered<span class="sc">$</span><span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>q1_box <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> q1_filtered, </span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>)) <span class="sc">+</span> </span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Q1 2023"</span>,</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">x =</span> <span class="st">"Property Type"</span>,</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">"Transacted Price ($)"</span>) <span class="sc">+</span></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">number_format</span>(<span class="at">scale =</span> <span class="fl">1e-6</span>, <span class="at">suffix =</span> <span class="st">"M"</span>),</span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">67000000</span>)) <span class="sc">+</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_hline</span>(<span class="at">yintercept =</span> q1_median,</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"navy"</span>) <span class="sc">+</span></span>
+<span id="cb48-13"><a href="#cb48-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>,</span>
+<span id="cb48-14"><a href="#cb48-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="dv">4</span>, <span class="at">y =</span> q1_median <span class="sc">*</span><span class="dv">10</span>, </span>
+<span id="cb48-15"><a href="#cb48-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Median:"</span>, scales<span class="sc">::</span><span class="fu">number</span>(q1_median, <span class="at">color =</span> <span class="st">"navy"</span>))) <span class="sc">+</span></span>
+<span id="cb48-16"><a href="#cb48-16" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_economist</span>() <span class="sc">+</span></span>
+<span id="cb48-17"><a href="#cb48-17" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) </span>
+<span id="cb48-18"><a href="#cb48-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-19"><a href="#cb48-19" aria-hidden="true" tabindex="-1"></a>q1_box</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>q2_median <span class="ot">&lt;-</span> <span class="fu">median</span>(q2<span class="sc">$</span><span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>q2_box <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> q2, </span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>)) <span class="sc">+</span> </span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Q2 2023"</span>,</span>
+<span id="cb49-7"><a href="#cb49-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">x =</span> <span class="st">"Property Type"</span>,</span>
+<span id="cb49-8"><a href="#cb49-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">"Transacted Price ($)"</span>) <span class="sc">+</span></span>
+<span id="cb49-9"><a href="#cb49-9" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">number_format</span>(<span class="at">scale =</span> <span class="fl">1e-6</span>, <span class="at">suffix =</span> <span class="st">"M"</span>),</span>
+<span id="cb49-10"><a href="#cb49-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">67000000</span>)) <span class="sc">+</span></span>
+<span id="cb49-11"><a href="#cb49-11" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_hline</span>(<span class="at">yintercept =</span> q2_median,</span>
+<span id="cb49-12"><a href="#cb49-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"navy"</span>) <span class="sc">+</span></span>
+<span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>,</span>
+<span id="cb49-14"><a href="#cb49-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="dv">4</span>, <span class="at">y =</span> q2_median <span class="sc">*</span><span class="dv">10</span>, </span>
+<span id="cb49-15"><a href="#cb49-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Median:"</span>, scales<span class="sc">::</span><span class="fu">number</span>(q2_median, <span class="at">color =</span> <span class="st">"navy"</span>))) <span class="sc">+</span></span>
+<span id="cb49-16"><a href="#cb49-16" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_economist</span>() <span class="sc">+</span></span>
+<span id="cb49-17"><a href="#cb49-17" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) </span>
+<span id="cb49-18"><a href="#cb49-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-19"><a href="#cb49-19" aria-hidden="true" tabindex="-1"></a>q2_box</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-8-3" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-3-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>q3_median <span class="ot">&lt;-</span> <span class="fu">median</span>(q3<span class="sc">$</span><span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>q3_box <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> q3, </span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>)) <span class="sc">+</span> </span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Q3 2023"</span>,</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">x =</span> <span class="st">"Property Type"</span>,</span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">"Transacted Price ($)"</span>) <span class="sc">+</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">number_format</span>(<span class="at">scale =</span> <span class="fl">1e-6</span>, <span class="at">suffix =</span> <span class="st">"M"</span>),</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">67000000</span>)) <span class="sc">+</span></span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_hline</span>(<span class="at">yintercept =</span> q3_median,</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"navy"</span>) <span class="sc">+</span></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>,</span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="dv">4</span>, <span class="at">y =</span> q3_median <span class="sc">*</span><span class="dv">10</span>, </span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>           <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Median:"</span>, scales<span class="sc">::</span><span class="fu">number</span>(q3_median, <span class="at">color =</span> <span class="st">"navy"</span>))) <span class="sc">+</span></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_economist</span>() <span class="sc">+</span></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) </span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>q3_box</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-8-4" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-4-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>q4_median <span class="ot">&lt;-</span> <span class="fu">median</span>(q4<span class="sc">$</span><span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>q4_box <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> q4, </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>)) <span class="sc">+</span> </span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Q4 2023"</span>,</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">x =</span> <span class="st">"Property Type"</span>,</span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">"Transacted Price ($)"</span>) <span class="sc">+</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">number_format</span>(<span class="at">scale =</span> <span class="fl">1e-6</span>, <span class="at">suffix =</span> <span class="st">"M"</span>),</span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">67000000</span>)) <span class="sc">+</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_hline</span>(<span class="at">yintercept =</span> q4_median,</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"navy"</span>) <span class="sc">+</span></span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>,</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="dv">4</span>, <span class="at">y =</span> q4_median <span class="sc">*</span><span class="dv">10</span>, </span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Median:"</span>, scales<span class="sc">::</span><span class="fu">number</span>(q4_median, <span class="at">color =</span> <span class="st">"navy"</span>))) <span class="sc">+</span></span>
+<span id="cb51-16"><a href="#cb51-16" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_economist</span>() <span class="sc">+</span></span>
+<span id="cb51-17"><a href="#cb51-17" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) </span>
+<span id="cb51-18"><a href="#cb51-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb51-19"><a href="#cb51-19" aria-hidden="true" tabindex="-1"></a>q4_box</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-8-5" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-5-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>q5_median <span class="ot">&lt;-</span> <span class="fu">median</span>(q5<span class="sc">$</span><span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>q5_box <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(<span class="at">data =</span> q5, </span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>                <span class="fu">aes</span>(<span class="at">x =</span> <span class="st">`</span><span class="at">Property Type</span><span class="st">`</span>, <span class="at">y =</span> <span class="st">`</span><span class="at">Transacted Price ($)</span><span class="st">`</span>)) <span class="sc">+</span> </span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">geom_boxplot</span>() <span class="sc">+</span></span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>          <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Q1 2024"</span>,</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">x =</span> <span class="st">"Property Type"</span>,</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">y =</span> <span class="st">"Transacted Price ($)"</span>) <span class="sc">+</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a><span class="fu">scale_y_continuous</span>(<span class="at">labels =</span> scales<span class="sc">::</span><span class="fu">number_format</span>(<span class="at">scale =</span> <span class="fl">1e-6</span>, <span class="at">suffix =</span> <span class="st">"M"</span>),</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a>                  <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">67000000</span>)) <span class="sc">+</span></span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true" tabindex="-1"></a><span class="fu">geom_hline</span>(<span class="at">yintercept =</span> q5_median,</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true" tabindex="-1"></a>             <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">color =</span> <span class="st">"navy"</span>) <span class="sc">+</span></span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">annotate</span>(<span class="at">geom =</span> <span class="st">"text"</span>,</span>
+<span id="cb52-14"><a href="#cb52-14" aria-hidden="true" tabindex="-1"></a>           <span class="at">x =</span> <span class="dv">4</span>, <span class="at">y =</span> q5_median <span class="sc">*</span><span class="dv">10</span>, </span>
+<span id="cb52-15"><a href="#cb52-15" aria-hidden="true" tabindex="-1"></a>          <span class="at">label =</span> <span class="fu">paste</span>(<span class="st">"Median:"</span>, scales<span class="sc">::</span><span class="fu">number</span>(q5_median, <span class="at">color =</span> <span class="st">"navy"</span>))) <span class="sc">+</span></span>
+<span id="cb52-16"><a href="#cb52-16" aria-hidden="true" tabindex="-1"></a><span class="fu">theme_economist</span>() <span class="sc">+</span></span>
+<span id="cb52-17"><a href="#cb52-17" aria-hidden="true" tabindex="-1"></a><span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>)) </span>
+<span id="cb52-18"><a href="#cb52-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-19"><a href="#cb52-19" aria-hidden="true" tabindex="-1"></a>q5_box</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="composite-plot-1" class="level3">
+<h3 class="anchored" data-anchor-id="composite-plot-1">Composite Plot</h3>
+<p>Using <strong><code>patchwork</code></strong> package, the plots for Q1 2023 and Q1 2024 are stacked into 1 composite plot for a quarter on quarter analysis.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>q1_box <span class="sc">|</span> q5_box</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="Take-home_Ex01_files/figure-html/unnamed-chunk-38-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Write Up
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Overall, there is an increase in overall prices from 1.63 million to 1.69 million. However, the price variability for all property types have decreased, with fewer outliers present.</p>
+<p>The boxplot shows Detached Houses generally have the highest transacted prices. The Q1, median, and Q3 values for this property type are all substantially higher than those of other types, indicating its premium market status.</p>
+<p>Detached Houses also exhibit the highest variability in transacted prices, although there are relatively few outliers. In contrast, Executive Condominiums demonstrate the least variability in transacted prices, with their interquartile ranges (IQR) closely aligning with their medians. This suggests a stable and consistent pricing trend. Executive Condominiums have the lowest transacted prices, indicating their appeal as an affordable option within the private housing market.</p>
+<p>Apartments and Condominiums, on the other hand, show a significant number of outliers in their transacted prices, suggesting a wider range of pricing and potentially more diversity in market conditions for these property types.</p>
+</div>
+</div>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

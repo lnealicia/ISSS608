@@ -54,13 +54,13 @@ pacman::p_load(tidytext, widyr, wordcloud, DT, ggwordcloud, textplot, lubridate,
 
 ### **Creating a folder list**
 
-```{r}
+```{r, eval=FALSE}
 news20 <- "data/20news/"
 ```
 
 ### **Define a function to read all files from a folder into a data frame**
 
-```{r}
+```{r, eval=FALSE}
 read_folder <- function(infolder) {
   tibble(file = dir(infolder, 
                     full.names = TRUE)) %>%
@@ -88,7 +88,7 @@ read_folder <- function(infolder) {
 
 -   [`read_rds()`](https://readr.tidyverse.org/reference/read_rds.html) is used to save the extracted and combined data frame as rds file for future use.
 
-```{r}
+```{r, eval=FALSE}
 raw_text <- tibble(folder = 
                      dir(news20, 
                          full.names = TRUE)) %>%
@@ -100,14 +100,14 @@ raw_text <- tibble(folder =
 write_rds(raw_text, "data/rds/news20.rds")
 ```
 
-##  **Initial EDA**
+## **Initial EDA**
 
 Figure below shows the frequency of messages by newsgroup.
 
 ::: panel-tabset
 ## Plot
 
-```{r, echo=FALSE}
+```{r, eval=FALSE}
 
 raw_text <- read_rds("data/rds/news20.rds")
 raw_text %>%
@@ -152,7 +152,7 @@ The code chunk below uses:
 
 -   [`str_detect()`](https://stringr.tidyverse.org/reference/str_detect.html) from **stringr** to detect the presence or absence of a pattern in a string.
 
-```{r}
+```{r, eval=FALSE}
 cleaned_text <- raw_text %>%
   group_by(newsgroup, id) %>%
   filter(cumsum(text == "") > 0,
@@ -169,7 +169,7 @@ Regular expressions are used to remove with nested text representing quotes from
 
 -   [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) of **dplyr** package is used to subset a data frame, retaining all rows that satisfy the specified conditions.
 
-```{r}
+```{r, eval=FALSE}
 cleaned_text <- cleaned_text %>%
   filter(str_detect(text, "^[^>]+[A-Za-z\\d]")
          | text == "",
@@ -186,7 +186,7 @@ cleaned_text <- cleaned_text %>%
 
 -    [`stop_words()`](https://rdrr.io/cran/tidytext/man/stop_words.html) is used to remove stop-words
 
-```{r}
+```{r, eval=FALSE}
 usenet_words <- cleaned_text %>%
   unnest_tokens(word, text) %>%
   filter(str_detect(word, "[a-z']$"),
@@ -195,14 +195,14 @@ usenet_words <- cleaned_text %>%
 
 Headers, signatures and formatting have been removed. The code chunk below calculates individual word frequncies to explore common words in the dataset.
 
-```{r}
+```{r, eval=FALSE}
 usenet_words %>%
   count(word, sort = TRUE)
 ```
 
 Word frequencies within newsgroup
 
-```{r}
+```{r, eval=FALSE}
 words_by_newsgroup <- usenet_words %>%
   count(newsgroup, word, sort = TRUE) %>%
   ungroup()
@@ -215,7 +215,7 @@ words_by_newsgroup <- usenet_words %>%
 ::: panel-tabset
 ## Plot
 
-```{r,echo=FALSE}
+```{r, eval=FALSE}
 wordcloud(words_by_newsgroup$word,
           words_by_newsgroup$n,
           max.words = 300)
@@ -235,7 +235,7 @@ A DT table can be used to complement the visual discovery.
 ::: panel-tabset
 ## Table
 
-```{r, echo=FALSE}
+```{r, eval=FALSE}
 # Create a data frame with word frequency data
 word_freq_table <- data.frame(Word = words_by_newsgroup$word,
                               Frequency = words_by_newsgroup$n)
@@ -265,7 +265,7 @@ datatable(word_freq_table,
 ::: panel-tabset
 ## Plot
 
-```{r,echo=FALSE}
+```{r, eval=FALSE}
 set.seed(1234)
 
 words_by_newsgroup %>%
@@ -302,7 +302,7 @@ $idf(term) = ln \frac{n_{documents}}{n_{documents containing term}}$
 
 *`bind_tf_idf()`* of ***tidytext*** is used to compute and bind the term frequency, inverse document frequency and ti-idf of a tidy text dataset to the dataset.
 
-```{r}
+```{r, eval=FALSE}
 tf_idf <- words_by_newsgroup %>%
   bind_tf_idf(word, newsgroup, n) %>%
   arrange(desc(tf_idf))
@@ -323,7 +323,7 @@ The code chunk below also uses:
 ::: panel-tabset
 ## Table
 
-```{r,echo=FALSE}
+```{r, eval=FALSE}
 DT::datatable(tf_idf, filter = 'top') %>% 
   formatRound(columns = c('tf', 'idf', 
                           'tf_idf'), 
@@ -353,7 +353,7 @@ Facet bar charts technique is used to visualise the tf-idf values of science rel
 ::: panel-tabset
 ## Plot
 
-```{r,echo=FALSE}
+```{r, eval=FALSE}
 tf_idf %>%
   filter(str_detect(newsgroup, "^sci\\.")) %>%
   group_by(newsgroup) %>%
@@ -404,7 +404,7 @@ tf_idf %>%
 
 In this code chunk below, `pairwise_cor()` of **widyr** package is used to compute the correlation between newsgroup based on the common words found.
 
-```{r}
+```{r, eval=FALSE}
 newsgroup_cors <- words_by_newsgroup %>%
   pairwise_cor(newsgroup, 
                word, 
@@ -419,7 +419,7 @@ Relationship between newgroups is visualised as a network graph
 ::: panel-tabset
 ## Plot
 
-```{r,echo=FALSE}
+```{r, eval=FALSE}
 set.seed(2017)
 
 newsgroup_cors %>%
@@ -456,14 +456,14 @@ newsgroup_cors %>%
 ```
 :::
 
-###  **Bigram**
+### **Bigram**
 
 Created by using `unnest_tokens()` of tidytext.
 
 ::: panel-tabset
 ## Bigram
 
-```{r,echo=FALSE}
+```{r, eval=FALSE}
 bigrams <- cleaned_text %>%
   unnest_tokens(bigram, 
                 text, 
@@ -493,7 +493,7 @@ Count and sort the bigram data frame ascendingly
 ::: panel-tabset
 ## Bigram Count
 
-```{r,echo=FALSE}
+```{r, eval=FALSE}
 bigrams_count <- bigrams %>%
   filter(bigram != 'NA') %>%
   count(bigram, sort = TRUE)
@@ -519,7 +519,7 @@ Seperate the bigram into two words
 ::: panel-tabset
 ## Bigram
 
-```{r,echo=FALSE}
+```{r, eval=FALSE}
 bigrams_separated <- bigrams %>%
   filter(bigram != 'NA') %>%
   separate(bigram, c("word1", "word2"), 
@@ -549,7 +549,7 @@ bigrams_filtered <- bigrams_separated %>%
 
 ### **Counting the bigram again**
 
-```{r}
+```{r, eval=FALSE}
 bigram_counts <- bigrams_filtered %>% 
   count(word1, word2, sort = TRUE)
 ```
@@ -558,7 +558,7 @@ bigram_counts <- bigrams_filtered %>%
 
 A network graph is created by using `graph_from_data_frame()` of **igraph** package.
 
-```{r}
+```{r, eval=FALSE}
 bigram_graph <- bigram_counts %>%
   filter(n > 3) %>%
   graph_from_data_frame()
@@ -572,7 +572,7 @@ bigram_graph
 ::: panel-tabset
 ## Plot
 
-```{r,echo=FALSE}
+```{r, eval=FALSE}
 
 set.seed(1234)
 
@@ -603,7 +603,7 @@ ggraph(bigram_graph, layout = "fr") +
 ::: panel-tabset
 ## Plot
 
-```{r,echo=FALSE}
+```{r, eval=FALSE}
 set.seed(1234)
 
 a <- grid::arrow(type = "closed", 
