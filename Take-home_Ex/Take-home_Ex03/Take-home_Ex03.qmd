@@ -1,0 +1,19 @@
+---
+title: "Take-home Exercise 3 - Vast Challenge 2024"
+author: "Alicia Loh"
+date: "May 10, 2024"
+date-modified: last-modified
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: false
+---
+
+# **The Task**
+
+Apply appropriate visual analytics methods to help FishEye, a non-profit organization that focuses on illegal fishing, to better identify bias, track behavior changes, and infer temporal patterns from the knowledge graphs prepared by their data analysts.
+
+# **The Source**
+
+The task is taken from the [VAST Challenge 2024](https://vast-challenge.github.io/2024/). Only 1 Mini Case or the Grand Challenge need to be attempted.
