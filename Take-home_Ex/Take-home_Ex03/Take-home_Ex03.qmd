@@ -14,6 +14,8 @@ execute:
 
 Apply appropriate visual analytics methods to help FishEye, a non-profit organization that focuses on illegal fishing, to better identify bias, track behavior changes, and infer temporal patterns from the knowledge graphs prepared by their data analysts.
 
+This take home exercise is done in conjunction with the group project. My group members are [Keke](https://isss608keke.netlify.app/) and [Quek You Ting](https://isss608ytquek.netlify.app/).
+
 # **The Source**
 
 The task is taken from the [VAST Challenge 2024](https://vast-challenge.github.io/2024/). Only 1 Mini Case or the Grand Challenge need to be attempted.

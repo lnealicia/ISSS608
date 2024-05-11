@@ -1,5 +1,5 @@
 ---
-title: "Hands-on Exercise 5 -  Visualising and Analysing Text Data"
+title: "Hands-on Exercise 5 - VAST 2024 MC1 Challenge  "
 author: "Alicia Loh"
 date: "11 May, 2024"
 date-modified: last-modified
@@ -32,22 +32,16 @@ Learning Objectives:
 
 The following R packages will be used:
 
--   tidytext, tidyverse (mainly readr, purrr, stringr, ggplot2)
+-   tidytext, tidyverse
 
--   widyr,
+-   readtext
 
--   wordcloud and ggwordcloud,
-
--   textplot (required igraph, tidygraph and ggraph, )
-
--   DT,
-
--   lubridate and hms.
+-   quanteda
 
 Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
 
 ```{r}
-pacman::p_load(tidytext, widyr, wordcloud, DT, ggwordcloud, textplot, lubridate, hms,tidyverse, tidygraph, ggraph, igraph)
+pacman::p_load(tidytext, readtext, quanteda, tidytext)
 ```
 
 ## **Importing Multiple Text Files from Multiple Folders**
