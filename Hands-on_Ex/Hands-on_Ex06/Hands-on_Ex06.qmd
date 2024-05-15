@@ -1,5 +1,5 @@
 ---
-title: "Hands-on Exercise 5 -  Visualising and Analysing Text Data"
+title: "Hands-on Exercise 6 -   Modelling, Visualising and Analysing Network Data with R"
 author: "Alicia Loh"
 date: "9 May, 2024"
 date-modified: last-modified
@@ -12,19 +12,15 @@ execute:
 
 Learning Objectives:
 
--   understand tidytext framework for processing, analysing and visualising text data,
+-   create graph object data frames, manipulate them using appropriate functions of *dplyr*, *lubridate*, and *tidygraph*,
 
--   write function for importing multiple files into R,
+-   build network graph visualisation using appropriate functions of *ggraph*,
 
--   combine multiple files into a single data frame,
+-   compute network geometrics using *tidygraph*,
 
--   clean and wrangle text data by using tidyverse approach,
+-   build advanced graph visualisation by incorporating the network geometrics, and
 
--   visualise words with Word Cloud,
-
--   compute term frequency–inverse document frequency (TF-IDF) using tidytext method, and
-
--   visualising texts and terms relationship.
+-   build interactive network visualisation using *visNetwork* package.
 
 # Getting Started
 
@@ -32,622 +28,526 @@ Learning Objectives:
 
 The following R packages will be used:
 
--   tidytext, tidyverse (mainly readr, purrr, stringr, ggplot2)
+-   igraph
 
--   widyr,
+-   tidygraph
 
--   wordcloud and ggwordcloud,
+-   ggraph
 
--   textplot (required igraph, tidygraph and ggraph, )
+-   visNetwork
 
--   DT,
+-   tidyverse
 
--   lubridate and hms.
+-   [lubridate](https://lubridate.tidyverse.org/)
 
 Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
 
 ```{r}
-pacman::p_load(tidytext, widyr, wordcloud, DT, ggwordcloud, textplot, lubridate, hms,tidyverse, tidygraph, ggraph, igraph)
+pacman::p_load(igraph, tidygraph, ggraph, 
+               visNetwork, lubridate, clock,
+               tidyverse, graphlayouts)
 ```
 
-## **Importing Multiple Text Files from Multiple Folders**
+## **The Data**
 
-### **Creating a folder list**
+The data sets used are from an oil exploration and extraction company. There are two data sets:
+
+-   Nodes data: *GAStech-email_edges.csv* which consists of two weeks of 9063 emails correspondances between 55 employees.
+
+-   edges (aka link) data: *GAStech_email_nodes.csv* which consist of the names, department and title of the 55 employees.
+
+### **Importing network data from files**
+
+Import GAStech_email_node.csv and GAStech_email_edges-v2.csv into RStudio environment by using `read_csv()` of **readr** package.
 
 ```{r}
-news20 <- "data/20news/"
+GAStech_nodes <- read_csv("data/GAStech_email_node.csv")
+GAStech_edges <- read_csv("data/GAStech_email_edge-v2.csv")
 ```
 
-### **Define a function to read all files from a folder into a data frame**
+###  **Reviewing the imported data**
 
 ```{r}
-read_folder <- function(infolder) {
-  tibble(file = dir(infolder, 
-                    full.names = TRUE)) %>%
-    mutate(text = map(file, 
-                      read_lines)) %>%
-    transmute(id = basename(file), 
-              text) %>%
-    unnest(text)
-}
+glimpse(GAStech_edges)
 ```
 
-## **Importing Multiple Text Files from Multiple Folders**
+### **Wrangling time**
 
-### **Reading in all the messages from the 20news folder**
+The output report of GAStech_edges below reveals that the *SentDate* is treated as “Character” data type instead of *date* data type, which is incorrect. Thus, the data type of *SentDate* field needs to be changed to “Date”” data type.
 
--   [`read_lines()`](https://readr.tidyverse.org/reference/read_lines.html) of [**readr**](https://readr.tidyverse.org/) package is used to read up to n_max lines from a file.
+Note:
 
--   [`map()`](https://purrr.tidyverse.org/reference/map.html) of [**purrr**](https://purrr.tidyverse.org/) package is used to transform their input by applying a function to each element of a list and returning an object of the same length as the input.
+-   both *dmy()* and *wday()* are functions of **lubridate** package. [lubridate](https://r4va.netlify.app/cran.r-project.org/web/packages/lubridate/vignettes/lubridate.html) is an R package that makes it easier to work with dates and times.
 
--   [`unnest()`](https://tidyr.tidyverse.org/reference/nest.html) of **dplyr** package is used to flatten a list-column of data frames back out into regular columns.
+-   *dmy()* transforms the SentDate to Date data type.
 
--   [`mutate()`](https://dplyr.tidyverse.org/reference/mutate.html) of **dplyr** is used to add new variables and preserves existing ones;
+-   *wday()* returns the day of the week as a decimal number or an ordered factor if label is TRUE. The argument abbr is FALSE keep the daya spells in full, i.e. Monday. The function will create a new column in the data.frame i.e. Weekday and the output of *wday()* will save in this newly created field.
 
--   [`transmute()`](https://dplyr.tidyverse.org/reference/mutate.html) of **dplyr** is used to add new variables and drops existing ones.
-
--   [`read_rds()`](https://readr.tidyverse.org/reference/read_rds.html) is used to save the extracted and combined data frame as rds file for future use.
+-   the values in the *Weekday* field are in ordinal scale.
 
 ```{r}
-raw_text <- tibble(folder = 
-                     dir("data/news20", 
-                         full.names = TRUE)) %>%
-  mutate(text = map_chr(folder, read_folder)) %>%
-  transmute(newsgroup = basename(folder), 
-            id = 'id', 
-            text = text)
-
-write_rds(raw_text, "data/rds/news20.rds")
+GAStech_edges <- GAStech_edges %>%
+  mutate(SendDate = dmy(SentDate)) %>%
+  mutate(Weekday = wday(SentDate,
+                        label = TRUE,
+                        abbr = FALSE))
 ```
 
-## **Initial EDA**
-
-Figure below shows the frequency of messages by newsgroup.
-
-::: panel-tabset
-## Plot
-
-```{r, echo=FALSE}
-
-news20 <- read_rds("data/rds/news20.rds")
-
-raw_text <- news20
-raw_text %>%
-  group_by(newsgroup) %>%
-  summarize(messages = n_distinct(id)) %>%
-  ggplot(aes(messages, newsgroup)) +
-  geom_col(fill = "lightblue") +
-  labs(y = NULL)
-```
-
-## Code
-
-```{r, eval=FALSE}
-
-raw_text <- read_rds("data/rds/news20.rds")
-raw_text %>%
-  group_by(newsgroup) %>%
-  summarize(messages = n_distinct(id)) %>%
-  ggplot(aes(messages, newsgroup)) +
-  geom_col(fill = "lightblue") +
-  labs(y = NULL)
-```
-:::
-
-## **Introducing tidytext**
-
--   Using tidy data principles in processing, analysing and visualising text data.
-
--   Much of the infrastructure needed for text mining with tidy data frames already exists in packages like ‘dplyr’, ‘broom’, ‘tidyr’, and ‘ggplot2’.
-
-### **Removing header and automated email signitures**
-
-Each message contains certain structural elements and additional text that are undesirable for inclusion in the analysis. For example:
-
--   Header containing fields such as “from:” or “in_reply_to:”
-
--   Automated email signatures, which occur after a line like “–”.
-
-The code chunk below uses:
-
--   [`cumsum()`](https://rdrr.io/r/base/cumsum.html) of base R to return a vector whose elements are the cumulative sums of the elements of the argument.
-
--   [`str_detect()`](https://stringr.tidyverse.org/reference/str_detect.html) from **stringr** to detect the presence or absence of a pattern in a string.
+### **Reviewing the revised date fields**
 
 ```{r}
-cleaned_text <- raw_text %>%
-  group_by(newsgroup, id) %>%
-  filter(cumsum(text == "") > 0,
-         cumsum(str_detect(
-           text, "^--")) == 0) %>%
+glimpse(GAStech_edges)
+```
+
+### **Wrangling attributes**
+
+A close examination of *GAStech_edges* data.frame reveals that it consists of individual e-mail flow records, which is not very useful for visualisation.
+
+Thus, aggregation is done for the individual by date, senders, receivers, main subject and day of the week.
+
+-   four functions from **dplyr** package are used. They are: *filter()*, *group()*, *summarise()*, and *ungroup()*.
+
+-   The output data.frame is called **GAStech_edges_aggregated**.
+
+-   A new field called *Weight* has been added in GAStech_edges_aggregated.
+
+```{r}
+GAStech_edges_aggregated <- GAStech_edges %>%
+  filter(MainSubject == "Work related") %>%
+  group_by(source, target, Weekday) %>%
+    summarise(Weight = n()) %>%
+  filter(source!=target) %>%
+  filter(Weight > 1) %>%
   ungroup()
 ```
 
-### **Removing lines with nested text representing quotes from other users**
-
-Regular expressions are used to remove with nested text representing quotes from other users.
-
--   [`str_detect()`](https://stringr.tidyverse.org/reference/str_detect.html) from **stringr** is used to detect the presence or absence of a pattern in a string.
-
--   [`filter()`](https://dplyr.tidyverse.org/reference/filter.html) of **dplyr** package is used to subset a data frame, retaining all rows that satisfy the specified conditions.
+### **Reviewing the revised edges file**
 
 ```{r}
-cleaned_text <- cleaned_text %>%
-  filter(str_detect(text, "^[^>]+[A-Za-z\\d]")
-         | text == "",
-         !str_detect(text, 
-                     "writes(:|\\.\\.\\.)$"),
-         !str_detect(text, 
-                     "^In article <")
-  )
+glimpse(GAStech_edges_aggregated)
 ```
 
-### **Text Data Processing**
+## **Creating network objects using tidygraph**
 
--    [`unnest_tokens()`](https://www.rdocumentation.org/packages/tidytext/versions/0.3.1/topics/unnest_tokens) of **tidytext** package is used to split the dataset into tokens
+ **tidygraph** package provides a tidy API for graph/network manipulation. Network data can be envisioned as 2 tidy tables, 1 for node data and 1 for edge data.
 
--    [`stop_words()`](https://rdrr.io/cran/tidytext/man/stop_words.html) is used to remove stop-words
+tidygraph provides a way to switch between the two tables and provides dplyr verbs for manipulating them. It is also provides access to many graph algorithms with return values that facilitate their use in a tidy workflow.
+
+### **The tbl_graph object**
+
+**tidygraph** can be used to create network objects:
+
+-   [`tbl_graph()`](https://tidygraph.data-imaginist.com/reference/tbl_graph.html) creates a **tbl_graph** network object from nodes and edges data.
+
+-   [`as_tbl_graph()`](https://tidygraph.data-imaginist.com/reference/tbl_graph.html) converts network data and objects to a **tbl_graph** network. Below are network data and objects supported by `as_tbl_graph()`
+
+    -   a node data.frame and an edge data.frame,
+
+    -   data.frame, list, matrix from base,
+
+    -   igraph from igraph,
+
+    -   network from network,
+
+    -   dendrogram and hclust from stats,
+
+    -   Node from data.tree,
+
+    -   phylo and evonet from ape, and
+
+    -   graphNEL, graphAM, graphBAM from graph (in Bioconductor).
+
+### **The dplyr verbs in tidygraph**
+
+-   *activate()* verb from **tidygraph** serves as a switch between tibbles for nodes and edges. All dplyr verbs applied to **tbl_graph** object are applied to the active tibble.
+
+-   *.N()* function is used to gain access to the node data while manipulating the edge data*. E()* will give you the edge data and *.G()* will give you the **tbl_graph** object itself.
+
+### **Using `tbl_graph()` to build tidygraph data model.**
+
+use `tbl_graph()` of **tinygraph** package to build an tidygraph’s network graph data.frame.
 
 ```{r}
-usenet_words <- cleaned_text %>%
-  unnest_tokens(word, text) %>%
-  filter(str_detect(word, "[a-z']$"),
-         !word %in% stop_words$word)
+GAStech_graph <- tbl_graph(nodes = GAStech_nodes,
+                           edges = GAStech_edges_aggregated, 
+                           directed = TRUE)
 ```
 
-Headers, signatures and formatting have been removed. The code chunk below calculates individual word frequncies to explore common words in the dataset.
+### **Reviewing the output tidygraph’s graph object**
 
 ```{r}
-usenet_words %>%
-  count(word, sort = TRUE)
+GAStech_graph
 ```
 
-Word frequencies within newsgroup
+### **Reviewing the output tidygraph’s graph object**
+
+-   The output above reveals that *GAStech_graph* is a tbl_graph object with 54 nodes and 4541 edges.
+-   The command also prints the first six rows of “Node Data” and the first three of “Edge Data”.
+-   It states that the Node Data is **active**. The notion of an active tibble within a tbl_graph object makes it possible to manipulate the data in one tibble at a time.
+
+### **Changing the active object**
+
+The nodes tibble data frame is activated by default, but it can be changed with the *activate()* function. To rearrange the rows in the edges tibble to list those with the highest “weight” first, use *activate()* and then *arrange()*.
 
 ```{r}
-words_by_newsgroup <- usenet_words %>%
-  count(newsgroup, word, sort = TRUE) %>%
+GAStech_graph %>%
+  activate(edges) %>%
+  arrange(desc(Weight))
+```
+
+## **Plotting Static Network Graphs with ggraph package**
+
+[**ggraph**](https://ggraph.data-imaginist.com/) is an extension of **ggplot2**, making it easier to carry over basic ggplot skills to the design of network graphs.
+
+There are three main aspects to a **ggraph**’s network graph, they are:
+
+-   [nodes](https://cran.r-project.org/web/packages/ggraph/vignettes/Nodes.html),
+
+-   [edges](https://cran.r-project.org/web/packages/ggraph/vignettes/Edges.html) and
+
+-   [layouts](https://cran.r-project.org/web/packages/ggraph/vignettes/Layouts.html)
+
+### **Plotting a basic network graph**
+
+The code chunk below uses [*ggraph()*](https://ggraph.data-imaginist.com/reference/ggraph.html), [*geom-edge_link()*](https://ggraph.data-imaginist.com/reference/geom_edge_link.html) and [*geom_node_point()*](https://ggraph.data-imaginist.com/reference/geom_node_point.html) to plot a network graph by using *GAStech_graph*. 
+
+-   The basic plotting function is `ggraph()`, which takes the data to be used for the graph and the type of layout desired.
+
+-   Both of the arguments for `ggraph()` are built around *igraph*. Therefore, `ggraph()` can use either an *igraph* object or a *tbl_graph* object.
+
+```{r}
+ggraph(GAStech_graph) +
+  geom_edge_link() +
+  geom_node_point()
+```
+
+### **Changing the default network graph theme**
+
+Use [*theme_graph()*](https://ggraph.data-imaginist.com/reference/theme_graph.html) to remove the x and y axes.
+
+-   **ggraph** introduces a special ggplot theme that provides better defaults for network graphs than the normal ggplot defaults. `theme_graph()`, besides removing axes, grids, and border, changes the font to Arial Narrow (this can be overridden).
+
+-   The ggraph theme can be set for a series of plots with the `set_graph_style()` command run before the graphs are plotted or by using `theme_graph()` in the individual plots.
+
+```{r}
+g <- ggraph(GAStech_graph) + 
+  geom_edge_link(aes()) +
+  geom_node_point(aes())
+
+g + theme_graph()
+```
+
+### **Changing the coloring of the plot**
+
+```{r}
+g <- ggraph(GAStech_graph) + 
+  geom_edge_link(aes(colour = 'grey50')) +
+  geom_node_point(aes(colour = 'grey40'))
+
+g + theme_graph(background = 'grey10',
+                text_colour = 'white')
+```
+
+### **Working with ggraph’s layouts**
+
+**ggraph** supports many standard layouts: star, circle, nicely (default), dh, gem, graphopt, grid, mds, spahere, randomly, fr, kk, drl and lgl. Figures below and on the right show layouts supported by `ggraph()`.
+
+![](images/clipboard-2852427744.png)
+
+### **Fruchterman and Reingold layout**
+
+Plot the network graph using Fruchterman and Reingold layout.
+
+-   *layout* argument is used to define the layout to be used.
+
+```{r}
+g <- ggraph(GAStech_graph, 
+            layout = "fr") +
+  geom_edge_link(aes()) +
+  geom_node_point(aes())
+
+g + theme_graph()
+```
+
+### **Modifying network nodes**
+
+colour each node by referring to their respective departments
+
+-   *geom_node_point* is equivalent in functionality to *geo_point* of **ggplot2**. It allows for simple plotting of nodes in different shapes, colours and sizes.
+
+```{r}
+g <- ggraph(GAStech_graph, 
+            layout = "nicely") + 
+  geom_edge_link(aes()) +
+  geom_node_point(aes(colour = Department, 
+                      size = 3))
+
+g + theme_graph()
+```
+
+### **Modifying edges**
+
+The thickness of the edges will be mapped with the *Weight* variable.
+
+-   *geom_edge_link* draws edges in the simplest way - as straight lines between the start and end nodes. But, it can do more that that. In the example above, argument *width* is used to map the width of the line in proportional to the Weight attribute and argument alpha is used to introduce opacity on the line.
+
+```{r}
+g <- ggraph(GAStech_graph, 
+            layout = "nicely") +
+  geom_edge_link(aes(width=Weight), 
+                 alpha=0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department), 
+                  size = 3)
+
+g + theme_graph()
+```
+
+## **Creating facet graphs**
+
+Another very useful feature of **ggraph** is faceting. In visualising network data, this technique can be used to reduce edge over-plotting in a very meaning way by spreading nodes and edges out based on their attributes. In this section, you will learn how to use faceting technique to visualise network data.
+
+There are three functions in ggraph to implement faceting:
+
+-   [*facet_nodes()*](https://r4va.netlify.app/chap27) whereby edges are only draw in a panel if both terminal nodes are present here,
+
+-   [*facet_edges()*](https://ggraph.data-imaginist.com/reference/facet_edges.html) whereby nodes are always drawn in al panels even if the node data contains an attribute named the same as the one used for the edge facetting, and
+
+-   [*facet_graph()*](https://ggraph.data-imaginist.com/reference/facet_graph.html) faceting on two variables simultaneously.
+
+### **Working with *facet_edges()***
+
+```{r}
+set_graph_style()
+
+g <- ggraph(GAStech_graph, 
+            layout = "nicely") + 
+  geom_edge_link(aes(width=Weight), 
+                 alpha=0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department), 
+                  size = 2)
+
+g + facet_edges(~Weekday)
+```
+
+### **Working with *facet_edges()***
+
+uses *theme()* to change the position of the legend
+
+```{r}
+set_graph_style()
+
+g <- ggraph(GAStech_graph, 
+            layout = "nicely") + 
+  geom_edge_link(aes(width=Weight), 
+                 alpha=0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department), 
+                  size = 2) +
+  theme(legend.position = 'bottom')
+  
+g + facet_edges(~Weekday)
+```
+
+### **A framed facet graph**
+
+Add frame to each graph
+
+```{r}
+set_graph_style() 
+
+g <- ggraph(GAStech_graph, 
+            layout = "nicely") + 
+  geom_edge_link(aes(width=Weight), 
+                 alpha=0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department), 
+                  size = 2)
+  
+g + facet_edges(~Weekday) +
+  th_foreground(foreground = "grey80",  
+                border = TRUE) +
+  theme(legend.position = 'bottom')
+```
+
+### **Working with *facet_nodes()***
+
+```{r}
+set_graph_style()
+
+g <- ggraph(GAStech_graph, 
+            layout = "nicely") + 
+  geom_edge_link(aes(width=Weight), 
+                 alpha=0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department), 
+                  size = 2)
+  
+g + facet_nodes(~Department)+
+  th_foreground(foreground = "grey80",  
+                border = TRUE) +
+  theme(legend.position = 'bottom')
+```
+
+## **Network Metrics Analysis**
+
+### **Computing centrality indices**
+
+Centrality measures are a collection of statistical indices use to describe the relative important of the actors are to a network. There are four well-known centrality measures, namely: degree, betweenness, closeness and eigenvector. It is beyond the scope of this hands-on exercise to cover the principles and mathematics of these measure here.
+
+-   *mutate()* of **dplyr** is used to perform the computation.
+
+-   the algorithm used, on the other hand, is the *centrality_betweenness()* of **tidygraph**.
+
+```{r}
+g <- GAStech_graph %>%
+  mutate(betweenness_centrality = centrality_betweenness()) %>%
+  ggraph(layout = "fr") + 
+  geom_edge_link(aes(width=Weight), 
+                 alpha=0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department,
+            size=betweenness_centrality))
+g + theme_graph()
+```
+
+### **Visualising network metrics**
+
+From **ggraph v2.0** onward tidygraph algorithms such as centrality measures can be accessed directly in ggraph calls. This means that it is no longer necessary to precompute and store derived node and edge centrality measures on the graph in order to use them in a plot.
+
+```{r}
+g <- GAStech_graph %>%
+  ggraph(layout = "fr") + 
+  geom_edge_link(aes(width=Weight), 
+                 alpha=0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = Department, 
+                      size = centrality_betweenness()))
+g + theme_graph()
+```
+
+### **Visualising Community**
+
+tidygraph package inherits many of the community detection algorithms imbedded into igraph, including *Edge-betweenness (group_edge_betweenness)*, *Leading eigenvector (group_leading_eigen)*, *Fast-greedy (group_fast_greedy)*, *Louvain (group_louvain)*, *Walktrap (group_walktrap)*, *Label propagation (group_label_prop)*, *InfoMAP (group_infomap)*, *Spinglass (group_spinglass)*, and *Optimal (group_optimal)*.
+
+*group_edge_betweenness()* is used below
+
+```{r}
+g <- GAStech_graph %>%
+  mutate(community = as.factor(group_edge_betweenness(weights = Weight, directed = TRUE))) %>%
+  ggraph(layout = "fr") + 
+  geom_edge_link(aes(width=Weight), 
+                 alpha=0.2) +
+  scale_edge_width(range = c(0.1, 5)) +
+  geom_node_point(aes(colour = community))  
+
+g + theme_graph()
+```
+
+## **Building Interactive Network Graph with visNetwork**
+
+-   [visNetwork()](http://datastorm-open.github.io/visNetwork/) is a R package for network visualization, using [vis.js](http://visjs.org/) javascript library.
+
+-   *visNetwork()* function uses a nodes list and edges list to create an interactive graph.
+
+    -   The nodes list must include an “id” column, and the edge list must have “from” and “to” columns.
+
+    -   The function also plots the labels for the nodes, using the names of the actors from the “label” column in the node list.
+
+-   Resulting graph:
+
+    -   The nodes can be moved and the graph will use an algorithm to keep the nodes properly spaced.
+
+    -   The plot can be moved around to be re-centered, zoomed in and out.
+
+### **Data preparation**
+
+```{r}
+GAStech_edges_aggregated <- GAStech_edges %>%
+  left_join(GAStech_nodes, by = c("sourceLabel" = "label")) %>%
+  rename(from = id) %>%
+  left_join(GAStech_nodes, by = c("targetLabel" = "label")) %>%
+  rename(to = id) %>%
+  filter(MainSubject == "Work related") %>%
+  group_by(from, to) %>%
+    summarise(weight = n()) %>%
+  filter(from!=to) %>%
+  filter(weight > 1) %>%
   ungroup()
 ```
 
-### **Visualising Words in newsgroups**
-
--   `wordcloud()` of **wordcloud** package is used to plot a static wordcloud
-
-::: panel-tabset
-## Plot
-
-```{r,echo=FALSE}
-wordcloud(words_by_newsgroup$word,
-          words_by_newsgroup$n,
-          max.words = 300)
-```
-
-## Code
-
-```{r,eval=FALSE}
-wordcloud(words_by_newsgroup$word,
-          words_by_newsgroup$n,
-          max.words = 300)
-```
-:::
-
-A DT table can be used to complement the visual discovery.
-
-::: panel-tabset
-## Table
-
-```{r, echo=FALSE}
-# Create a data frame with word frequency data
-word_freq_table <- data.frame(Word = words_by_newsgroup$word,
-                              Frequency = words_by_newsgroup$n)
-
-# Render the DataTable
-datatable(word_freq_table, 
-          options = list(pageLength = 10))
-```
-
-## Code
-
-```{r,eval=FALSE}
-# Create a data frame with word frequency data
-word_freq_table <- data.frame(Word = words_by_newsgroup$word,
-                              Frequency = words_by_newsgroup$n)
-
-# Render the DataTable
-datatable(word_freq_table, 
-          options = list(pageLength = 10))
-```
-:::
-
-### **Visualising Words in newsgroups**
-
- [**ggwordcloud**](https://lepennec.github.io/ggwordcloud/) package is used to plot the wordcloud below
-
-::: panel-tabset
-## Plot
-
-```{r,echo=FALSE}
-set.seed(1234)
-
-words_by_newsgroup %>%
-  filter(n > 0) %>%
-ggplot(aes(label = word,
-           size = n)) +
-  geom_text_wordcloud() +
-  theme_minimal() +
-  facet_wrap(~newsgroup)
-```
-
-## Code
-
-```{r,eval=FALSE}
-set.seed(1234)
-
-words_by_newsgroup %>%
-  filter(n > 0) %>%
-ggplot(aes(label = word,
-           size = n)) +
-  geom_text_wordcloud() +
-  theme_minimal() +
-  facet_wrap(~newsgroup)
-```
-:::
-
-## **Basic Concept of TF-IDF**
-
-[tf–idf](https://en.wikipedia.org/wiki/Tf%E2%80%93idf), short for term frequency–inverse document frequency, is a numerical statistic that is intended to reflect how important a word is to a document in a collection of [corpus](https://en.wikipedia.org/wiki/Text_corpus).
-
-$idf(term) = ln \frac{n_{documents}}{n_{documents containing term}}$
-
-### **Computing tf-idf within newsgroups**
-
-*`bind_tf_idf()`* of ***tidytext*** is used to compute and bind the term frequency, inverse document frequency and ti-idf of a tidy text dataset to the dataset.
+### **Plotting the first interactive network graph**
 
 ```{r}
-tf_idf <- words_by_newsgroup %>%
-  bind_tf_idf(word, newsgroup, n) %>%
-  arrange(desc(tf_idf))
+visNetwork(GAStech_nodes, 
+           GAStech_edges_aggregated)
 ```
 
-### **Visualising tf-idf as interactive table**
+### **Working with layout**
 
-Interactive table created by using [`datatable()`](https://rstudio.github.io/DT/functions.html) to create a html table that allows pagination of rows and columns.
-
-The code chunk below also uses:
-
--   `filter()` argument is used to turn control the filter UI.
-
--   `formatRound()` is used to customise the values format. The argument *digits* define the number of decimal places.
-
--   `formatStyle()` is used to customise the output table. In this example, the arguments *target* and *lineHeight* are used to reduce the line height by 25%.
-
-::: panel-tabset
-## Table
-
-```{r,echo=FALSE}
-DT::datatable(tf_idf, filter = 'top') %>% 
-  formatRound(columns = c('tf', 'idf', 
-                          'tf_idf'), 
-              digits = 3) %>%
-  formatStyle(0, 
-              target = 'row', 
-              lineHeight='25%')
-```
-
-## Code
-
-```{r,eval=FALSE}
-DT::datatable(tf_idf, filter = 'top') %>% 
-  formatRound(columns = c('tf', 'idf', 
-                          'tf_idf'), 
-              digits = 3) %>%
-  formatStyle(0, 
-              target = 'row', 
-              lineHeight='25%')
-```
-:::
-
-### **Visualising tf-idf within newsgroups**
-
-Facet bar charts technique is used to visualise the tf-idf values of science related newsgroup.
-
-::: panel-tabset
-## Plot
-
-```{r,echo=FALSE}
-tf_idf %>%
-  filter(str_detect(newsgroup, "^sci\\.")) %>%
-  group_by(newsgroup) %>%
-  slice_max(tf_idf, 
-            n = 12) %>%
-  ungroup() %>%
-  mutate(word = reorder(word, 
-                        tf_idf)) %>%
-  ggplot(aes(tf_idf, 
-             word, 
-             fill = newsgroup)) +
-  geom_col(show.legend = FALSE) +
-  facet_wrap(~ newsgroup, 
-             scales = "free") +
-  labs(x = "tf-idf", 
-       y = NULL)
-```
-
-## Code
-
-```{r,eval=FALSE}
-tf_idf %>%
-  filter(str_detect(newsgroup, "^sci\\.")) %>%
-  group_by(newsgroup) %>%
-  slice_max(tf_idf, 
-            n = 12) %>%
-  ungroup() %>%
-  mutate(word = reorder(word, 
-                        tf_idf)) %>%
-  ggplot(aes(tf_idf, 
-             word, 
-             fill = newsgroup)) +
-  geom_col(show.legend = FALSE) +
-  facet_wrap(~ newsgroup, 
-             scales = "free") +
-  labs(x = "tf-idf", 
-       y = NULL)
-```
-:::
-
-### **Counting and correlating pairs of words with the widyr package**
-
--   To count the number of times that two words appear within the same document, or to see how correlated they are.
-
--   Most operations for finding pairwise counts or correlations need to turn the data into a wide matrix first.
-
--   [**widyr**](https://cran.r-project.org/web/packages/widyr/) package first ‘casts’ a tidy dataset into a wide matrix, performs an operation such as a correlation on it, then re-tidies the result.
-
-In this code chunk below, `pairwise_cor()` of **widyr** package is used to compute the correlation between newsgroup based on the common words found.
+Fruchterman and Reingold layout is used.
 
 ```{r}
-newsgroup_cors <- words_by_newsgroup %>%
-  pairwise_cor(newsgroup, 
-               word, 
-               n, 
-               sort = TRUE)
+visNetwork(GAStech_nodes,
+           GAStech_edges_aggregated) %>%
+  visIgraphLayout(layout = "layout_with_fr") 
 ```
 
-### **Visualising correlation as a network**
+### **Working with visual attributes - Nodes**
 
-Relationship between newgroups is visualised as a network graph
+visNetwork() looks for a field called “group” in the nodes object and colour the nodes according to the values of the group field.
 
-::: panel-tabset
-## Plot
-
-```{r,echo=FALSE}
-set.seed(2017)
-
-newsgroup_cors %>%
-  filter(correlation > .025) %>%
-  graph_from_data_frame() %>%
-  ggraph(layout = "fr") +
-  geom_edge_link(aes(alpha = correlation, 
-                     width = correlation)) +
-  geom_node_point(size = 6, 
-                  color = "lightblue") +
-  geom_node_text(aes(label = name),
-                 color = "red",
-                 repel = TRUE) +
-  theme_void()
-```
-
-## Code
-
-```{r,eval=FALSE}
-set.seed(2017)
-
-newsgroup_cors %>%
-  filter(correlation > .025) %>%
-  graph_from_data_frame() %>%
-  ggraph(layout = "fr") +
-  geom_edge_link(aes(alpha = correlation, 
-                     width = correlation)) +
-  geom_node_point(size = 6, 
-                  color = "lightblue") +
-  geom_node_text(aes(label = name),
-                 color = "red",
-                 repel = TRUE) +
-  theme_void()
-```
-:::
-
-### **Bigram**
-
-Created by using `unnest_tokens()` of tidytext.
-
-::: panel-tabset
-## Bigram
-
-```{r,echo=FALSE}
-bigrams <- cleaned_text %>%
-  unnest_tokens(bigram, 
-                text, 
-                token = "ngrams", 
-                n = 2)
-
-bigrams
-```
-
-## Code
-
-```{r,eval=FALSE}
-bigrams <- cleaned_text %>%
-  unnest_tokens(bigram, 
-                text, 
-                token = "ngrams", 
-                n = 2)
-
-bigrams
-```
-:::
-
-### **Counting bigrams**
-
-Count and sort the bigram data frame ascendingly
-
-::: panel-tabset
-## Bigram Count
-
-```{r,echo=FALSE}
-bigrams_count <- bigrams %>%
-  filter(bigram != 'NA') %>%
-  count(bigram, sort = TRUE)
-
-bigrams_count
-```
-
-## Code
-
-```{r,eval=FALSE}
-bigrams_count <- bigrams %>%
-  filter(bigram != 'NA') %>%
-  count(bigram, sort = TRUE)
-
-bigrams_count
-```
-:::
-
-### **Cleaning bigram**
-
-Seperate the bigram into two words
-
-::: panel-tabset
-## Bigram
-
-```{r,echo=FALSE}
-bigrams_separated <- bigrams %>%
-  filter(bigram != 'NA') %>%
-  separate(bigram, c("word1", "word2"), 
-           sep = " ")
-
-bigrams_filtered <- bigrams_separated %>%
-  filter(!word1 %in% stop_words$word) %>%
-  filter(!word2 %in% stop_words$word)
-
-bigrams_filtered
-```
-
-## Code
-
-```{r,eval=FALSE}
-bigrams_separated <- bigrams %>%
-  filter(bigram != 'NA') %>%
-  separate(bigram, c("word1", "word2"), 
-           sep = " ")
-
-bigrams_filtered <- bigrams_separated %>%
-  filter(!word1 %in% stop_words$word) %>%
-  filter(!word2 %in% stop_words$word)
-
-```
-:::
-
-### **Counting the bigram again**
+rename Department field to group
 
 ```{r}
-bigram_counts <- bigrams_filtered %>% 
-  count(word1, word2, sort = TRUE)
+GAStech_nodes <- GAStech_nodes %>%
+  rename(group = Department) 
 ```
 
-### **Create a network graph from bigram data frame**
-
-A network graph is created by using `graph_from_data_frame()` of **igraph** package.
+visNetwork shades the nodes by assigning unique colour to each category in the *group* field.
 
 ```{r}
-bigram_graph <- bigram_counts %>%
-  filter(n > 3) %>%
-  graph_from_data_frame()
-bigram_graph
+visNetwork(GAStech_nodes,
+           GAStech_edges_aggregated) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visLegend() %>%
+  visLayout(randomSeed = 123)
 ```
 
-### **Visualizing a network of bigrams with ggraph**
+### **Working with visual attributes - Edges**
 
-**ggraph** package is used to plot the bigram
+*visEdges()* is used to symbolise the edges.
 
-::: panel-tabset
-## Plot
+-   The argument *arrows* is used to define where to place the arrow.
 
-```{r,echo=FALSE}
+-   The *smooth* argument is used to plot the edges using a smooth curve.
 
-set.seed(1234)
-
-ggraph(bigram_graph, layout = "fr") +
-  geom_edge_link() +
-  geom_node_point() +
-  geom_node_text(aes(label = name), 
-                 vjust = 1, 
-                 hjust = 1)
+```{r}
+visNetwork(GAStech_nodes,
+           GAStech_edges_aggregated) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visEdges(arrows = "to", 
+           smooth = list(enabled = TRUE, 
+                         type = "curvedCW")) %>%
+  visLegend() %>%
+  visLayout(randomSeed = 123)
 ```
 
-## Code
+### **Interactivity**
 
-```{r,eval=FALSE}
-set.seed(1234)
+*visOptions()* is used to incorporate interactivity features in the data visualisation.
 
-ggraph(bigram_graph, layout = "fr") +
-  geom_edge_link() +
-  geom_node_point() +
-  geom_node_text(aes(label = name), 
-                 vjust = 1, 
-                 hjust = 1)
+-   The argument *highlightNearest* highlights nearest when clicking a node.
+
+-   The argument *nodesIdSelection* adds an id node selection creating an HTML select element.
+
+```{r}
+visNetwork(GAStech_nodes,
+           GAStech_edges_aggregated) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%
+  visOptions(highlightNearest = TRUE,
+             nodesIdSelection = TRUE) %>%
+  visLegend() %>%
+  visLayout(randomSeed = 123)
 ```
-:::
-
-### **Revised version**
-
-::: panel-tabset
-## Plot
-
-```{r,echo=FALSE}
-set.seed(1234)
-
-a <- grid::arrow(type = "closed", 
-                 length = unit(.15,
-                               "inches"))
-
-ggraph(bigram_graph, 
-       layout = "fr") +
-  geom_edge_link(aes(edge_alpha = n), 
-                 show.legend = FALSE,
-                 arrow = a, 
-                 end_cap = circle(.07,
-                                  'inches')) +
-  geom_node_point(color = "lightblue", 
-                  size = 5) +
-  geom_node_text(aes(label = name), 
-                 vjust = 1, 
-                 hjust = 1) +
-  theme_void()
-```
-
-## Code
-
-```{r,eval=FALSE}
-set.seed(1234)
-
-a <- grid::arrow(type = "closed", 
-                 length = unit(.15,
-                               "inches"))
-
-ggraph(bigram_graph, 
-       layout = "fr") +
-  geom_edge_link(aes(edge_alpha = n), 
-                 show.legend = FALSE,
-                 arrow = a, 
-                 end_cap = circle(.07,
-                                  'inches')) +
-  geom_node_point(color = "lightblue", 
-                  size = 5) +
-  geom_node_text(aes(label = name), 
-                 vjust = 1, 
-                 hjust = 1) +
-  theme_void()
-```
-:::
