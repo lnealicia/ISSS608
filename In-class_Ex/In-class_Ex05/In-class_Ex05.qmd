@@ -10,22 +10,6 @@ execute:
   freeze: true
 ---
 
-Learning Objectives:
-
--   understand tidytext framework for processing, analysing and visualising text data,
-
--   write function for importing multiple files into R,
-
--   combine multiple files into a single data frame,
-
--   clean and wrangle text data by using tidyverse approach,
-
--   visualise words with Word Cloud,
-
--   compute term frequency–inverse document frequency (TF-IDF) using tidytext method, and
-
--   visualising texts and terms relationship.
-
 # Getting Started
 
 ## Installing and loading the required libraries
@@ -41,7 +25,7 @@ The following R packages will be used:
 Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
 
 ```{r}
-pacman::p_load(tidytext, readtext, quanteda, tidytext)
+pacman::p_load(tidytext, readtext, quanteda, tidytext, tidyverse)
 ```
 
 ## **Importing Multiple Text Files from Multiple Folders**
@@ -56,7 +40,10 @@ data_folder <- "data/articles/"
 
 ```{r}
 text_data <- readtext(paste0("data/articles","/*"))
+# alternate version: text_data <- readtext("data/articles/*")
 ```
+
+Check dataframe
 
 ```{r}
 corpus_text <- corpus(text_data)
@@ -70,16 +57,30 @@ summary(corpus_text, 5)
 -    [`stop_words()`](https://rdrr.io/cran/tidytext/man/stop_words.html) is used to remove stop-words
 
 ```{r}
-usenet_words <- text_data %>%   
-  unnest_tokens(word, text) %>%   
-  filter(str_detect(word, "[a-z']$"),          
-         !word %in% stop_words$word)
+text_data
+```
+
+```{r}
+# Tokenize the text column
+unnest_words <- text_data %>%   
+  unnest_tokens(output = word, input = text) 
+
+# Filter tokens to include only alphabetic characters and remove stop words
+unnest_words <- filter(unnest_words, 
+                       str_detect(word, "[a-z']$"),          
+                       !word %in% stop_words$word)
+```
+
+View dataframe
+
+```{r}
+head(unnest_words)
 ```
 
 The code chunk below calculates individual word frequncies to explore common words in the dataset.
 
 ```{r}
-usenet_words %>%
+unnest_words %>%
   count(word,sort = TRUE)
 ```
 
@@ -100,7 +101,23 @@ pacman::p_load(jsonlite, tidyverse)
 ```{r}
 mc1_data <- fromJSON("data/mc1.json")
 mc2_data <- fromJSON("data/mc2.json")
-mc3_data <- fromJSON("data/mc3.json")
+```
+
+The mc3.json file shows an error message indicating that there's an invalid character in the JSON text, specifically "NaN". As "NaN" is not recognised as a valid value, preprocessing of the JSON file to replace "NaN" is required.
+
+```{r}
+# Read the JSON file as text
+json_text <- readLines("data/mc3.json")
+
+# Replace "NaN" with "null"
+json_text_fixed <- gsub("NaN", "null", json_text)
+
+# Write the fixed JSON text back to a file
+writeLines(json_text_fixed, "data/mc3_fixed.json")
+```
+
+```{r}
+mc3_data <- fromJSON("data/mc3_fixed.json")
 ```
 
 ## To view the dataframe
