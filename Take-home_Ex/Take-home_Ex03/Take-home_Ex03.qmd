@@ -163,31 +163,36 @@ glimpse(text_data_clean)
 
 List of Company and News Sources
 
+::: panel-tabset
+## Companies
+
 ```{r}
 # Unique values in the "Company" column
 unique_companies <- unique(text_data_clean$Company)
-
-# Unique values in the "News_Source" column
-unique_news_sources <- unique(text_data_clean$News_Source)
-```
-
-```{r}
 unique_companies
 ```
 
-::: callout-note
-There are a total of 85 companies being mentioned in the entire dataset.
-:::
+## News Sources
 
 ```{r}
+# Unique values in the "News_Source" column
+unique_news_sources <- unique(text_data_clean$News_Source)
 unique_news_sources
 ```
+:::
 
 ::: callout-note
-There are a total of 6 news outlets that authored the news articles.
+There are a total of:
+
+-   85 companies being mentioned in the news articles
+
+-   6 news outlets that authored the news articles
 :::
 
 Discovering the company that is mentioned the greatest number of times, and the author of the most news articles
+
+::: panel-tabset
+## Companies
 
 ```{r}
 # Count the frequency of values in the "Company" column and sort by frequency
@@ -195,25 +200,35 @@ company_freq <- text_data_clean %>%
   count(Company) %>%
   mutate(Percentage = n / sum(n) * 100) %>%
   arrange(desc(n))
+company_freq
+```
 
+## News Sources
+
+```{r}
 # Count the frequency of values in the "News_Source" column and sort by frequency
 news_source_freq <- text_data_clean %>%
   count(News_Source) %>%
   mutate(Percentage = n / sum(n) * 100) %>%
   arrange(desc(n))
-
-```
-
-```{r}
-company_freq
-```
-
-::: callout-note
-:::
-
-```{r}
 news_source_freq
 ```
+:::
 
 ::: callout-note
+The top 3 companies with the most mentions in the news articles are:
+
+-   Cervantes-Kramer (12 - 33.1%)
+
+-   Jones GRoup and Rasmussen (12 - 32.2%)
+
+-   Nelson and King (8 - 31.7%)
+
+The top 3 news outlets with the most number of news articles are:
+
+-   The News Buoy (112 - 33.1%)
+
+-   Haacklee Herald (109 - 32.2%)
+
+-   Lomark Daily (107 - 31.7%)
 :::
