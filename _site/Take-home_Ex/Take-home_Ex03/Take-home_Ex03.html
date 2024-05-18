@@ -253,15 +253,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#installing-and-loading-the-required-libraries" id="toc-installing-and-loading-the-required-libraries" class="nav-link" data-scroll-target="#installing-and-loading-the-required-libraries">Installing and loading the required libraries</a></li>
   <li><a href="#importing-json-file" id="toc-importing-json-file" class="nav-link" data-scroll-target="#importing-json-file"><strong>Importing JSON File</strong></a></li>
-  <li><a href="#missing-values" id="toc-missing-values" class="nav-link" data-scroll-target="#missing-values">Missing Values</a>
-  <ul class="collapse">
+  <li><a href="#missing-values" id="toc-missing-values" class="nav-link" data-scroll-target="#missing-values">Missing Values</a></li>
   <li><a href="#setting-empty-values-in-revenue-to-0" id="toc-setting-empty-values-in-revenue-to-0" class="nav-link" data-scroll-target="#setting-empty-values-in-revenue-to-0">Setting empty values in <em><code>revenue</code></em> to 0</a></li>
-  <li><a href="#drop-unnecessary-columns" id="toc-drop-unnecessary-columns" class="nav-link" data-scroll-target="#drop-unnecessary-columns">Drop unnecessary columns</a></li>
-  </ul></li>
-  <li><a href="#data-wrangling" id="toc-data-wrangling" class="nav-link" data-scroll-target="#data-wrangling">Data Wrangling</a>
+  <li><a href="#drop-unnecessary-columns" id="toc-drop-unnecessary-columns" class="nav-link" data-scroll-target="#drop-unnecessary-columns">Drop unnecessary columns</a>
   <ul class="collapse">
-  <li><a href="#wrangling-time" id="toc-wrangling-time" class="nav-link" data-scroll-target="#wrangling-time"><strong>Wrangling Time</strong></a></li>
+  <li><a href="#clean-missing-values-temp" id="toc-clean-missing-values-temp" class="nav-link" data-scroll-target="#clean-missing-values-temp">Clean Missing Values (Temp)</a></li>
   </ul></li>
+  <li><a href="#constructing-network-graph" id="toc-constructing-network-graph" class="nav-link" data-scroll-target="#constructing-network-graph">Constructing Network Graph</a>
+  <ul class="collapse">
+  <li><a href="#modifying-network-nodes-and-edges" id="toc-modifying-network-nodes-and-edges" class="nav-link" data-scroll-target="#modifying-network-nodes-and-edges"><strong>Modifying network nodes and edges</strong></a></li>
+  <li><a href="#plot-graph" id="toc-plot-graph" class="nav-link" data-scroll-target="#plot-graph"><strong>Plot graph</strong></a></li>
+  </ul></li>
+  <li><a href="#graph-visualisation" id="toc-graph-visualisation" class="nav-link" data-scroll-target="#graph-visualisation">Graph Visualisation</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -295,7 +298,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 18, 2024</p>
+      <p class="date-modified">May 19, 2024</p>
     </div>
   </div>
     
@@ -574,8 +577,9 @@ Note
 <p>In addition, according to the <em>VAST2024 - MC3 Data Description</em> file, all empty values are supposed to have been set to 0. However, there are still some values with “NA”.</p>
 </div>
 </div>
-<section id="setting-empty-values-in-revenue-to-0" class="level3">
-<h3 class="anchored" data-anchor-id="setting-empty-values-in-revenue-to-0">Setting empty values in <em><code>revenue</code></em> to 0</h3>
+</section>
+<section id="setting-empty-values-in-revenue-to-0" class="level2">
+<h2 class="anchored" data-anchor-id="setting-empty-values-in-revenue-to-0">Setting empty values in <em><code>revenue</code></em> to 0</h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>nodes<span class="sc">$</span>revenue <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(mc3_data<span class="sc">$</span>nodes<span class="sc">$</span>revenue) <span class="sc">|</span> mc3_data<span class="sc">$</span>nodes<span class="sc">$</span>revenue <span class="sc">==</span> <span class="st">""</span>, <span class="dv">0</span>, mc3_data<span class="sc">$</span>nodes<span class="sc">$</span>revenue)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -588,8 +592,8 @@ Note
 </div>
 </div>
 </section>
-<section id="drop-unnecessary-columns" class="level3">
-<h3 class="anchored" data-anchor-id="drop-unnecessary-columns">Drop unnecessary columns</h3>
+<section id="drop-unnecessary-columns" class="level2">
+<h2 class="anchored" data-anchor-id="drop-unnecessary-columns">Drop unnecessary columns</h2>
 <p>A decision was made to drop the <em><code>end_date</code></em> column due to the sheer number of missing values:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>links <span class="ot">&lt;-</span> <span class="fu">subset</span>(mc3_data<span class="sc">$</span>links, <span class="at">select =</span> <span class="sc">-</span>end_date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -604,21 +608,76 @@ Note
 [10] "key"              </code></pre>
 </div>
 </div>
+<section id="clean-missing-values-temp" class="level3">
+<h3 class="anchored" data-anchor-id="clean-missing-values-temp">Clean Missing Values (Temp)</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect and clean nodes data</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>nodes <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>nodes <span class="sc">%&gt;%</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter_all</span>(<span class="fu">all_vars</span>(<span class="sc">!</span><span class="fu">is.na</span>(.)))  <span class="co"># Remove rows with any NA values</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect and clean edges data</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>links <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>links <span class="sc">%&gt;%</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter_all</span>(<span class="fu">all_vars</span>(<span class="sc">!</span><span class="fu">is.na</span>(.)))  <span class="co"># Remove rows with any NA values</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure all columns have proper data types (e.g., numeric for IDs)</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>nodes <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>nodes <span class="sc">%&gt;%</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), as.character))  <span class="co"># Convert all columns to character if necessary</span></span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>links <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>links <span class="sc">%&gt;%</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), as.character))  <span class="co"># Convert all columns to character if necessary</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 </section>
 </section>
-<section id="data-wrangling" class="level2">
-<h2 class="anchored" data-anchor-id="data-wrangling">Data Wrangling</h2>
-<section id="wrangling-time" class="level3">
-<h3 class="anchored" data-anchor-id="wrangling-time"><strong>Wrangling Time</strong></h3>
-<ul>
-<li><p><em>dmy()</em> is a function of <strong>lubridate</strong> package under tidyverse</p></li>
-<li><p><em>dmy()</em> transforms the date columns to Date data type.</p></li>
-<li><p>Missing values can cause issues during date conversion, thus need to be appropriately handled</p></li>
-<li><p><strong><code>lapply()</code></strong> is used to iterate over dataframes (i.e.&nbsp;nodes and links) within the <strong><code>mc3_data</code></strong> list and applies the necessary mutations to handle missing values and convert date columns.</p></li>
-</ul>
+<section id="constructing-network-graph" class="level2">
+<h2 class="anchored" data-anchor-id="constructing-network-graph">Constructing Network Graph</h2>
+<section id="modifying-network-nodes-and-edges" class="level3">
+<h3 class="anchored" data-anchor-id="modifying-network-nodes-and-edges"><strong>Modifying network nodes and edges</strong></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>id1 <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>links <span class="sc">%&gt;%</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source) <span class="sc">%&gt;%</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">id =</span> source)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>id2 <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>links <span class="sc">%&gt;%</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(target) <span class="sc">%&gt;%</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span> (<span class="at">id =</span> target)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>nodes1 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(id1, id2) <span class="sc">%&gt;%</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(mc3_data<span class="sc">$</span>nodes,</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">unmatched =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plot-graph" class="level3">
+<h3 class="anchored" data-anchor-id="plot-graph"><strong>Plot graph</strong></h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>mc3_graph <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(<span class="at">nodes =</span> mc3_data<span class="sc">$</span>nodes1,</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">edges =</span> mc3_data<span class="sc">$</span>links,</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">directed =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">betweeness_centrality =</span> </span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">centrality_betweenness</span>(),</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">closeness_centrality =</span> </span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">centrality_closeness</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>mc3_graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="graph-visualisation" class="level2">
+<h2 class="anchored" data-anchor-id="graph-visualisation">Graph Visualisation</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mc3_graph <span class="sc">%&gt;%</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(betweeness_centrality <span class="sc">&gt;=</span> <span class="dv">300000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggraph</span>(<span class="at">layout =</span> <span class="st">"fr"</span>) <span class="sc">+</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> betweeness_centrality,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"salmon"</span>,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">range=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">10</span>)) <span class="co">#+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#theme_graph()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 
 
-</section>
 </section>
 </section>
 

@@ -310,7 +310,7 @@ mc3_graph <- tbl_graph(nodes = mc3_data$nodes1,
            centrality_closeness())
 ```
 
-```{r}
+```{r,eval=FALSE}
 mc3_graph
 ```
 
