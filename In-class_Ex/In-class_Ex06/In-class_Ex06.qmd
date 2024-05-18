@@ -243,3 +243,18 @@ mc3_graph <- tbl_graph(nodes = mc3_nodes1,
 ```{r}
 mc3_graph
 ```
+
+## Graph Visualisation
+
+```{r}
+mc3_graph %>%
+  filter(betweeness_centrality >= 300000) %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(alpha = 0.5)) +
+  geom_node_point(aes(
+    size = betweeness_centrality,
+    color = "lightblue",
+    alpha = 0.5)) +
+  scale_size_continuous(range=c(1,10)) +
+  theme_graph()
+```
