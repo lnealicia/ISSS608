@@ -10,18 +10,6 @@ execute:
   freeze: false
 ---
 
-Learning Objectives:
-
--   create graph object data frames, manipulate them using appropriate functions of *dplyr*, *lubridate*, and *tidygraph*,
-
--   build network graph visualisation using appropriate functions of *ggraph*,
-
--   compute network geometrics using *tidygraph*,
-
--   build advanced graph visualisation by incorporating the network geometrics, and
-
--   build interactive network visualisation using *visNetwork* package.
-
 # Getting Started
 
 ## Installing and loading the required libraries
@@ -150,221 +138,108 @@ KJB <- prepare_data(dataset = bible_df,
 explore(KJB)
 ```
 
-### **Modifying network nodes**
+# Getting Started
 
-```{r,eval=FALSE}
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") + 
-  geom_edge_link(aes()) +
-  geom_node_point(aes(colour = Department, 
-                      size = 3))
+## Installing and loading the required libraries
 
-g + theme_graph()
+The following R packages will be used:
+
+-   ggforce
+
+-   tidygraph
+
+-   ggraph
+
+-   visNetwork
+
+-   skimr
+
+-   tidytext
+
+-   tidyverse
+
+-   graphlayouts
+
+-   jsonlite
+
+Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
+
+```{r}
+pacman::p_load(ggforce, tidygraph, ggraph, 
+               visNetwork, skimr, tidytext,
+               tidyverse, graphlayouts, jsonlite)
 ```
 
-### **Modifying edges**
+## **Importing JSON File**
 
-```{r,eval=FALSE}
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") +
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department), 
-                  size = 3)
-
-g + theme_graph()
+```{r}
+mc3_data <- fromJSON("data/MC3.json")
 ```
 
-## **Creating facet graphs**
+Verify data type
 
-```{r,eval=FALSE}
-set_graph_style()
-
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department), 
-                  size = 2)
-
-g + facet_edges(~Weekday)
+```{r}
+class(mc3_data)
 ```
 
-### **Working with *facet_edges()***
+## Extract edges
 
-uses *theme()* to change the position of the legend
-
-```{r,eval=FALSE}
-set_graph_style()
-
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department), 
-                  size = 2) +
-  theme(legend.position = 'bottom')
-  
-g + facet_edges(~Weekday)
-```
-
-### **A framed facet graph**
-
-Add frame to each graph
-
-```{r,eval=FALSE}
-set_graph_style() 
-
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department), 
-                  size = 2)
-  
-g + facet_edges(~Weekday) +
-  th_foreground(foreground = "grey80",  
-                border = TRUE) +
-  theme(legend.position = 'bottom')
-```
-
-### **Working with *facet_nodes()***
-
-```{r,eval=FALSE}
-set_graph_style()
-
-g <- ggraph(GAStech_graph, 
-            layout = "nicely") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department), 
-                  size = 2)
-  
-g + facet_nodes(~Department)+
-  th_foreground(foreground = "grey80",  
-                border = TRUE) +
-  theme(legend.position = 'bottom')
-```
-
-## **Network Metrics Analysis**
-
-```{r,eval=FALSE}
-g <- GAStech_graph %>%
-  mutate(betweenness_centrality = centrality_betweenness()) %>%
-  ggraph(layout = "fr") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department,
-            size=betweenness_centrality))
-g + theme_graph()
-```
-
-### **Visualising network metrics**
-
-```{r,eval=FALSE}
-g <- GAStech_graph %>%
-  ggraph(layout = "fr") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = Department, 
-                      size = centrality_betweenness()))
-g + theme_graph()
-```
-
-### **Visualising Community**
-
-```{r,eval=FALSE}
-g <- GAStech_graph %>%
-  mutate(community = as.factor(group_edge_betweenness(weights = Weight, directed = TRUE))) %>%
-  ggraph(layout = "fr") + 
-  geom_edge_link(aes(width=Weight), 
-                 alpha=0.2) +
-  scale_edge_width(range = c(0.1, 5)) +
-  geom_node_point(aes(colour = community))  
-
-g + theme_graph()
-```
-
-## **Building Interactive Network Graph with visNetwork**
-
-### **Data preparation**
-
-```{r,eval=FALSE}
-GAStech_edges_aggregated <- GAStech_edges %>%
-  left_join(GAStech_nodes, by = c("sourceLabel" = "label")) %>%
-  rename(from = id) %>%
-  left_join(GAStech_nodes, by = c("targetLabel" = "label")) %>%
-  rename(to = id) %>%
-  filter(MainSubject == "Work related") %>%
-  group_by(from, to) %>%
-    summarise(weight = n()) %>%
-  filter(from!=to) %>%
-  filter(weight > 1) %>%
+```{r}
+mc3_edges <-
+  as_tibble(mc3_data$links) %>%
+  distinct() %>%
+  mutate(source =
+           as.character(source),
+         target =
+           as.character(target),
+         type = as.character(type)) %>%
+  group_by(source,target,type) %>% #to count number of unique links
+  summarise(weights = n()) %>%
+  filter(source!=target) %>%
   ungroup()
 ```
 
-### **Plotting the first interactive network graph**
+## Extract nodes
 
-```{r,eval=FALSE}
-visNetwork(GAStech_nodes, 
-           GAStech_edges_aggregated)
+```{r}
+mc3_nodes <-
+  as_tibble(mc3_data$nodes) %>%
+  mutate(country = as.character(country),
+         id = as.character(id),
+         product_services = as.character(product_services),
+         revenue_omu = as.numeric(as.character(revenue_omu)),
+         type = as.character(type)) %>%
+  select(id, country, type, revenue_omu, product_services)
 ```
 
-### **Working with layout**
+### **Modifying network nodes and edges**
 
-Fruchterman and Reingold layout is used.
+```{r}
+id1 <- mc3_edges %>%
+  select(source) %>%
+  rename(id = source)
 
-```{r,eval=FALSE}
-visNetwork(GAStech_nodes,
-           GAStech_edges_aggregated) %>%
-  visIgraphLayout(layout = "layout_with_fr") 
+id2 <- mc3_edges %>%
+  select(target) %>%
+  rename (id = target)
+mc3_nodes1 <- rbind(id1, id2) %>%
+  distinct() %>%
+  left_join(mc3_nodes,
+            unmatched = "drop")
 ```
 
-### **Working with visual attributes - Nodes**
+### **Constructing graph**
 
-```{r,eval=FALSE}
-GAStech_nodes <- GAStech_nodes %>%
-  rename(group = Department) 
+```{r}
+mc3_graph <- tbl_graph(nodes = mc3_nodes1,
+                       edges = mc3_edges,
+                       directed = FALSE) %>%
+  mutate(betweeness_centrality = 
+           centrality_betweenness(),
+         closeness_centrality = 
+           centrality_closeness())
 ```
 
-visNetwork shades the nodes by assigning unique colour to each category in the *group* field.
-
-```{r,eval=FALSE}
-visNetwork(GAStech_nodes,
-           GAStech_edges_aggregated) %>%
-  visIgraphLayout(layout = "layout_with_fr") %>%
-  visLegend() %>%
-  visLayout(randomSeed = 123)
-```
-
-### **Working with visual attributes - Edges**
-
-```{r,eval=FALSE}
-visNetwork(GAStech_nodes,
-           GAStech_edges_aggregated) %>%
-  visIgraphLayout(layout = "layout_with_fr") %>%
-  visEdges(arrows = "to", 
-           smooth = list(enabled = TRUE, 
-                         type = "curvedCW")) %>%
-  visLegend() %>%
-  visLayout(randomSeed = 123)
-```
-
-### **Interactivity**
-
-```{r,eval=FALSE}
-visNetwork(GAStech_nodes,
-           GAStech_edges_aggregated) %>%
-  visIgraphLayout(layout = "layout_with_fr") %>%
-  visOptions(highlightNearest = TRUE,
-             nodesIdSelection = TRUE) %>%
-  visLegend() %>%
-  visLayout(randomSeed = 123)
+```{r}
+mc3_graph
 ```
