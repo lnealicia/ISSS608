@@ -1,5 +1,5 @@
 ---
-title: "In-Class Exercise 1"
+title: "In-Class Exercise 1 - Introduction to ggplot2"
 author: "Alicia Loh"
 date: "April 13, 2024"
 date-modified: last-modified
@@ -32,7 +32,7 @@ pacman::p_load(tidyverse)
 realis <- read_csv("data/realis2019.csv")
 ```
 
-# ggplot
+# ggplot2
 
 [ggplot2](https://ggplot2.tidyverse.org/) is an R package for **declaratively** creating **data-driven** graphics based on ***The Grammar of Graphics***. It is also part of the tidyverse family specially designed for visual exploration and communication.
 

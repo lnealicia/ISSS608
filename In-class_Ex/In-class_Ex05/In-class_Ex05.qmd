@@ -1,5 +1,5 @@
 ---
-title: "In-Class Exercise 5 - VAST 2024 MC1 Challenge  "
+title: "In-Class Exercise 5"
 author: "Alicia Loh"
 date: "11 May, 2024"
 date-modified: last-modified
@@ -16,7 +16,9 @@ execute:
 
 The following R packages will be used:
 
--   tidytext, tidyverse
+-   tidytext
+
+-   tidyverse
 
 -   readtext
 

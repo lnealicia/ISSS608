@@ -1,5 +1,5 @@
 ---
-title: "In-Class Exercise 6 - "
+title: "In-Class Exercise 6"
 author: "Alicia Loh"
 date: "18 May, 2024"
 date-modified: last-modified
@@ -7,7 +7,7 @@ execute:
   eval: true
   echo: true
   warning: false
-  freeze: false
+  freeze: true
 ---
 
 # Getting Started

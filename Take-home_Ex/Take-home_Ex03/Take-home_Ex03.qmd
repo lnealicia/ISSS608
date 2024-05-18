@@ -234,7 +234,7 @@ Links: Overall, there are 9.06% missing values. Most of the columns do not conta
 In addition, according to the *VAST2024 - MC3 Data Description* file, all empty values are supposed to have been set to 0. However, there are still some values with "NA".
 :::
 
-### Setting empty values in *`revenue`* to 0
+## Setting empty values in *`revenue`* to 0
 
 ```{r}
 mc3_data$nodes$revenue <- ifelse(is.na(mc3_data$nodes$revenue) | mc3_data$nodes$revenue == "", 0, mc3_data$nodes$revenue)
@@ -247,7 +247,7 @@ Verify changes
 sum(is.na(mc3_data$nodes$revenue))
 ```
 
-### Drop unnecessary columns
+## Drop unnecessary columns
 
 A decision was made to drop the *`end_date`* column due to the sheer number of missing values:
 
@@ -261,14 +261,70 @@ Verify changes
 colnames(mc3_data$links)
 ```
 
-## Data Wrangling
+### Clean Missing Values (Temp)
 
-### **Wrangling Time**
+```{r}
+# Inspect and clean nodes data
+mc3_data$nodes <- mc3_data$nodes %>%
+  filter_all(all_vars(!is.na(.)))  # Remove rows with any NA values
 
--   *dmy()* is a function of **lubridate** package under tidyverse
+# Inspect and clean edges data
+mc3_data$links <- mc3_data$links %>%
+  filter_all(all_vars(!is.na(.)))  # Remove rows with any NA values
 
--   *dmy()* transforms the date columns to Date data type.
+# Ensure all columns have proper data types (e.g., numeric for IDs)
+mc3_data$nodes <- mc3_data$nodes %>%
+  mutate(across(everything(), as.character))  # Convert all columns to character if necessary
 
--   Missing values can cause issues during date conversion, thus need to be appropriately handled
+mc3_data$links <- mc3_data$links %>%
+  mutate(across(everything(), as.character))  # Convert all columns to character if necessary
+```
 
--   **`lapply()`** is used to iterate over dataframes (i.e. nodes and links) within the **`mc3_data`** list and applies the necessary mutations to handle missing values and convert date columns.
+## Constructing Network Graph
+
+### **Modifying network nodes and edges**
+
+```{r}
+id1 <- mc3_data$links %>%
+  select(source) %>%
+  rename(id = source)
+
+id2 <- mc3_data$links %>%
+  select(target) %>%
+  rename (id = target)
+mc3_data$nodes1 <- rbind(id1, id2) %>%
+  distinct() %>%
+  left_join(mc3_data$nodes,
+            unmatched = "drop")
+```
+
+### **Plot graph**
+
+```{r,eval=FALSE}
+mc3_graph <- tbl_graph(nodes = mc3_data$nodes1,
+                       edges = mc3_data$links,
+                       directed = FALSE) %>%
+  mutate(betweeness_centrality = 
+           centrality_betweenness(),
+         closeness_centrality = 
+           centrality_closeness())
+```
+
+```{r}
+mc3_graph
+```
+
+## Graph Visualisation
+
+```{r,eval=FALSE}
+mc3_graph %>%
+  filter(betweeness_centrality >= 300000) %>%
+  ggraph(layout = "fr") +
+  geom_edge_link(aes(alpha = 0.5)) +
+  geom_node_point(aes(
+    size = betweeness_centrality,
+    color = "salmon",
+    alpha = 0.5)) +
+  scale_size_continuous(range=c(1,10)) #+
+  #theme_graph()
+```
