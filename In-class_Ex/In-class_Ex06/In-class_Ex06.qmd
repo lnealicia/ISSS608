@@ -1,5 +1,5 @@
 ---
-title: "Hands-on Exercise 6 -   Modelling, Visualising and Analysing Network Data with R"
+title: "In-Class Exercise 6 -   Modelling, Visualising and Analysing Network Data with R"
 author: "Alicia Loh"
 date: "15 May, 2024"
 date-modified: last-modified
@@ -28,6 +28,8 @@ Learning Objectives:
 
 The following R packages will be used:
 
+-   corporaexplorer
+
 -   igraph
 
 -   tidygraph
@@ -43,7 +45,7 @@ The following R packages will be used:
 Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
 
 ```{r}
-pacman::p_load(igraph, tidygraph, ggraph, 
+pacman::p_load(corporaexplorer, igraph, tidygraph, ggraph, 
                visNetwork, lubridate, clock,
                tidyverse, graphlayouts)
 ```
