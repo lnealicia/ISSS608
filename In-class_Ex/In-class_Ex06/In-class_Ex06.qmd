@@ -60,9 +60,9 @@ bible <- readr::read_lines("http://www.gutenberg.org/cache/epub/10/pg10.txt")
 bible <- paste(bible, collapse = "\n")
 ```
 
-### **Split into chapters**
+### **Identify the beginning and end of the Bible**
 
-Identify the beginning and end of the Bible (technique borrowed from <https://quanteda.io/articles/pkgdown/replication/digital-humanities.html>)
+Technique borrowed from <https://quanteda.io/articles/pkgdown/replication/digital-humanities.html>
 
 ```{r}
 
@@ -98,23 +98,15 @@ chapters <- str_replace_all(books, "(\\d+:1 )", "NEW_CHAPTER\\1") %>%
     stri_split_regex("NEW_CHAPTER")
 ```
 
-### **Remove header**
-
-Remove chapter headings from text
+### **Remove chapter headings**
 
 ```{r}
 chapters <- lapply(chapters, function(x) x[-1])
 ```
 
-### **Reviewing the output tidygraph’s graph object**
-
-```{r,eval=FALSE}
-GAStech_graph
-```
-
 ### **Retrieve shorter book titles**
 
-Retrieve shorter book titles from esv.org so save space in the corpus map plot.
+Retrieve shorter book titles from esv.org to save space in the corpus map plot.
 
 ```{r}
 book_titles <- read_html("https://www.esv.org/resources/esv-global-study-bible/list-of-abbreviations") %>%
@@ -141,7 +133,7 @@ bible_df <- tibble::tibble(Text = chapters,
 bible_df <- tidyr::unnest(bible_df, Text)
 ```
 
-### **Changing the coloring of the plot**
+### **Organise Data**
 
 Corpus not organised by date, so `date_based_corpus` to `FALSE`.
 
