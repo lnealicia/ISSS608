@@ -161,6 +161,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html" rel="" target="">
  <span class="dropdown-text">Hands-on Exercise 6</span></a>
   </li>  
+        <li>
+    <a class="dropdown-item" href="../../Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html" rel="" target="">
+ <span class="dropdown-text">Hands-on Exercise 7</span></a>
+  </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
@@ -189,6 +193,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li>
     <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex06/In-class_Ex06.html" rel="" target="">
  <span class="dropdown-text">In-class Exercise 6</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../In-class_Ex/In-class_Ex07/In-class_Ex07.html" rel="" target="">
+ <span class="dropdown-text">In-class Exercise 7</span></a>
   </li>  
     </ul>
   </li>
@@ -255,13 +263,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#importing-json-file" id="toc-importing-json-file" class="nav-link" data-scroll-target="#importing-json-file"><strong>Importing JSON File</strong></a></li>
   <li><a href="#missing-values" id="toc-missing-values" class="nav-link" data-scroll-target="#missing-values">Missing Values</a></li>
   <li><a href="#setting-empty-values-in-revenue-to-0" id="toc-setting-empty-values-in-revenue-to-0" class="nav-link" data-scroll-target="#setting-empty-values-in-revenue-to-0">Setting empty values in <em><code>revenue</code></em> to 0</a></li>
-  <li><a href="#drop-unnecessary-columns" id="toc-drop-unnecessary-columns" class="nav-link" data-scroll-target="#drop-unnecessary-columns">Drop unnecessary columns</a>
-  <ul class="collapse">
-  <li><a href="#clean-missing-values-temp" id="toc-clean-missing-values-temp" class="nav-link" data-scroll-target="#clean-missing-values-temp">Clean Missing Values (Temp)</a></li>
-  </ul></li>
+  <li><a href="#drop-unnecessary-columns" id="toc-drop-unnecessary-columns" class="nav-link" data-scroll-target="#drop-unnecessary-columns">Drop unnecessary columns</a></li>
+  <li><a href="#rename-columns" id="toc-rename-columns" class="nav-link" data-scroll-target="#rename-columns">Rename Columns</a></li>
   <li><a href="#constructing-network-graph" id="toc-constructing-network-graph" class="nav-link" data-scroll-target="#constructing-network-graph">Constructing Network Graph</a>
   <ul class="collapse">
   <li><a href="#modifying-network-nodes-and-edges" id="toc-modifying-network-nodes-and-edges" class="nav-link" data-scroll-target="#modifying-network-nodes-and-edges"><strong>Modifying network nodes and edges</strong></a></li>
+  <li><a href="#keeping-unique-values" id="toc-keeping-unique-values" class="nav-link" data-scroll-target="#keeping-unique-values">Keeping unique values</a></li>
   <li><a href="#plot-graph" id="toc-plot-graph" class="nav-link" data-scroll-target="#plot-graph"><strong>Plot graph</strong></a></li>
   </ul></li>
   <li><a href="#graph-visualisation" id="toc-graph-visualisation" class="nav-link" data-scroll-target="#graph-visualisation">Graph Visualisation</a></li>
@@ -298,7 +305,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Modified</div>
     <div class="quarto-title-meta-contents">
-      <p class="date-modified">May 19, 2024</p>
+      <p class="date-modified">May 28, 2024</p>
     </div>
   </div>
     
@@ -488,6 +495,7 @@ Note
 <li>dob</li>
 </ul></li>
 <li>Some columns have missing values, which need to be handled appropriately for ease of later analysis.</li>
+<li>Some columns are prefixed with “_”, we remove them to reduce chance of bugs later</li>
 </ol>
 </div>
 </div>
@@ -581,12 +589,16 @@ Note
 <section id="setting-empty-values-in-revenue-to-0" class="level2">
 <h2 class="anchored" data-anchor-id="setting-empty-values-in-revenue-to-0">Setting empty values in <em><code>revenue</code></em> to 0</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>nodes<span class="sc">$</span>revenue <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(mc3_data<span class="sc">$</span>nodes<span class="sc">$</span>revenue) <span class="sc">|</span> mc3_data<span class="sc">$</span>nodes<span class="sc">$</span>revenue <span class="sc">==</span> <span class="st">""</span>, <span class="dv">0</span>, mc3_data<span class="sc">$</span>nodes<span class="sc">$</span>revenue)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a copy of mc3_data</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>mc3_data2 <span class="ot">&lt;-</span> mc3_data</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Set empty values in revenue to 0 and save it to the new list</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>mc3_data2<span class="sc">$</span>nodes<span class="sc">$</span>revenue <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">is.na</span>(mc3_data2<span class="sc">$</span>nodes<span class="sc">$</span>revenue) <span class="sc">|</span> mc3_data2<span class="sc">$</span>nodes<span class="sc">$</span>revenue <span class="sc">==</span> <span class="st">""</span>, <span class="dv">0</span>, mc3_data2<span class="sc">$</span>nodes<span class="sc">$</span>revenue)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Verify changes</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># ensure no more missing values in revenue column</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(mc3_data<span class="sc">$</span>nodes<span class="sc">$</span>revenue))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(<span class="fu">is.na</span>(mc3_data2<span class="sc">$</span>nodes<span class="sc">$</span>revenue))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 0</code></pre>
 </div>
@@ -596,11 +608,14 @@ Note
 <h2 class="anchored" data-anchor-id="drop-unnecessary-columns">Drop unnecessary columns</h2>
 <p>A decision was made to drop the <em><code>end_date</code></em> column due to the sheer number of missing values:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>links <span class="ot">&lt;-</span> <span class="fu">subset</span>(mc3_data<span class="sc">$</span>links, <span class="at">select =</span> <span class="sc">-</span>end_date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a copy of mc3_data2</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>mc3_data3 <span class="ot">&lt;-</span> mc3_data2</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>mc3_data3<span class="sc">$</span>links <span class="ot">&lt;-</span> <span class="fu">subset</span>(mc3_data3<span class="sc">$</span>links, <span class="at">select =</span> <span class="sc">-</span>end_date)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Verify changes</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mc3_data<span class="sc">$</span>links)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mc3_data3<span class="sc">$</span>links)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code> [1] "start_date"        "type"              "_last_edited_by"  
  [4] "_last_edited_date" "_date_added"       "_raw_source"      
@@ -608,73 +623,222 @@ Note
 [10] "key"              </code></pre>
 </div>
 </div>
-<section id="clean-missing-values-temp" class="level3">
-<h3 class="anchored" data-anchor-id="clean-missing-values-temp">Clean Missing Values (Temp)</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect and clean nodes data</span></span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>nodes <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>nodes <span class="sc">%&gt;%</span></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter_all</span>(<span class="fu">all_vars</span>(<span class="sc">!</span><span class="fu">is.na</span>(.)))  <span class="co"># Remove rows with any NA values</span></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspect and clean edges data</span></span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>links <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>links <span class="sc">%&gt;%</span></span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter_all</span>(<span class="fu">all_vars</span>(<span class="sc">!</span><span class="fu">is.na</span>(.)))  <span class="co"># Remove rows with any NA values</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure all columns have proper data types (e.g., numeric for IDs)</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>nodes <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>nodes <span class="sc">%&gt;%</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), as.character))  <span class="co"># Convert all columns to character if necessary</span></span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>links <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>links <span class="sc">%&gt;%</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">across</span>(<span class="fu">everything</span>(), as.character))  <span class="co"># Convert all columns to character if necessary</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(mc3_data3[[<span class="st">"nodes"</span>]])</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(mc3_data3[[<span class="st">"links"</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
+<section id="rename-columns" class="level2">
+<h2 class="anchored" data-anchor-id="rename-columns">Rename Columns</h2>
+<p>Remove prefix “_” from columns to reduce chance of issues later</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to remove leading underscores from column names</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>remove_leading_underscores <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">colnames</span>(df) <span class="ot">&lt;-</span> <span class="fu">gsub</span>(<span class="st">"^_"</span>, <span class="st">""</span>, <span class="fu">colnames</span>(df))</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(df)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create a copy of mc3_data and name it mc3_data3</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>mc3_data4 <span class="ot">&lt;-</span> mc3_data3</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the function to the nodes and links data frames in mc3_data3</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>mc3_data4<span class="sc">$</span>nodes <span class="ot">&lt;-</span> <span class="fu">remove_leading_underscores</span>(mc3_data4<span class="sc">$</span>nodes)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>mc3_data4<span class="sc">$</span>links <span class="ot">&lt;-</span> <span class="fu">remove_leading_underscores</span>(mc3_data4<span class="sc">$</span>links)</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Verify the changes in mc3_data4</span></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mc3_data4<span class="sc">$</span>nodes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "type"             "country"          "ProductServices"  "PointOfContact"  
+ [5] "HeadOfOrg"        "founding_date"    "revenue"          "TradeDescription"
+ [9] "last_edited_by"   "last_edited_date" "date_added"       "raw_source"      
+[13] "algorithm"        "id"               "dob"             </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(mc3_data4<span class="sc">$</span>links)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "start_date"       "type"             "last_edited_by"   "last_edited_date"
+ [5] "date_added"       "raw_source"       "algorithm"        "source"          
+ [9] "target"           "key"             </code></pre>
+</div>
+</div>
 </section>
 <section id="constructing-network-graph" class="level2">
 <h2 class="anchored" data-anchor-id="constructing-network-graph">Constructing Network Graph</h2>
 <section id="modifying-network-nodes-and-edges" class="level3">
 <h3 class="anchored" data-anchor-id="modifying-network-nodes-and-edges"><strong>Modifying network nodes and edges</strong></h3>
+<p>Prepare the <strong><code>edges</code></strong> dataframe for network analysis by:</p>
+<ul>
+<li><p>Ensuring all edges are unique.</p></li>
+<li><p>Converting columns to a uniform type.</p></li>
+<li><p>Calculating the weight of each edge (how many times each connection occurs).</p></li>
+<li><p>Removing any self-loops.</p></li>
+</ul>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>id1 <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>links <span class="sc">%&gt;%</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(source) <span class="sc">%&gt;%</span></span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">id =</span> source)</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>id2 <span class="ot">&lt;-</span> mc3_data<span class="sc">$</span>links <span class="sc">%&gt;%</span></span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(target) <span class="sc">%&gt;%</span></span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span> (<span class="at">id =</span> target)</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>mc3_data<span class="sc">$</span>nodes1 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(id1, id2) <span class="sc">%&gt;%</span></span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(mc3_data<span class="sc">$</span>nodes,</span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>            <span class="at">unmatched =</span> <span class="st">"drop"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>mc3_edges <span class="ot">&lt;-</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_tibble</span>(mc3_data4<span class="sc">$</span>links) <span class="sc">%&gt;%</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">source =</span> <span class="fu">as.character</span>(source),</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">target =</span> <span class="fu">as.character</span>(target),</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">type =</span> <span class="fu">as.character</span>(type)) <span class="sc">%&gt;%</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(source, target, type) <span class="sc">%&gt;%</span></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">weights =</span> <span class="fu">n</span>()) <span class="sc">%&gt;%</span></span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">!=</span> target) <span class="sc">%&gt;%</span></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ungroup</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The resulting <strong><code>mc3_edges</code></strong> tibble contains the columns <strong><code>source</code></strong>, <strong><code>target</code></strong>, <strong><code>type</code></strong>, and <strong><code>weights</code></strong>, where each row represents a unique edge between two nodes with a specific type, and the <strong><code>weights</code></strong> column represents the number of times that edge occurs.</p>
+</div>
+</div>
+<p>Clean and preprocess the <strong><code>nodes</code></strong> data by:</p>
+<ul>
+<li><p>Ensuring that each column has the correct data type for analysis.</p></li>
+<li><p>Selecting only the necessary columns for further analysis or visualization.</p></li>
+</ul>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>mc3_nodes <span class="ot">&lt;-</span> <span class="fu">as_tibble</span>(mc3_data4<span class="sc">$</span>nodes) <span class="sc">%&gt;%</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">country =</span> <span class="fu">as.character</span>(country), </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">id =</span> <span class="fu">as.character</span>(id), </span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">ProductServices =</span> <span class="fu">as.character</span>(ProductServices), </span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">revenue =</span> <span class="fu">as.numeric</span>(<span class="fu">as.character</span>(revenue)), </span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">type =</span> <span class="fu">as.character</span>(type)) <span class="sc">%&gt;%</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id, country, type, revenue, ProductServices)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The resulting <strong><code>mc3_nodes</code></strong> tibble contains the cleaned and correctly typed columns <strong><code>id</code></strong>, <strong><code>country</code></strong>, <strong><code>type</code></strong>, <strong><code>revenue</code></strong>, and <strong><code>ProductServices</code></strong>.</p>
+</div>
+</div>
+</section>
+<section id="keeping-unique-values" class="level3">
+<h3 class="anchored" data-anchor-id="keeping-unique-values">Keeping unique values</h3>
+<p>Edges</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>unique_transaction_types_edges <span class="ot">&lt;-</span> mc3_edges <span class="sc">%&gt;%</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(type) <span class="sc">%&gt;%</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the unique transaction types</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(unique_transaction_types_edges)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 1
+  type                           
+  &lt;chr&gt;                          
+1 Event.Owns.Shareholdership     
+2 Event.WorksFor                 
+3 Event.Owns.BeneficialOwnership 
+4 Relationship.FamilyRelationship</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There are 4 types of edges, namely:</p>
+<ul>
+<li><p>Event.Owns.Shareholdership</p></li>
+<li><p>Event.WOrksFor</p></li>
+<li><p>Event.Owns.BeneficialOwnership</p></li>
+<li><p>Relationship.FamilyRelationship</p></li>
+</ul>
+</div>
+</div>
+<p>Nodes</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>unique_transaction_types_nodes <span class="ot">&lt;-</span> mc3_nodes <span class="sc">%&gt;%</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(type) <span class="sc">%&gt;%</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>()</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the unique transaction types</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(unique_transaction_types_nodes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 1
+  type                                
+  &lt;chr&gt;                               
+1 Entity.Organization.Company         
+2 Entity.Organization.LogisticsCompany
+3 Entity.Organization.FishingCompany  
+4 Entity.Organization.FinancialCompany
+5 Entity.Organization.NewsCompany     
+6 Entity.Organization.NGO             
+7 Entity.Person                       
+8 Entity.Person.CEO                   </code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>There are 8 types of nodes, namely:</p>
+<ul>
+<li><p>Entity.Organization.Company</p></li>
+<li><p>Entity.Organization.LogisticsCompany</p></li>
+<li><p>Entity.Organization.FishingCompany</p></li>
+<li><p>Entity.Organization.FinancialCompany</p></li>
+<li><p>Entity.Organization.NewsCompany</p></li>
+<li><p>Entity.Organization.NGO</p></li>
+<li><p>Entity.Person</p></li>
+<li><p>Entity.Person.CEO</p></li>
+</ul>
+</div>
 </div>
 </section>
 <section id="plot-graph" class="level3">
 <h3 class="anchored" data-anchor-id="plot-graph"><strong>Plot graph</strong></h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>mc3_graph <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(<span class="at">nodes =</span> mc3_data<span class="sc">$</span>nodes1,</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">edges =</span> mc3_data<span class="sc">$</span>links,</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">directed =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">betweeness_centrality =</span> </span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">centrality_betweenness</span>(),</span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">closeness_centrality =</span> </span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">centrality_closeness</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>mc3_graph <span class="ot">&lt;-</span> <span class="fu">tbl_graph</span>(<span class="at">nodes =</span> mc3_data4<span class="sc">$</span>nodes1,</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>                       <span class="at">edges =</span> mc3_data4<span class="sc">$</span>links,</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">directed =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">betweeness_centrality =</span> </span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>           <span class="fu">centrality_betweenness</span>(),</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>         <span class="at">closeness_centrality =</span> </span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>           <span class="fu">centrality_closeness</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>mc3_graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>mc3_graph</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
 <section id="graph-visualisation" class="level2">
 <h2 class="anchored" data-anchor-id="graph-visualisation">Graph Visualisation</h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mc3_graph <span class="sc">%&gt;%</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(betweeness_centrality <span class="sc">&gt;=</span> <span class="dv">300000</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggraph</span>(<span class="at">layout =</span> <span class="st">"fr"</span>) <span class="sc">+</span></span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
-<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(</span>
-<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> betweeness_centrality,</span>
-<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"salmon"</span>,</span>
-<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
-<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">range=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">10</span>)) <span class="co">#+</span></span>
-<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#theme_graph()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>mc3_graph <span class="sc">%&gt;%</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(betweeness_centrality <span class="sc">&gt;=</span> <span class="dv">300000</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggraph</span>(<span class="at">layout =</span> <span class="st">"fr"</span>) <span class="sc">+</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_edge_link</span>(<span class="fu">aes</span>(<span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_node_point</span>(<span class="fu">aes</span>(</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> betweeness_centrality,</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"salmon"</span>,</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">alpha =</span> <span class="fl">0.5</span>)) <span class="sc">+</span></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">range=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">10</span>)) <span class="co">#+</span></span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">#theme_graph()</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

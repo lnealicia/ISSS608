@@ -170,6 +170,7 @@ On closer inspection of `mc3_data`, we note some issues to be rectified:
     -   \_date_added
     -   dob
 2.  Some columns have missing values, which need to be handled appropriately for ease of later analysis.
+3.  Some columns are prefixed with "\_", we remove them to reduce chance of bugs later
 :::
 
 ## Missing Values
@@ -237,14 +238,18 @@ In addition, according to the *VAST2024 - MC3 Data Description* file, all empty 
 ## Setting empty values in *`revenue`* to 0
 
 ```{r}
-mc3_data$nodes$revenue <- ifelse(is.na(mc3_data$nodes$revenue) | mc3_data$nodes$revenue == "", 0, mc3_data$nodes$revenue)
+# Create a copy of mc3_data
+mc3_data2 <- mc3_data
+
+# Set empty values in revenue to 0 and save it to the new list
+mc3_data2$nodes$revenue <- ifelse(is.na(mc3_data2$nodes$revenue) | mc3_data2$nodes$revenue == "", 0, mc3_data2$nodes$revenue)
 ```
 
 Verify changes
 
 ```{r}
 # ensure no more missing values in revenue column
-sum(is.na(mc3_data$nodes$revenue))
+sum(is.na(mc3_data2$nodes$revenue))
 ```
 
 ## Drop unnecessary columns
@@ -252,57 +257,158 @@ sum(is.na(mc3_data$nodes$revenue))
 A decision was made to drop the *`end_date`* column due to the sheer number of missing values:
 
 ```{r}
-mc3_data$links <- subset(mc3_data$links, select = -end_date)
+# Create a copy of mc3_data2
+mc3_data3 <- mc3_data2
+
+mc3_data3$links <- subset(mc3_data3$links, select = -end_date)
 ```
 
 Verify changes
 
 ```{r}
-colnames(mc3_data$links)
+colnames(mc3_data3$links)
 ```
 
-### Clean Missing Values (Temp)
+```{r}
+view(mc3_data3[["nodes"]])
+view(mc3_data3[["links"]])
+```
+
+## Rename Columns
+
+Remove prefix "\_" from columns to reduce chance of issues later
 
 ```{r}
-# Inspect and clean nodes data
-mc3_data$nodes <- mc3_data$nodes %>%
-  filter_all(all_vars(!is.na(.)))  # Remove rows with any NA values
+# Function to remove leading underscores from column names
+remove_leading_underscores <- function(df) {
+  colnames(df) <- gsub("^_", "", colnames(df))
+  return(df)
+}
 
-# Inspect and clean edges data
-mc3_data$links <- mc3_data$links %>%
-  filter_all(all_vars(!is.na(.)))  # Remove rows with any NA values
+# Create a copy of mc3_data and name it mc3_data3
+mc3_data4 <- mc3_data3
 
-# Ensure all columns have proper data types (e.g., numeric for IDs)
-mc3_data$nodes <- mc3_data$nodes %>%
-  mutate(across(everything(), as.character))  # Convert all columns to character if necessary
+# Apply the function to the nodes and links data frames in mc3_data3
+mc3_data4$nodes <- remove_leading_underscores(mc3_data4$nodes)
+mc3_data4$links <- remove_leading_underscores(mc3_data4$links)
 
-mc3_data$links <- mc3_data$links %>%
-  mutate(across(everything(), as.character))  # Convert all columns to character if necessary
+# Verify the changes in mc3_data4
+colnames(mc3_data4$nodes)
+colnames(mc3_data4$links)
 ```
 
 ## Constructing Network Graph
 
 ### **Modifying network nodes and edges**
 
-```{r}
-id1 <- mc3_data$links %>%
-  select(source) %>%
-  rename(id = source)
+Prepare the **`edges`** dataframe for network analysis by:
 
-id2 <- mc3_data$links %>%
-  select(target) %>%
-  rename (id = target)
-mc3_data$nodes1 <- rbind(id1, id2) %>%
+-   Ensuring all edges are unique.
+
+-   Converting columns to a uniform type.
+
+-   Calculating the weight of each edge (how many times each connection occurs).
+
+-   Removing any self-loops.
+
+```{r}
+mc3_edges <-
+  as_tibble(mc3_data4$links) %>%
   distinct() %>%
-  left_join(mc3_data$nodes,
-            unmatched = "drop")
+  mutate(source = as.character(source),
+         target = as.character(target),
+         type = as.character(type)) %>%
+  group_by(source, target, type) %>%
+  summarise(weights = n()) %>%
+  filter(source != target) %>%
+  ungroup()
 ```
+
+::: callout-note
+The resulting **`mc3_edges`** tibble contains the columns **`source`**, **`target`**, **`type`**, and **`weights`**, where each row represents a unique edge between two nodes with a specific type, and the **`weights`** column represents the number of times that edge occurs.
+:::
+
+Clean and preprocess the **`nodes`** data by:
+
+-   Ensuring that each column has the correct data type for analysis.
+
+-   Selecting only the necessary columns for further analysis or visualization.
+
+```{r}
+mc3_nodes <- as_tibble(mc3_data4$nodes) %>%
+  mutate(country = as.character(country), 
+         id = as.character(id), 
+         ProductServices = as.character(ProductServices), 
+         revenue = as.numeric(as.character(revenue)), 
+         type = as.character(type)) %>%
+  select(id, country, type, revenue, ProductServices)
+```
+
+::: callout-note
+The resulting **`mc3_nodes`** tibble contains the cleaned and correctly typed columns **`id`**, **`country`**, **`type`**, **`revenue`**, and **`ProductServices`**.
+:::
+
+### Keeping unique values
+
+Edges
+
+```{r}
+unique_transaction_types_edges <- mc3_edges %>%
+  select(type) %>%
+  distinct()
+
+# Display the unique transaction types
+print(unique_transaction_types_edges)
+```
+
+::: callout-note
+There are 4 types of edges, namely:
+
+-   Event.Owns.Shareholdership
+
+-   Event.WOrksFor
+
+-   Event.Owns.BeneficialOwnership
+
+-   Relationship.FamilyRelationship
+:::
+
+Nodes
+
+```{r}
+unique_transaction_types_nodes <- mc3_nodes %>%
+  select(type) %>%
+  distinct()
+
+# Display the unique transaction types
+print(unique_transaction_types_nodes)
+```
+
+::: callout-note
+There are 8 types of nodes, namely:
+
+-   Entity.Organization.Company
+
+-   Entity.Organization.LogisticsCompany
+
+-   Entity.Organization.FishingCompany
+
+-   Entity.Organization.FinancialCompany
+
+-   Entity.Organization.NewsCompany
+
+-   Entity.Organization.NGO
+
+-   Entity.Person
+
+-   Entity.Person.CEO
+:::
 
 ### **Plot graph**
 
 ```{r,eval=FALSE}
-mc3_graph <- tbl_graph(nodes = mc3_data$nodes1,
-                       edges = mc3_data$links,
+mc3_graph <- tbl_graph(nodes = mc3_data4$nodes1,
+                       edges = mc3_data4$links,
                        directed = FALSE) %>%
   mutate(betweeness_centrality = 
            centrality_betweenness(),
