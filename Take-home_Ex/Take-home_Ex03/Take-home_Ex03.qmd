@@ -404,33 +404,128 @@ There are 8 types of nodes, namely:
 -   Entity.Person.CEO
 :::
 
-### **Plot graph**
+Extract all the source and target nodes
 
-```{r,eval=FALSE}
-mc3_graph <- tbl_graph(nodes = mc3_data4$nodes1,
-                       edges = mc3_data4$links,
-                       directed = FALSE) %>%
-  mutate(betweeness_centrality = 
-           centrality_betweenness(),
-         closeness_centrality = 
-           centrality_closeness())
+Drop any unmatched nodes
+
+```{r}
+id1 <- mc3_edges %>%
+  select(source) %>%
+  rename(id = source)
+
+id2 <- mc3_edges %>%
+  select(target) %>%
+  rename(id = target)
+
+mc3_nodes1 <- rbind(id1, id2) %>%
+  distinct() %>%
+  left_join(mc3_nodes, by = c("id" = "id")) %>%
+  mutate(unmatched = "drop")
 ```
 
-```{r,eval=FALSE}
-mc3_graph
+Verify results
+
+```{r}
+print(mc3_nodes1)
+```
+
+## **Plot graph**
+
+```{r}
+mc3_graph <- tbl_graph(nodes = mc3_nodes1, edges = mc3_edges, directed = FALSE) %>%
+  mutate(betweenness_centrality = centrality_betweenness(),
+         closeness_centrality = centrality_closeness())
+  theme_graph()
+```
+
+### Top Nodes
+
+```{r}
+
+# Identify top nodes by betweenness centrality
+top_nodes <- mc3_graph %>% 
+  as_tibble() %>% 
+  filter(betweenness_centrality >= 3000000)
 ```
 
 ## Graph Visualisation
 
-```{r,eval=FALSE}
-mc3_graph %>%
-  filter(betweeness_centrality >= 300000) %>%
-  ggraph(layout = "fr") +
-  geom_edge_link(aes(alpha = 0.5)) +
-  geom_node_point(aes(
-    size = betweeness_centrality,
-    color = "salmon",
-    alpha = 0.5)) +
-  scale_size_continuous(range=c(1,10)) #+
-  #theme_graph()
+### Filter for Atypical Business Transactions
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+# Filter edges for atypical business transactions
+atypical_edges <- mc3_edges %>%
+  filter(type %in% c("Event.Owns.Shareholdership", "Event.WorksFor", "Event.Owns.BeneficialOwnership"))
+
+# Extract nodes that are part of these transactions
+atypical_nodes <- mc3_nodes %>%
+  filter(id %in% unique(c(atypical_edges$source, atypical_edges$target)))
+
+# Create the graph object with filtered data
+atypical_graph <- tbl_graph(nodes = atypical_nodes, edges = atypical_edges, directed = FALSE) %>%
+  mutate(betweenness_centrality = centrality_betweenness(),
+         closeness_centrality = centrality_closeness())
+
+# Define higher centrality thresholds for more filtering
+betweenness_threshold <- quantile(atypical_graph %>% activate(nodes) %>% pull(betweenness_centrality), 0.995)
+closeness_threshold <- quantile(atypical_graph %>% activate(nodes) %>% pull(closeness_centrality), 0.995)
+
+# Filter nodes based on higher centrality thresholds
+filtered_graph <- atypical_graph %>%
+  activate(nodes) %>%
+  filter(betweenness_centrality >= betweenness_threshold | closeness_centrality >= closeness_threshold) %>%
+  activate(edges) %>%
+  filter(edge_is_between())
+
+# Display the refined network graph
+ggraph(filtered_graph, layout = "fr") + # Using Fruchterman-Reingold layout
+  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) + # Customize edge appearance
+  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) + # Customize node appearance
+  scale_color_viridis_c() + # Use viridis color scale
+  theme_void() + # Use a void theme
+  labs(title = "Refined Network Graph of Atypical Business Transactions",
+       subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
+       caption = "Data Source: mc3.json") # Add titles and captions
 ```
+
+## Code
+
+```{r,eval=FALSE}
+# Filter edges for atypical business transactions
+atypical_edges <- mc3_edges %>%
+  filter(type %in% c("Event.Owns.Shareholdership", "Event.WorksFor", "Event.Owns.BeneficialOwnership"))
+
+# Extract nodes that are part of these transactions
+atypical_nodes <- mc3_nodes %>%
+  filter(id %in% unique(c(atypical_edges$source, atypical_edges$target)))
+
+# Create the graph object with filtered data
+atypical_graph <- tbl_graph(nodes = atypical_nodes, edges = atypical_edges, directed = FALSE) %>%
+  mutate(betweenness_centrality = centrality_betweenness(),
+         closeness_centrality = centrality_closeness())
+
+# Define higher centrality thresholds for more filtering
+betweenness_threshold <- quantile(atypical_graph %>% activate(nodes) %>% pull(betweenness_centrality), 0.995)
+closeness_threshold <- quantile(atypical_graph %>% activate(nodes) %>% pull(closeness_centrality), 0.995)
+
+# Filter nodes based on higher centrality thresholds
+filtered_graph <- atypical_graph %>%
+  activate(nodes) %>%
+  filter(betweenness_centrality >= betweenness_threshold | closeness_centrality >= closeness_threshold) %>%
+  activate(edges) %>%
+  filter(edge_is_between())
+
+# Display the refined network graph
+ggraph(filtered_graph, layout = "fr") + # Using Fruchterman-Reingold layout
+  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) + # Customize edge appearance
+  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) + # Customize node appearance
+  scale_color_viridis_c() + # Use viridis color scale
+  theme_void() + # Use a void theme
+  labs(title = "Refined Network Graph of Atypical Business Transactions",
+       subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
+       caption = "Data Source: mc3.json") # Add titles and captions
+```
+:::
