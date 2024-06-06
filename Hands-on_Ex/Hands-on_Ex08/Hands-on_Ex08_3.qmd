@@ -129,7 +129,7 @@ NGA_wp <- NGA_wp %>%
   mutate(pct_nonfunctional = wp_nonfunctional/total_wp)
 ```
 
-##  **Plotting map of rate**
+## **Plotting map of rate**
 
 Choropleth map showing the distribution of percentage functional water point by LGA
 
