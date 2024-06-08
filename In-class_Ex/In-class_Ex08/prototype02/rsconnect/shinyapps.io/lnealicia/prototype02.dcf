@@ -1,0 +1,12 @@
+name: prototype02
+title: prototype02
+username: lnealicia
+account: lnealicia
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 12148179
+bundleId: 8716736
+url: https://lnealicia.shinyapps.io/prototype02/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

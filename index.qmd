@@ -28,7 +28,7 @@ listing:
 toc: false
 ---
 
-Welcome to **ISSS608 Visual Analytics and Applications** homepage. In this website, you will find my coursework.
+Welcome to **ISSS608 Visual Analytics and Applications** homepage. In this website, you will find my coursework. Materials here are based on [https://isss608-ay2023-24apr.netlify.app/](https://isss608-ay2023-24apr.netlify.app/lesson) by Prof Kam Tin Seong from SMU.
 
 ![](images/clipboard-514459332.png)
 
