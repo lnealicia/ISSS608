@@ -7,7 +7,7 @@ execute:
   eval: true
   echo: true
   warning: false
-  freeze: false
+  freeze: true
 ---
 
 # **The Source**
@@ -626,7 +626,7 @@ mc3_graph <- tbl_graph(nodes = mc3_nodes_1_filtered3, edges = mc3_links_1_filter
   theme_graph()
 ```
 
-Identify most active people and businesses
+Plot Graph
 
 ```{r,eval=FALSE}
 # Assuming you have a function to calculate centrality for each year
@@ -663,7 +663,13 @@ ggplot(centrality_over_time, aes(x = period, y = mean_betweenness)) +
 
 ```
 
+::: callout-note
+The nodes represent entities e.g. Logistics Companies, Fishing Companies, and the edges represent relationships between them e.g. Shareholdership. Overall, this graph can help identify central or influential transactions/entities within the network, as well as potential outliers or anomalies based on their position and connectivity patterns.
+:::
+
 ### Identify Top Nodes
+
+Filter out the top nodes,
 
 ```{r,eval=FALSE}
 # Identify top nodes by betweenness centrality

@@ -1074,7 +1074,7 @@ Note
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">closeness_centrality =</span> <span class="fu">centrality_closeness</span>())</span>
 <span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_graph</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>Identify most active people and businesses</p>
+<p>Plot Graph</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Assuming you have a function to calculate centrality for each year</span></span>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>calculate_centrality_over_time <span class="ot">&lt;-</span> <span class="cf">function</span>(nodes, edges, <span class="at">time_unit =</span> <span class="st">"year"</span>) {</span>
@@ -1108,9 +1108,23 @@ Note
 <span id="cb53-30"><a href="#cb53-30" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Mean Betweenness Centrality"</span>) <span class="sc">+</span></span>
 <span id="cb53-31"><a href="#cb53-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The nodes represent entities e.g.&nbsp;Logistics Companies, Fishing Companies, and the edges represent relationships between them e.g.&nbsp;Shareholdership. Overall, this graph can help identify central or influential transactions/entities within the network, as well as potential outliers or anomalies based on their position and connectivity patterns.</p>
+</div>
+</div>
 </section>
 <section id="identify-top-nodes" class="level3">
 <h3 class="anchored" data-anchor-id="identify-top-nodes">Identify Top Nodes</h3>
+<p>Filter out the top nodes,</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Identify top nodes by betweenness centrality</span></span>
 <span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>top_nodes <span class="ot">&lt;-</span> mc3_graph <span class="sc">%&gt;%</span> </span>
