@@ -377,44 +377,12 @@ view(mc3_data6[["nodes"]])
 view(mc3_data6[["links"]])
 ```
 
-## Extract Nodes
-
-```{r}
-mc3_nodes <- as_tibble(mc3_data6$nodes)
-```
-
-Save as rds file for future use
-
-```{r}
-write_rds(mc3_nodes, "data/rds/mc3_nodes.rds")
-```
-
-## Extract Links
-
-```{r}
-mc3_links <- as_tibble(mc3_data6$links) %>% 
-  distinct() 
-```
-
-Save as rds file for future use
-
-```{r}
-write_rds(mc3_links, "data/rds/mc3_links.rds")
-```
-
 # Visualize Changes in Corporate Structures Over Time
-
-Load rds file
-
-```{r,eval=FALSE}
-mc3_links <- readRDS("data/rds/mc3_links.rds")
-mc3_nodes <- readRDS("data/rds/mc3_nodes.rds")
-```
 
 The plot shows how transaction volume changes over time, which helps identify periods of increased or decreased activity
 
 ```{r}
-transactions_over_time <- mc3_links %>%
+transactions_over_time <- mc3_data6$links %>%
   group_by(start_date) %>%
   summarize(count = n())
 ```
@@ -454,123 +422,149 @@ We can see that from the start of the dataset until about year 2000, there were 
 We should focus the analysis from year 2005 onwards.
 :::
 
+## Extract Nodes
+
+```{r}
+mc3_nodes <- as_tibble(mc3_data6$nodes) %>%
+  mutate(country = as.character(country), 
+         id = as.character(id), 
+         ProductServices = as.character(ProductServices), 
+         revenue = as.numeric(as.character(revenue)), 
+         type2 = as.character(type2)) %>%
+  select(id, country, type2, revenue, ProductServices)
+```
+
+Save as rds file for future use
+
+```{r}
+write_rds(mc3_nodes, "data/rds/mc3_nodes.rds")
+```
+
+## Extract Links
+
+```{r}
+mc3_links <- as_tibble(mc3_data6$links) %>% 
+  distinct() %>%
+  mutate(source = as.character(source),
+         target = as.character(target),
+         type2 = as.character(type2)) %>%
+  group_by(source, target, type2) %>%
+  summarise(weights = n()) %>%
+  filter(source != target) %>%
+  ungroup()
+```
+
+Save as rds file for future use
+
+```{r}
+write_rds(mc3_links, "data/rds/mc3_links.rds")
+```
+
 ## Identify and Visualize Transactions
 
-### Filter Transactions and Nodes of Interest
+Load rds file
 
-By filtering the transactions and nodes, the network graph highlights significant relationships and transactions that stand out.
-
-```{r}
-# Filter edges for atypical business transactions
-atypical_edges <- mc3_links %>%
-  filter(type2 %in% c("Shareholdership", "WorksFor", "BeneficialOwnership"))
-
-# Extract nodes that are part of these transactions
-atypical_nodes <- mc3_nodes %>%
-  filter(id %in% unique(c(atypical_edges$source, atypical_edges$target)))
+```{r,eval=FALSE}
+mc3_links <- readRDS("data/rds/mc3_links.rds")
+mc3_nodes <- readRDS("data/rds/mc3_nodes.rds")
 ```
 
-Drop unnecessary columns, then remove rows with NA and NaN values.
+Find unique IDs
 
 ```{r}
-#edges
-atypical_edges2 <- atypical_edges %>%
-  select(-algorithm, -end_date, -type1) %>%
-  drop_na() %>%
-  mutate_if(is.numeric, ~ replace(., is.nan(.), NA_real_)) %>%
-  drop_na()
+# Extract unique IDs from edge source and target
+id1 <- mc3_links %>%
+  select(source) %>%
+  rename(id = source)
 
-# nodes
-atypical_nodes2 <- atypical_nodes %>%
-  select(-type1, -dob, -algorithm, -TradeDescription) %>%
-  drop_na() %>%
-  mutate_if(is.numeric, ~ replace(., is.nan(.), NA_real_)) %>%
-  drop_na()
-```
+id2 <- mc3_links %>%
+  select(target) %>%
+  rename(id = target)
 
-Check number of nodes and edges
-
-```{r}
-# Check the number of nodes
-num_nodes <- nrow(atypical_nodes2)
-num_edges <- nrow(atypical_edges2)
-
-num_nodes
-num_edges
-
-```
-
-::: callout-note
-It seems the number of nodes (8846) is less than the number of edges (61096), which will cause issues when creating the graph object.
-
-To create a graph object, we need to ensure that all nodes in the edges are present in the nodes data frame.
-
-One way to handle this is to filter out edges where either the source or target node is not present in the nodes data frame.
-:::
-
-Filter edges
-
-```{r}
-# Filter edges to only include nodes present in the nodes data frame
-atypical_edges3 <- atypical_edges2 %>%
-  filter(source %in% atypical_nodes2$node_id & target %in% atypical_nodes2$node_id)
+# Combine unique IDs and remove duplicates
+mc3_nodes2 <- rbind(id1, id2) %>%
+  distinct() %>%
+  # Join with node information
+  left_join(mc3_nodes, by = c("id" = "id")) %>%
+  # Add an indicator for unmatched IDs
+  mutate(unmatched = "drop")
 ```
 
 ### Create Graph Object
 
-```{r}
-# make a copy of atypical_nodes2 for ease of reference
-atypical_nodes3 <- atypical_nodes2
-
-# Create the graph object with filtered edges
-atypical_graph <- tbl_graph(nodes = atypical_nodes3, edges = atypical_edges3, directed = FALSE) %>%
+```{r,echo=FALSE}
+mc3_graph <- tbl_graph(nodes = mc3_nodes2, edges = mc3_links, directed = FALSE) %>%
   mutate(betweenness_centrality = centrality_betweenness(),
          closeness_centrality = centrality_closeness())
+  theme_graph()
 ```
 
-### Compute Centrality Measures
+### Identify Top Nodes
 
 ```{r}
-# Define centrality thresholds for filtering
-betweenness_threshold <- quantile(atypical_graph %>% activate(nodes) %>% pull(betweenness_centrality), 0.995, na.rm = TRUE)
-closeness_threshold <- quantile(atypical_graph %>% activate(nodes) %>% pull(closeness_centrality), 0.995, na.rm = TRUE)
+# Identify top nodes by betweenness centrality
+top_nodes <- mc3_graph %>% 
+  as_tibble() %>% 
+  filter(betweenness_centrality >= 3000000)
+```
 
-# Filter nodes based on centrality thresholds
+### Filtering Atypical Business Transactions
+
+```{r}
+# Filter edges for atypical business transactions
+atypical_edges <- mc3_links %>%
+  filter(type2 %in% c("Shareholdership", "WorksFor", "Owns.BeneficialOwnership"))
+
+# Extract nodes that are part of these transactions
+atypical_nodes <- mc3_nodes %>%
+  filter(id %in% unique(c(atypical_edges$source, atypical_edges$target)))
+
+# Create the graph object with filtered data
+atypical_graph <- tbl_graph(nodes = atypical_nodes, edges = atypical_edges, directed = FALSE) %>%
+  mutate(betweenness_centrality = centrality_betweenness(),
+         closeness_centrality = centrality_closeness())
+
+# Define higher centrality thresholds for more filtering
+betweenness_threshold <- quantile(atypical_graph %>% activate(nodes) %>% pull(betweenness_centrality), 0.995)
+closeness_threshold <- quantile(atypical_graph %>% activate(nodes) %>% pull(closeness_centrality), 0.995)
+
+# Filter nodes based on higher centrality thresholds
+filtered_graph <- atypical_graph %>%
+  activate(nodes) %>%
+  filter(betweenness_centrality >= betweenness_threshold | closeness_centrality >= closeness_threshold) %>%
+  activate(edges) %>%
+  filter(edge_is_between())
+
+# Display the refined network graph
+ggraph(filtered_graph, layout = "fr") + # Using Fruchterman-Reingold layout
+  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) + # Customize edge appearance
+  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) + # Customize node appearance
+  scale_color_viridis_c() + # Use viridis color scale
+  theme_void() + # Use a void theme
+  labs(title = "Refined Network Graph of Atypical Business Transactions",
+       subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
+       caption = "Data Source: mc3.json") # Add titles and captions
+```
+
+::: callout-note
+The resulting graph needs further refinement for improved clarity. We will explore using a filter based on 99.5 percentile.
+:::
+
+### Refined Graph
+
+```{r}
+# Define higher centrality thresholds for more filtering
+betweenness_threshold <- quantile(atypical_graph %>% 
+                                    activate(nodes) %>% 
+                                    pull(betweenness_centrality), 0.99)
+closeness_threshold <- quantile(atypical_graph %>% 
+                                  activate(nodes) %>% 
+                                  pull(closeness_centrality), 0.995)
+
+# Filter nodes based on higher centrality thresholds
 filtered_graph <- atypical_graph %>%
   activate(nodes) %>%
   filter(betweenness_centrality >= betweenness_threshold | closeness_centrality >= closeness_threshold) %>%
   activate(edges) %>%
   filter(edge_is_between())
 ```
-
-## Plot Centrality
-
-::: panel-tabset
-## Plot
-
-```{r,echo=FALSE}
-# Display the refined network graph
-ggraph(filtered_graph, layout = "fr") + # Using Fruchterman-Reingold layout
-  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) + # Customize edge appearance
-  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) + # Customize node appearance
-  scale_color_viridis_c() + # Use viridis color scale
-  theme_void() + # Use a void theme
-  labs(title = "Refined Network Graph of Atypical Business Transactions",
-       subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
-       caption = "Data Source: mc3.json") # Add titles and captions
-```
-
-## Code
-
-```{r,eval=FALSE}
-# Display the refined network graph
-ggraph(filtered_graph, layout = "fr") + # Using Fruchterman-Reingold layout
-  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) + # Customize edge appearance
-  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) + # Customize node appearance
-  scale_color_viridis_c() + # Use viridis color scale
-  theme_void() + # Use a void theme
-  labs(title = "Refined Network Graph of Atypical Business Transactions",
-       subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
-       caption = "Data Source: mc3.json") # Add titles and captions
-```
-:::
