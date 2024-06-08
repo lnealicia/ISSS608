@@ -531,26 +531,11 @@ atypical_graph <- tbl_graph(nodes = atypical_nodes3, edges = atypical_edges3, di
 ### Compute Centrality Measures
 
 ```{r}
-# Compute betweenness centrality using igraph
-betweenness <- igraph::betweenness(as.igraph(atypical_graph))
-
-# Compute closeness centrality using igraph
-closeness <- igraph::closeness(as.igraph(atypical_graph))
-
-# Add centrality measures to the graph object
-atypical_graph <- atypical_graph %>%
-  mutate(betweenness_centrality = betweenness,
-         closeness_centrality = closeness)
-```
-
-### Further Filtering
-
-```{r}
-# Define higher centrality thresholds for more filtering
+# Define centrality thresholds for filtering
 betweenness_threshold <- quantile(atypical_graph %>% activate(nodes) %>% pull(betweenness_centrality), 0.995, na.rm = TRUE)
 closeness_threshold <- quantile(atypical_graph %>% activate(nodes) %>% pull(closeness_centrality), 0.995, na.rm = TRUE)
 
-# Filter nodes based on higher centrality thresholds
+# Filter nodes based on centrality thresholds
 filtered_graph <- atypical_graph %>%
   activate(nodes) %>%
   filter(betweenness_centrality >= betweenness_threshold | closeness_centrality >= closeness_threshold) %>%
@@ -565,27 +550,27 @@ filtered_graph <- atypical_graph %>%
 
 ```{r,echo=FALSE}
 # Display the refined network graph
-ggraph(filtered_graph, layout = "fr") + 
-  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) +
-  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) +
-  scale_color_viridis_c(transform = scales::log10_trans(), na.value = "grey90") +  # Updated
-  theme_void() +
+ggraph(filtered_graph, layout = "fr") + # Using Fruchterman-Reingold layout
+  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) + # Customize edge appearance
+  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) + # Customize node appearance
+  scale_color_viridis_c() + # Use viridis color scale
+  theme_void() + # Use a void theme
   labs(title = "Refined Network Graph of Atypical Business Transactions",
        subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
-       caption = "Data Source: mc3.json")
+       caption = "Data Source: mc3.json") # Add titles and captions
 ```
 
 ## Code
 
 ```{r,eval=FALSE}
 # Display the refined network graph
-ggraph(filtered_graph, layout = "fr") + 
-  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) +
-  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) +
-  scale_color_viridis_c(transform = scales::log10_trans(), na.value = "grey90") +  # Updated
-  theme_void() +
+ggraph(filtered_graph, layout = "fr") + # Using Fruchterman-Reingold layout
+  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) + # Customize edge appearance
+  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) + # Customize node appearance
+  scale_color_viridis_c() + # Use viridis color scale
+  theme_void() + # Use a void theme
   labs(title = "Refined Network Graph of Atypical Business Transactions",
        subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
-       caption = "Data Source: mc3.json")
+       caption = "Data Source: mc3.json") # Add titles and captions
 ```
 :::
