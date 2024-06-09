@@ -78,8 +78,10 @@ The following R packages will be used:
 
 -   plotly
 
+-   ggiraph
+
 ```{r}
-pacman::p_load(tidytext, readtext, quanteda, tidyverse, jsonlite, igraph, tidygraph, ggraph, visNetwork, clock, graphlayouts,plotly)
+pacman::p_load(tidytext, readtext, quanteda, tidyverse, jsonlite, igraph, tidygraph, ggraph, visNetwork, clock, graphlayouts,plotly,ggiraph)
 ```
 
 ## **Importing JSON File**
@@ -1036,8 +1038,8 @@ Plot Graph
 ## Plot
 
 ```{r,echo=FALSE}
-# Create the graph plot using ggraph
-ggraph_plot <- ggraph(graph_data, layout = "fr") +  # Using Fruchterman-Reingold layout
+# Plot the directed graph
+ggraph(graph_data, layout = "fr") +  # Using Fruchterman-Reingold layout
   geom_edge_link(aes(label = as.character(tyear)),  # Only label with tyear
                  arrow = arrow(length = unit(4, 'mm')),  # Add arrows to indicate direction
                  end_cap = circle(3, 'mm'),  # Cap the end of the edges with a circle
@@ -1049,21 +1051,15 @@ ggraph_plot <- ggraph(graph_data, layout = "fr") +  # Using Fruchterman-Reingold
   geom_node_text(aes(label = name), vjust = 1.5, size = 4) +  # Add node labels
   theme_void() +  # Use a void theme
   labs(title = "Directed Network Graph of Key Personnel Transactions",
-       subtitle = "Nodes represent unique sources and targets, edges labeled with start year",
+       subtitle = "Nodes represent unique sources and targets, edges labeled with year",
        caption = "Data Source: keypersonnel")  # Add titles and captions
-
-# Convert ggraph plot to plotly object
-plotly_plot <- ggplotly(ggraph_plot)
-
-# Display the interactive plot
-plotly_plot
 ```
 
 ## Code
 
 ```{r,eval=FALSE}
-# Create the graph plot using ggraph
-ggraph_plot <- ggraph(graph_data, layout = "fr") +  # Using Fruchterman-Reingold layout
+# Plot the directed graph
+ggraph(graph_data, layout = "fr") +  # Using Fruchterman-Reingold layout
   geom_edge_link(aes(label = as.character(tyear)),  # Only label with tyear
                  arrow = arrow(length = unit(4, 'mm')),  # Add arrows to indicate direction
                  end_cap = circle(3, 'mm'),  # Cap the end of the edges with a circle
@@ -1075,14 +1071,9 @@ ggraph_plot <- ggraph(graph_data, layout = "fr") +  # Using Fruchterman-Reingold
   geom_node_text(aes(label = name), vjust = 1.5, size = 4) +  # Add node labels
   theme_void() +  # Use a void theme
   labs(title = "Directed Network Graph of Key Personnel Transactions",
-       subtitle = "Nodes represent unique sources and targets, edges labeled with start year",
+       subtitle = "Nodes represent unique sources and targets, edges labeled with year",
        caption = "Data Source: keypersonnel")  # Add titles and captions
 
-# Convert ggraph plot to plotly object
-plotly_plot <- ggplotly(ggraph_plot)
-
-# Display the interactive plot
-plotly_plot
 ```
 :::
 
