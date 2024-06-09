@@ -334,16 +334,20 @@ The steps below will be used to split text in type column of **nodes** into two 
 # Make a copy of mc3_data4
 mc3_data5 <- mc3_data4
 
-# Split the type column into two columns, handling the special case
+# Split the type column into two columns
 mc3_data5$nodes <- mc3_data5$nodes %>%
   mutate(
-    type1 = sub("(.*?\\..*?)(\\.[^.]+)?$", "\\1", type),
-    type2 = ifelse(grepl("\\.", type), sub(".*\\.", "", type), "Organization")
+    type1 = sub("^(\\S+).*", "\\1", type),
+    type2 = sub("^\\S+\\.(.*)", "\\1", type)
   )
 
-# remove the original 'type' column
+# If there's only one word in type, set type2 to NA
+mc3_data5$nodes$type2 <- ifelse(grepl("\\.", mc3_data5$nodes$type), mc3_data5$nodes$type2, NA)
+
+# Remove the original 'type' column
 mc3_data5$nodes <- mc3_data5$nodes %>%
   select(-type)
+
 ```
 
 The steps below will be used to split text in type column of **links** into two columns: namely type1 and type2.
@@ -565,7 +569,7 @@ Drop na values
 
 ```{r}
 mc3_nodes2_1 <- mc3_nodes_1 %>%
-  drop_na(founding_date)
+  drop_na(founding_date) # removes Persons and Persons CEO
 ```
 
 Number of nodes can be used to determine the number of active companies per year.
@@ -647,41 +651,259 @@ We also see a dip around 2035, before the numbers increase again. Also likely du
 
 ## Centrality Measures Over Time
 
-### Find unique IDs
+### **Modifying network nodes and edges**
+
+Prepare the **`edges`** dataframe for network analysis by:
+
+-   Ensuring all edges are unique.
+
+-   Converting columns to a uniform type.
+
+-   Calculating the weight of each edge (how many times each connection occurs).
+
+-   Removing any self-loops.
 
 ```{r}
-# Duplicate mc3_nodes_1_filtered
-mc3_nodes_1_filtered2 <- mc3_nodes_1_filtered
+mc3_edges <-
+  as_tibble(mc3_links_1_filtered2) %>%
+  distinct() %>%
+  mutate(source = as.character(source),
+         target = as.character(target),
+         type = as.character(type2),
+         tyear = as.integer(transaction_year)) %>%
+  group_by(source, target, type,tyear) %>%
+  summarise(weights = n()) %>%
+  filter(source != target) %>%
+  ungroup()
+```
 
-# Extract unique IDs from edge source and target
+::: callout-note
+The resulting **`mc3_edges`** tibble contains the columns **`source`**, **`target`**, **`type`**, **`year`**, and **`weights`**, where each row represents a unique edge between two nodes with a specific type, and the **`weights`** column represents the number of times that edge occurs.
+:::
+
+Clean and preprocess the **`nodes`** data by:
+
+-   Ensuring that each column has the correct data type for analysis.
+
+-   Selecting only the necessary columns for further analysis or visualization.
+
+```{r}
+mc3_nodes <- as_tibble(mc3_nodes_1) %>%
+  mutate(country = as.character(country), 
+         id = as.character(id), 
+         ProductServices = as.character(ProductServices), 
+         revenue = as.numeric(as.character(revenue)), 
+         type = as.character(type2)) %>%
+  select(id, country, type, revenue, ProductServices)
+```
+
+::: callout-note
+The resulting **`mc3_nodes`** tibble contains the cleaned and correctly typed columns **`id`**, **`country`**, **`type`**, **`revenue`**, and **`ProductServices`**.
+:::
+
+### Keeping unique values
+
+Edges
+
+```{r}
+unique_transaction_types_edges <- mc3_edges %>%
+  select(type) %>%
+  distinct()
+
+# Display the unique transaction types
+print(unique_transaction_types_edges)
+```
+
+::: callout-note
+There are 4 types of edges, namely:
+
+-   Shareholdership
+
+-   WorksFor
+
+-   BeneficialOwnership
+
+-   FamilyRelationship
+:::
+
+Nodes
+
+```{r}
+unique_transaction_types_nodes <- mc3_nodes %>%
+  select(type) %>%
+  distinct()
+
+# Display the unique transaction types
+print(unique_transaction_types_nodes)
+```
+
+::: callout-note
+There are 8 types of nodes, namely:
+
+-   Company
+
+-   LogisticsCompany
+
+-   FishingCompany
+
+-   FinancialCompany
+
+-   NewsCompany
+
+-   NGO
+
+-   Person
+
+-   CEO
+:::
+
+### Extract all the source and target nodes ###
+Extract all the source and target nodes, then, drop any unmatched nodes
+
+```{r}
+id1 <- mc3_edges %>%
+  select(source) %>%
+  rename(id = source)
+
+id2 <- mc3_edges %>%
+  select(target) %>%
+  rename(id = target)
+
+mc3_nodes1 <- rbind(id1, id2) %>%
+  distinct() %>%
+  left_join(mc3_nodes, by = c("id" = "id")) %>%
+  mutate(unmatched = "drop")
+```
+
+Verify results
+
+```{r}
+print(mc3_nodes1)
+```
+
+### Plot graph
+
+```{r,echo=FALSE}
+mc3_graph <- tbl_graph(nodes = mc3_nodes1, edges = mc3_edges, directed = TRUE) %>%
+  mutate(betweenness_centrality = centrality_betweenness(),
+         closeness_centrality = centrality_closeness())
+  theme_graph()
+```
+
+
+
+
+
+
+
+### \*\*\*\*Find unique IDs
+
+```{r}
+# Extract unique IDs from link source
 id1 <- mc3_links_1_filtered2 %>%
   select(source) %>%
   distinct() %>%
   rename(id = source)
 
+# Extract unique IDs from link target
 id2 <- mc3_links_1_filtered2 %>%
   select(target) %>%
   distinct() %>%
   rename(id = target)
 
-# Combine unique IDs and remove duplicates
-mc3_nodes_1_filtered2 <- rbind(id1, id2) %>%
-  distinct() %>%
-  # Join with node information
-  left_join(mc3_nodes_1_filtered2, by = "id") %>%
-  # Add an indicator for unmatched IDs
-  mutate(unmatched = ifelse(is.na(id), "drop", ""))
+# Combine unique IDs from source and target, and remove duplicates
+id_unique <- rbind(id1, id2) %>%
+  distinct() 
 
-# Drop unmatched nodes
-mc3_nodes_1_filtered3 <- mc3_nodes_1_filtered2 %>%
+# Duplicate mc3_nodes3_1
+mc3_nodes4_1 <- mc3_nodes3_1
+
+# Perform a left join with the original nodes
+mc3_nodes4_1 <- left_join(id_unique, mc3_nodes4_1, by = "id")
+
+# Add an indicator for unmatched IDs based on a column from mc3_nodes4_1
+mc3_nodes4_1 <- mc3_nodes4_1 %>%
+  mutate(unmatched = ifelse(is.na(founding_date), "drop", ""))
+
+# Filter out unmatched nodes
+mc3_nodes4_1 <- mc3_nodes4_1 %>%
   filter(unmatched != "drop")
 
+# Drop column unmatched
+mc3_nodes4_1 <- mc3_nodes4_1 %>%
+  select(-unmatched)
 ```
+
+::: callout-note
+Note: 0 rows dropped, all nodes have valid links
+:::
+
+Check for NA values
+
+```{r}
+# Check for NA values in mc3_nodes4_1
+colSums(is.na(mc3_nodes4_1))
+
+# Check for NA values in mc3_links_1_filtered2
+colSums(is.na(mc3_links_1_filtered2))
+```
+
+::: callout-note
+There seems to be missing values in **nodes** for some entities for their Point of Contact and Head of Organisation. We will replace these values with the id.
+:::
+
+Replace missing values
+
+```{r}
+#duplicate mc3_nodes4_1
+mc3_nodes5_1 <- mc3_nodes4_1
+
+# Replace missing values in PointOfContact and HeadOfOrg with values from id
+mc3_nodes5_1 <- mc3_nodes5_1 %>%
+  mutate(PointOfContact = ifelse(is.na(PointOfContact), as.character(id), PointOfContact),
+         HeadOfOrg = ifelse(is.na(HeadOfOrg), as.character(id), HeadOfOrg))
+```
+
+Verify changes
+
+```{r}
+# Check for NA values in mc3_nodes5_1
+colSums(is.na(mc3_nodes5_1))
+```
+
+Check for Nan Values
+
+```{r}
+# Check for NaN values in mc3_nodes5_1
+colSums(is.nan(as.matrix(mc3_nodes5_1[, sapply(mc3_nodes4_1, is.numeric)])))
+
+# Check for NaN values in mc3_links_1_filtered2
+colSums(is.nan(as.matrix(mc3_links_1_filtered2[, sapply(mc3_links_1_filtered2, is.numeric)])))
+```
+
+::: callout-note
+Note: There are no Nan values
+:::
 
 ### Create Graph Object
 
 ```{r,eval=FALSE}
-mc3_graph <- tbl_graph(nodes = mc3_nodes_1_filtered3, edges = mc3_links_1_filtered2, directed = TRUE) %>%
+# Create graph from edges
+mc3_graph <- tbl_graph(edges = mc3_links_1_filtered2, directed = TRUE) %>%
+  activate(nodes) %>%
+  left_join(mc3_nodes5_1, by = c("source" = "id")) %>%
+  as_tbl_graph()
+```
+
+### Calculate Centrality
+
+```{r}
+closeness <- mc3_graph %>%
+  mutate(closeness_centrality = centrality_closeness())
+```
+
+```{r,eval=FALSE}
+mc3_graph <- tbl_graph(nodes = mc3_nodes5_1, edges = mc3_links_1_filtered2, directed = TRUE) %>%
   mutate(betweenness_centrality = centrality_betweenness(),
          closeness_centrality = centrality_closeness())
   theme_graph()
