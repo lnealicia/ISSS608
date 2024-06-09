@@ -825,7 +825,15 @@ ggraph(mc3_graph, layout = "fr") + # Using Fruchterman-Reingold layout
 ```
 :::
 
-### Top Nodes
+::: callout-note
+The grey circular portion in the center of the network graph does not represent any specific data or entities. It is a visual byproduct resulting from the dense clustering of nodes and edges in that central region. This effect is particularly noticeable in dense, highly interconnected network visualizations where nodes and edges are concentrated in a small space.
+
+Thus, we filter the nodes to refine the graph and improve clarity.
+:::
+
+### Refined Network Graph
+
+#### Top Nodes
 
 Identify top 20 nodes by betweenness centrality
 
@@ -839,7 +847,7 @@ top_nodes2 <- top_nodes %>%
   top_n(20, wt = betweenness_centrality)
 ```
 
-### List of most active people and businesses
+#### List of most active people and businesses
 
 ```{r}
 top_nodes2
