@@ -225,6 +225,8 @@ In addition, according to the *VAST2024 - MC3 Data Description* file, all empty 
 
 ## Setting empty values in *`revenue`* to 0
 
+Set NA values to 0 to aid analysis
+
 ```{r}
 # Create a copy of mc3_data
 mc3_data2 <- mc3_data
@@ -311,6 +313,12 @@ summary(mc3_data4$nodes %>% select(founding_date, last_edited_date, date_added, 
 
 # Summary of date columns in links
 summary(mc3_data4$links %>% select(start_date))
+
+# Check the types of the date columns in nodes
+str(mc3_data4$nodes %>% select(founding_date, last_edited_date, date_added, dob))
+
+# Check the types of the date columns in links
+str(mc3_data4$links %>% select(start_date))
 ```
 
 ```{r,eval=FALSE}
@@ -344,7 +352,8 @@ The steps below will be used to split text in type column of **links** into two 
 # Make a copy of mc3_data4
 mc3_data6 <- mc3_data5
 
-# Split the type column into two columns, handling the special case
+# Split the type column into two columns
+# There are no special cases, exception left blank
 mc3_data6$links <- mc3_data6$links %>%
   mutate(
     type1 = sub("(.*?\\..*?)(\\.[^.]+)?$", "\\1", type),
@@ -357,6 +366,14 @@ mc3_data6$links <- mc3_data6$links %>%
 ```
 
 Verify changes
+
+```{r}
+# View the first few rows of the type columns in nodes
+head(mc3_data6$nodes %>% select(type1,type2))
+
+# View the first few rows of the type columns in links
+head(mc3_data6$links %>% select(type1,type2))
+```
 
 ```{r,eval=FALSE}
 view(mc3_data6[["nodes"]])
@@ -375,8 +392,7 @@ mc3_nodes_1 <- as_tibble(mc3_data6$nodes) %>%
           -last_edited_date,
           -algorithm,
           -dob,
-          -type1,
-          -founding_date)
+          -type1)
 ```
 
 For Question 2
@@ -434,14 +450,18 @@ write_rds(mc3_links_1, "data/rds/mc3_links_1.rds")
 write_rds(mc3_links_2, "data/rds/mc3_links_2.rds")
 ```
 
-# Changes in Corporate Structures Over Time
+# Load Data
 
 Load rds file
+
+Note: rds files can be loaded independently of the data wrangling steps above to save time
 
 ```{r,eval=FALSE}
 mc3_links_1 <- readRDS("data/rds/mc3_links_1.rds")
 mc3_nodes_1 <- readRDS("data/rds/mc3_nodes_1.rds")
 ```
+
+# Changes in Corporate Structures Over Time
 
 The plot shows how transaction volume changes over time, which helps identify periods of increased or decreased activity
 
@@ -453,6 +473,8 @@ transactions_over_time <- mc3_links_1 %>%
 ```
 
 ## Number of Transactions over Time
+
+Number of links can be used to determine transactions over time
 
 ::: panel-tabset
 ## Plot
@@ -477,7 +499,7 @@ The dataset spans from year 1952 to 2035.
 
 We can see that from the start of the dataset until about year 2000, there were relatively few transactions. There was a small spike after year 2000, proceeded by exponential growth around 2005. However, there was a dip in transactions in 2035.
 
-The dip could be due to effects after SouthSeafood Express Corp was caught for illegal behaviour and eventually closed.
+The dip could be due to effects after SouthSeafood Express Corp was caught for illegal behaviour and eventually closed in 2035.
 
 Analysis should focus on transactions from year 2005 onwards. Data analysed should also be aggregated by year.
 :::
@@ -539,15 +561,36 @@ It is now clearer that the rapid growth in transactions started around 2005, bef
 
 ## Number of Active Companies Per Year
 
+Drop na values
+
+```{r}
+mc3_nodes2_1 <- mc3_nodes_1 %>%
+  drop_na(founding_date)
+```
+
+Number of nodes can be used to determine the number of active companies per year.
+
 ```{r}
 # Extract year for aggregation
-mc3_nodes_1_filtered <- mc3_nodes_1 %>%
-  mutate(active_year = floor_date(date_added, "year"))
+mc3_nodes3_1 <- mc3_nodes2_1 %>%
+  mutate(active_year = floor_date(founding_date, "year"))
 
-# Calculate the number of active companies per month
-active_companies <- mc3_nodes_1_filtered %>%
+# Calculate the number of active companies per year
+active_companies <- mc3_nodes3_1 %>%
   group_by(active_year) %>%
   summarise(num_active_companies = n())
+```
+
+Summary
+
+```{r}
+# Calculate the summary statistics
+summary_stats <- summary(active_companies$num_active_companies)
+summary_stats
+
+# Extract and save the mean
+# Round to 2 decimal places
+mean_active_companies <- round(summary_stats["Mean"], 2)
 ```
 
 Plot graph
@@ -558,10 +601,18 @@ Plot graph
 ```{r,echo=FALSE}
 # Plot the number of active companies over time
 ggplot(active_companies, aes(x = active_year, y = num_active_companies)) +
+  # line plot
   geom_line(color = "darkgreen") +
   labs(title = "Number of Active Companies Over Time",
        x = "Date",
        y = "Number of Active Companies") +
+  # mean line
+  geom_hline(aes(yintercept = mean_active_companies), 
+             linetype = "dotted", color = "blue") +
+  annotate("text", x = min(active_companies$active_year), 
+           y = mean_active_companies, 
+           label = paste("Mean:", mean_active_companies), 
+           hjust = 0, vjust = -1, color = "blue") +
   theme_minimal()
 
 ```
@@ -571,17 +622,27 @@ ggplot(active_companies, aes(x = active_year, y = num_active_companies)) +
 ```{r,eval=FALSE}
 # Plot the number of active companies over time
 ggplot(active_companies, aes(x = active_year, y = num_active_companies)) +
+  # line plot
   geom_line(color = "darkgreen") +
   labs(title = "Number of Active Companies Over Time",
        x = "Date",
        y = "Number of Active Companies") +
+  # mean line
+  geom_hline(aes(yintercept = mean_active_companies), 
+             linetype = "dotted", color = "blue") +
+  annotate("text", x = min(active_companies$active_year), 
+           y = mean_active_companies, 
+           label = paste("Mean:", mean_active_companies), 
+           hjust = 0, vjust = -1, color = "blue") +
   theme_minimal()
 
 ```
 :::
 
 ::: callout-note
-It can be noted that while the number of transactions showed an increasing trend, the number of active companies are showing a decreasing trend. This suggests that some major players are involved in an increasing number of transactions.
+While there are fluctuations in the number of active companies over time, there is generally an increasing trend of the number of active companies over time, especially around 2010 onwards. This period shows a rising trend with the number of active companies reaching the highest values in the dataset. This is similar to that observed in the number of transactions over time, seen above.
+
+We also see a dip around 2035, before the numbers increase again. Also likely due to the after effects of the SouthSeafood Express Corp incident.
 :::
 
 ## Centrality Measures Over Time
