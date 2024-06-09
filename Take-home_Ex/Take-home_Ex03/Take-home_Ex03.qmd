@@ -649,7 +649,7 @@ While there are fluctuations in the number of active companies over time, there 
 We also see a dip around 2035, before the numbers increase again. Also likely due to the after effects of the SouthSeafood Express Corp incident.
 :::
 
-## Centrality Measures Over Time
+## Centrality Measures
 
 ### **Modifying network nodes and edges**
 
@@ -757,7 +757,8 @@ There are 8 types of nodes, namely:
 -   CEO
 :::
 
-### Extract all the source and target nodes ###
+### Extract all the source and target nodes
+
 Extract all the source and target nodes, then, drop any unmatched nodes
 
 ```{r}
@@ -781,141 +782,88 @@ Verify results
 print(mc3_nodes1)
 ```
 
-### Plot graph
+### Create Graph Object
 
-```{r,echo=FALSE}
+Create graph object and calculate centrality measures
+
+```{r,collapse=TRUE}
 mc3_graph <- tbl_graph(nodes = mc3_nodes1, edges = mc3_edges, directed = TRUE) %>%
   mutate(betweenness_centrality = centrality_betweenness(),
          closeness_centrality = centrality_closeness())
   theme_graph()
 ```
 
+### Network Graph
 
+::: panel-tabset
+## Plot
 
-
-
-
-
-### \*\*\*\*Find unique IDs
-
-```{r}
-# Extract unique IDs from link source
-id1 <- mc3_links_1_filtered2 %>%
-  select(source) %>%
-  distinct() %>%
-  rename(id = source)
-
-# Extract unique IDs from link target
-id2 <- mc3_links_1_filtered2 %>%
-  select(target) %>%
-  distinct() %>%
-  rename(id = target)
-
-# Combine unique IDs from source and target, and remove duplicates
-id_unique <- rbind(id1, id2) %>%
-  distinct() 
-
-# Duplicate mc3_nodes3_1
-mc3_nodes4_1 <- mc3_nodes3_1
-
-# Perform a left join with the original nodes
-mc3_nodes4_1 <- left_join(id_unique, mc3_nodes4_1, by = "id")
-
-# Add an indicator for unmatched IDs based on a column from mc3_nodes4_1
-mc3_nodes4_1 <- mc3_nodes4_1 %>%
-  mutate(unmatched = ifelse(is.na(founding_date), "drop", ""))
-
-# Filter out unmatched nodes
-mc3_nodes4_1 <- mc3_nodes4_1 %>%
-  filter(unmatched != "drop")
-
-# Drop column unmatched
-mc3_nodes4_1 <- mc3_nodes4_1 %>%
-  select(-unmatched)
+```{r,echo=FALSE}
+# Display the network graph
+ggraph(mc3_graph, layout = "fr") + # Using Fruchterman-Reingold layout
+  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) + # Customize edge appearance
+  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) + # Customize node appearance
+  scale_color_viridis_c() + # Use viridis color scale
+  theme_void() + # Use a void theme
+  labs(title = "Refined Network Graph of Atypical Business Transactions",
+       subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
+       caption = "Data Source: mc3.json") # Add titles and captions
 ```
 
-::: callout-note
-Note: 0 rows dropped, all nodes have valid links
-:::
-
-Check for NA values
-
-```{r}
-# Check for NA values in mc3_nodes4_1
-colSums(is.na(mc3_nodes4_1))
-
-# Check for NA values in mc3_links_1_filtered2
-colSums(is.na(mc3_links_1_filtered2))
-```
-
-::: callout-note
-There seems to be missing values in **nodes** for some entities for their Point of Contact and Head of Organisation. We will replace these values with the id.
-:::
-
-Replace missing values
-
-```{r}
-#duplicate mc3_nodes4_1
-mc3_nodes5_1 <- mc3_nodes4_1
-
-# Replace missing values in PointOfContact and HeadOfOrg with values from id
-mc3_nodes5_1 <- mc3_nodes5_1 %>%
-  mutate(PointOfContact = ifelse(is.na(PointOfContact), as.character(id), PointOfContact),
-         HeadOfOrg = ifelse(is.na(HeadOfOrg), as.character(id), HeadOfOrg))
-```
-
-Verify changes
-
-```{r}
-# Check for NA values in mc3_nodes5_1
-colSums(is.na(mc3_nodes5_1))
-```
-
-Check for Nan Values
-
-```{r}
-# Check for NaN values in mc3_nodes5_1
-colSums(is.nan(as.matrix(mc3_nodes5_1[, sapply(mc3_nodes4_1, is.numeric)])))
-
-# Check for NaN values in mc3_links_1_filtered2
-colSums(is.nan(as.matrix(mc3_links_1_filtered2[, sapply(mc3_links_1_filtered2, is.numeric)])))
-```
-
-::: callout-note
-Note: There are no Nan values
-:::
-
-### Create Graph Object
+## Code
 
 ```{r,eval=FALSE}
-# Create graph from edges
-mc3_graph <- tbl_graph(edges = mc3_links_1_filtered2, directed = TRUE) %>%
-  activate(nodes) %>%
-  left_join(mc3_nodes5_1, by = c("source" = "id")) %>%
-  as_tbl_graph()
+# Display the network graph
+ggraph(mc3_graph, layout = "fr") + # Using Fruchterman-Reingold layout
+  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) + # Customize edge appearance
+  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) + # Customize node appearance
+  scale_color_viridis_c() + # Use viridis color scale
+  theme_void() + # Use a void theme
+  labs(title = "Refined Network Graph of Atypical Business Transactions",
+       subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
+       caption = "Data Source: mc3.json") # Add titles and captions
 ```
+:::
 
-### Calculate Centrality
+### Top Nodes
+
+Identify top 20 nodes by betweenness centrality
 
 ```{r}
-closeness <- mc3_graph %>%
-  mutate(closeness_centrality = centrality_closeness())
+# Identify top nodes by betweenness centrality
+top_nodes <- mc3_graph %>% 
+  as_tibble()
+
+# Identify top 20 nodes by betweenness centrality
+top_nodes2 <- top_nodes %>% 
+  top_n(20, wt = betweenness_centrality)
 ```
 
-```{r,eval=FALSE}
-mc3_graph <- tbl_graph(nodes = mc3_nodes5_1, edges = mc3_links_1_filtered2, directed = TRUE) %>%
-  mutate(betweenness_centrality = centrality_betweenness(),
-         closeness_centrality = centrality_closeness())
-  theme_graph()
+### List of most active people and businesses
+
+```{r}
+top_nodes2
 ```
+
+::: callout-note
+It is likely that these entities on the top 20 list are big players in the industry and control information and resources.
+
+High betweenness centrality means that a node plays a more crucial role in connecting other nodes. It can be an indicator of:
+
+-   **Brokerage Role**: Nodes with high betweenness centrality often act as bridges or intermediaries between different parts of the network. They control the flow of information, resources, or interactions between other nodes.
+
+-   **Control and Influence**: Nodes with high betweenness centrality have the potential to control the flow of information or resources in the network. They may have more influence or power over the network dynamics compared to other nodes.
+:::
+
+### Centrality Over Time
 
 Plot Graph
 
-```{r,eval=FALSE}
+```{r}
 # Assuming you have a function to calculate centrality for each year
 calculate_centrality_over_time <- function(nodes, edges, time_unit = "year") {
   edges <- edges %>%
-    mutate(period = year(start_date))
+    mutate(period = as.Date(paste0(tyear, "-01-01")))
   
   centrality_results <- edges %>%
     group_by(period) %>%
@@ -934,7 +882,7 @@ calculate_centrality_over_time <- function(nodes, edges, time_unit = "year") {
 }
 
 # Calculate centrality measures over time
-centrality_over_time <- calculate_centrality_over_time(mc3_nodes_1_filtered2, mc3_links_1_filtered3)
+centrality_over_time <- calculate_centrality_over_time(mc3_nodes1, mc3_edges)
 
 # Plot centrality measures over time
 ggplot(centrality_over_time, aes(x = period, y = mean_betweenness)) +
@@ -943,20 +891,14 @@ ggplot(centrality_over_time, aes(x = period, y = mean_betweenness)) +
        x = "Year",
        y = "Mean Betweenness Centrality") +
   theme_minimal()
-
 ```
 
 ::: callout-note
-The nodes represent entities e.g. Logistics Companies, Fishing Companies, and the edges represent relationships between them e.g. Shareholdership. Overall, this graph can help identify central or influential transactions/entities within the network, as well as potential outliers or anomalies based on their position and connectivity patterns.
+This graph shows that there is a increasing trend of the average betweenness centrality per year over time.
+
+From around 2000 to 2020, the average betweenness centrality remains relatively low and fluctuates within a small range, indicating a stable network structure during this period. However, starting around 2025, there is a sharp and dramatic increase in the average betweenness centrality.
+
+This sudden rise suggests a significant change in the network dynamics, where certain nodes or entities are becoming increasingly important as bridges or intermediaries connecting different parts of the network. Such a drastic increase could potentially indicate the emergence of new influential players, changes in transaction patterns, or the formation of new connections and pathways within the network.
+
+The rapid growth in average betweenness centrality implies that the network structure is becoming more centralized, with a smaller number of nodes acting as critical hubs or gatekeepers, controlling the flow of information or transactions within the network.
 :::
-
-### Identify Top Nodes
-
-Filter out the top nodes,
-
-```{r,eval=FALSE}
-# Identify top nodes by betweenness centrality
-top_nodes <- mc3_graph %>% 
-  as_tibble() %>% 
-  filter(betweenness_centrality >= 3000000)
-```
