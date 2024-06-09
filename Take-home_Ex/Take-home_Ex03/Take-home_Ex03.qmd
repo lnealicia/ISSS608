@@ -44,8 +44,6 @@ A key element in stopping illegal fishing is holding the people who own nefariou
 
 1.  FishEye analysts want to better visualize changes in corporate structures over time. Create a visual analytics approach that analysts can use to highlight temporal patterns and changes in corporate structures. Examine the most active people and businesses using visual analytics.
 
-2.  Using your visualizations, find and display examples of typical and atypical business transactions (e.g., mergers, acquisitions, etc.). Can you infer the motivations behind changes in their activity?
-
 Note: the VAST challenge is focused on visual analytics and graphical figures should be included with your response to each question. Please include a reasonable number of figures for each question (no more than about 6) and keep written responses as brief as possible (around 250 words per question). Participants are encouraged to new visual representations rather than relying on traditional or existing approaches.
 
 # Getting Started
@@ -76,8 +74,12 @@ The following R packages will be used:
 
 -   [clock](https://cran.r-project.org/web/packages/clock/index.html)
 
+-   graphlayouts
+
+-   plotly
+
 ```{r}
-pacman::p_load(tidytext, readtext, quanteda, tidyverse, jsonlite, igraph, tidygraph, ggraph, visNetwork, clock, graphlayouts)
+pacman::p_load(tidytext, readtext, quanteda, tidyverse, jsonlite, igraph, tidygraph, ggraph, visNetwork, clock, graphlayouts,plotly)
 ```
 
 ## **Importing JSON File**
@@ -399,23 +401,10 @@ mc3_nodes_1 <- as_tibble(mc3_data6$nodes) %>%
           -type1)
 ```
 
-For Question 2
-
-```{r}
-mc3_nodes_2 <- as_tibble(mc3_data6$nodes) %>%
-  mutate(country = as.character(country), 
-         id = as.character(id), 
-         ProductServices = as.character(ProductServices), 
-         revenue = as.numeric(as.character(revenue)), 
-         type2 = as.character(type2)) %>%
-  select(id, country, type2, revenue, ProductServices)
-```
-
 Save as rds file for future use
 
 ```{r}
 write_rds(mc3_nodes_1, "data/rds/mc3_nodes_1.rds")
-write_rds(mc3_nodes_2, "data/rds/mc3_nodes_2.rds")
 ```
 
 ## Extract Links
@@ -433,25 +422,10 @@ mc3_links_1 <- as_tibble(mc3_data6$links) %>%
           -end_date)
 ```
 
-For Question 2
-
-```{r}
-mc3_links_2 <- as_tibble(mc3_data6$links) %>% 
-  distinct() %>%
-  mutate(source = as.character(source),
-         target = as.character(target),
-         type2 = as.character(type2)) %>%
-  group_by(source, target, type2) %>%
-  summarise(weights = n()) %>%
-  filter(source != target) %>%
-  ungroup()
-```
-
 Save as rds file for future use
 
 ```{r}
 write_rds(mc3_links_1, "data/rds/mc3_links_1.rds")
-write_rds(mc3_links_2, "data/rds/mc3_links_2.rds")
 ```
 
 # Load Data
@@ -801,11 +775,11 @@ mc3_graph <- tbl_graph(nodes = mc3_nodes1, edges = mc3_edges, directed = TRUE) %
 ```{r,echo=FALSE}
 # Display the network graph
 ggraph(mc3_graph, layout = "fr") + # Using Fruchterman-Reingold layout
-  geom_edge_link(aes(edge_alpha = 0.8, edge_width = 0.8)) + # Customize edge appearance
+  geom_edge_link(aes(edge_alpha = 0.9, edge_width = 0.1)) + # Customize edge appearance
   geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) + # Customize node appearance
   scale_color_viridis_c() + # Use viridis color scale
   theme_void() + # Use a void theme
-  labs(title = "Refined Network Graph of Atypical Business Transactions",
+  labs(title = "Network Graph of Business Network",
        subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
        caption = "Data Source: mc3.json") # Add titles and captions
 ```
@@ -828,7 +802,7 @@ ggraph(mc3_graph, layout = "fr") + # Using Fruchterman-Reingold layout
 ::: callout-note
 The grey circular portion in the center of the network graph does not represent any specific data or entities. It is a visual byproduct resulting from the dense clustering of nodes and edges in that central region. This effect is particularly noticeable in dense, highly interconnected network visualizations where nodes and edges are concentrated in a small space.
 
-Thus, we filter the nodes to refine the graph and improve clarity.
+Thus, we filter the nodes to refine the graph.
 :::
 
 ### Refined Network Graph
@@ -854,7 +828,7 @@ top_nodes2
 ```
 
 ::: callout-note
-It is likely that these entities on the top 20 list are big players in the industry and control information and resources.
+It is likely that these entities on the top 10 list are big players in the industry and control information and resources.
 
 High betweenness centrality means that a node plays a more crucial role in connecting other nodes. It can be an indicator of:
 
@@ -863,13 +837,71 @@ High betweenness centrality means that a node plays a more crucial role in conne
 -   **Control and Influence**: Nodes with high betweenness centrality have the potential to control the flow of information or resources in the network. They may have more influence or power over the network dynamics compared to other nodes.
 :::
 
+Plot refined graph
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+# Extract IDs of top nodes
+top_node_ids <- top_nodes$id
+
+# Filter the graph to include only top nodes and their incident edges
+top_graph <- mc3_graph %>%
+  activate(nodes) %>%
+  filter(id %in% top_node_ids) %>%
+  activate(edges) %>%
+  filter(edge_is_incident(top_node_ids))
+
+# Plot the network graph with top nodes
+ggraph(top_graph, layout = "fr") + 
+  geom_edge_link(aes(edge_alpha = 0.1, edge_width = 0.1)) +
+  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) +
+  scale_color_viridis_c() +
+  theme_void() +
+  labs(title = "Top 20 Nodes Network Graph",
+       subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
+       caption = "Data Source: mc3.json")
+```
+
+## Code
+
+```{r,eval=FALSE}
+# Extract IDs of top nodes
+# Extract IDs of top nodes
+top_node_ids <- top_nodes$id
+
+# Filter the graph to include only top nodes and their incident edges
+top_graph <- mc3_graph %>%
+  activate(nodes) %>%
+  filter(id %in% top_node_ids) %>%
+  activate(edges) %>%
+  filter(edge_is_incident(top_node_ids))
+
+# Plot the network graph with top nodes
+ggraph(top_graph, layout = "fr") + 
+  geom_edge_link(aes(edge_alpha = 0.1, edge_width = 0.1)) +
+  geom_node_point(aes(size = betweenness_centrality, color = closeness_centrality)) +
+  scale_color_viridis_c() +
+  theme_void() +
+  labs(title = "Top 20 Nodes Network Graph",
+       subtitle = "Nodes colored by closeness centrality and sized by betweenness centrality",
+       caption = "Data Source: mc3.json")
+```
+:::
+
+::: callout-note
+We can see that for the top nodes, they are highly interconnected. To the extent that the graph becomes less interpretable.
+:::
+
 ### Centrality Over Time
 
 Plot Graph
 
 ```{r}
 # Assuming you have a function to calculate centrality for each year
-calculate_centrality_over_time <- function(nodes, edges, time_unit = "year") {
+calculate_centrality_over_time <- function(nodes, edges, time_unit = "year")
+  {
   edges <- edges %>%
     mutate(period = as.Date(paste0(tyear, "-01-01")))
   
@@ -909,4 +941,166 @@ From around 2000 to 2020, the average betweenness centrality remains relatively 
 This sudden rise suggests a significant change in the network dynamics, where certain nodes or entities are becoming increasingly important as bridges or intermediaries connecting different parts of the network. Such a drastic increase could potentially indicate the emergence of new influential players, changes in transaction patterns, or the formation of new connections and pathways within the network.
 
 The rapid growth in average betweenness centrality implies that the network structure is becoming more centralized, with a smaller number of nodes acting as critical hubs or gatekeepers, controlling the flow of information or transactions within the network.
+:::
+
+## Key Influencers
+
+### Extract key influencers and their edges
+
+```{r}
+# Filter mc3_edges to keep rows where source ID is in top_nodes2
+keypersonnel <- mc3_edges %>%
+  filter(source %in% top_nodes2$id)
+```
+
+### Key influencers of the industry
+
+```{r}
+unique(keypersonnel$source)
+```
+
+::: callout-note
+The key influencers are:
+
+-   Cortez LLC
+
+-   Evans-Pearson
+
+-   Friedman, Gibson and Garcia
+
+-   GvardeyskAmerica Shipping Plc
+
+-   Hill PLC
+
+-   Howell LLC
+
+-   Johnson, Perez and Salinas
+
+-   Kaiser, Warren and Shepard
+
+-   King and Sons
+
+-   Lane Group
+
+-   Lee-Ramirez
+
+-   Mcpherson-Wright
+
+-   NamRiver Transit A/S
+
+-   Osborne, Saunders and Brown
+
+-   Patel-Miller
+
+-   Ramos, Jordan and Stewart
+
+-   Rivera, Lee and Carroll Russell and Sons
+
+-   Stein, Taylor and Williams
+
+-   StichtingMarine Shipping Company
+
+-   Vasquez-Gonzalez
+:::
+
+Relationship between influencers and their links
+
+```{r}
+unique(keypersonnel$type)
+```
+
+::: callout-note
+There is only 1 type of relationship between the influencers and their links. The influencers are shareholders of those they are linked to.
+:::
+
+### Network Graph
+
+Create Graph Object
+
+```{r}
+# Create a nodes dataframe from the unique source and target values
+nodes <- unique(c(keypersonnel$source, keypersonnel$target)) %>%
+  data.frame(name = .)
+
+# Create the graph object using tbl_graph
+graph_data <- tbl_graph(nodes = nodes,
+                        edges = keypersonnel %>%
+                          rename(from = source, to = target),
+                        directed = TRUE)
+
+```
+
+Plot Graph
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+# Create the graph plot using ggraph
+ggraph_plot <- ggraph(graph_data, layout = "fr") +  # Using Fruchterman-Reingold layout
+  geom_edge_link(aes(label = as.character(tyear)),  # Only label with tyear
+                 arrow = arrow(length = unit(4, 'mm')),  # Add arrows to indicate direction
+                 end_cap = circle(3, 'mm'),  # Cap the end of the edges with a circle
+                 label_dodge = unit(2, "mm"),  # Adjust label position to avoid overlap
+                 label_size = 3,  # Set label size
+                 edge_width = 0.8,  # Set edge width
+                 edge_alpha = 0.8) +  # Set edge transparency
+  geom_node_point(size = 5, color = "blue") +  # Customize node appearance
+  geom_node_text(aes(label = name), vjust = 1.5, size = 4) +  # Add node labels
+  theme_void() +  # Use a void theme
+  labs(title = "Directed Network Graph of Key Personnel Transactions",
+       subtitle = "Nodes represent unique sources and targets, edges labeled with start year",
+       caption = "Data Source: keypersonnel")  # Add titles and captions
+
+# Convert ggraph plot to plotly object
+plotly_plot <- ggplotly(ggraph_plot)
+
+# Display the interactive plot
+plotly_plot
+```
+
+## Code
+
+```{r,eval=FALSE}
+# Create the graph plot using ggraph
+ggraph_plot <- ggraph(graph_data, layout = "fr") +  # Using Fruchterman-Reingold layout
+  geom_edge_link(aes(label = as.character(tyear)),  # Only label with tyear
+                 arrow = arrow(length = unit(4, 'mm')),  # Add arrows to indicate direction
+                 end_cap = circle(3, 'mm'),  # Cap the end of the edges with a circle
+                 label_dodge = unit(2, "mm"),  # Adjust label position to avoid overlap
+                 label_size = 3,  # Set label size
+                 edge_width = 0.8,  # Set edge width
+                 edge_alpha = 0.8) +  # Set edge transparency
+  geom_node_point(size = 5, color = "blue") +  # Customize node appearance
+  geom_node_text(aes(label = name), vjust = 1.5, size = 4) +  # Add node labels
+  theme_void() +  # Use a void theme
+  labs(title = "Directed Network Graph of Key Personnel Transactions",
+       subtitle = "Nodes represent unique sources and targets, edges labeled with start year",
+       caption = "Data Source: keypersonnel")  # Add titles and captions
+
+# Convert ggraph plot to plotly object
+plotly_plot <- ggplotly(ggraph_plot)
+
+# Display the interactive plot
+plotly_plot
+```
+:::
+
+::: callout-note
+Most number of links:
+
+| Entity Name                      | Number of Links |
+|----------------------------------|-----------------|
+| GvardeyskAmerica Shipping Plc    | 4               |
+| Rivera, Lee and Carroll          | 3               |
+| Cortez LLC                       | 2               |
+| Kaiser, Warren and Shepard       | 2               |
+| Mcpherson-Wright                 | 2               |
+| Patel-Miller                     | 2               |
+| StichtingMarine Shipping Company | 2               |
+| Vasquez-Gonzalez                 | 2               |
+
+The earliest link: Lane Group has been the shareholder of Howell LLC since 2020.
+
+The most recent link: GvardeyskAmerica Shipping Plc is the shareholder of ArawakFish Cargo Ges.m.b.H.. since 2034.
 :::
