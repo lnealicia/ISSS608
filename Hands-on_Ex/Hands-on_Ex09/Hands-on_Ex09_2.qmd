@@ -1,0 +1,240 @@
+---
+title: "Hands-on Exercise 9 Part II - Visual Correlation Analysis"
+author: "Alicia Loh"
+date: "10 June, 2024"
+date-modified: last-modified
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+Learning Objectives:
+
+-   plot data visualisation for visualising correlation matrix with R
+
+# Getting Started
+
+Correlation coefficient is a popular statistic that use to measure the type and strength of the relationship between two variables. The values of a correlation coefficient ranges between -1.0 and 1.0. A correlation coefficient of 1 shows a perfect linear relationship between the two variables, while a -1.0 shows a perfect inverse relationship between the two variables. A correlation coefficient of 0.0 shows no linear relationship between the two variables.
+
+When multivariate data are used, the correlation coefficeints of the pair comparisons are displayed in a table form known as correlation matrix or scatterplot matrix.
+
+There are three broad reasons for computing a correlation matrix.
+
+-   To reveal the relationship between high-dimensional variables pair-wisely.
+
+-   To input into other analyses. For example, people commonly use correlation matrices as inputs for exploratory factor analysis, confirmatory factor analysis, structural equation models, and linear regression when excluding missing values pairwise.
+
+-   As a diagnostic when checking other analyses. For example, with linear regression a high amount of correlations suggests that the linear regression’s estimates will be unreliable.
+
+When the data is large, both in terms of the number of observations and the number of variables, [Corrgram](http://www.datavis.ca/papers/corrgram.pdf) tend to be used to visually explore and analyse the structure and the patterns of relations among variables. It is designed based on two main schemes:
+
+-   Rendering the value of a correlation to depict its sign and magnitude, and
+
+-   Reordering the variables in a correlation matrix so that “similar” variables are positioned adjacently, facilitating perception.
+
+## Installing and loading the required libraries
+
+The following R packages will be used:
+
+-   Tidyverse:
+
+    -   [**readr**](https://readr.tidyverse.org/) for importing delimited text file,
+
+    -   [**tidyr**](https://tidyr.tidyverse.org/) for tidying data,
+
+    -   [**dplyr**](https://dplyr.tidyverse.org/) for wrangling data and
+
+-   ggstatplot
+
+-   corrplot
+
+Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
+
+```{r}
+pacman::p_load(corrplot, ggstatsplot, tidyverse)
+```
+
+## **Importing Data into R**
+
+### **The Data**
+
+The [Wine Quality Data Set](https://archive.ics.uci.edu/ml/datasets/wine+quality) of UCI Machine Learning Repository will be used. The data set consists of 13 variables and 6497 observations. For the purpose of this exercise, we have combined the red wine and white wine data into one data file. It is called wine_quality and is in csv file format.
+
+### **Importing Data**
+
+The code chunk below uses the ***read_csv()*** function of **readr** package to import the data into R
+
+```{r}
+wine <- read_csv("data/wine_quality.csv")
+```
+
+::: callout-note
+Besides quality and type, the rest of the variables are numerical and continuous data type.
+:::
+
+### **Preparing the Data**
+
+Use the ***mutate()*** function of **dplyr** package to derive three new measures, namely: young, active, and old.
+
+```{r}
+#Deriving the young, economy active and old measures
+agpop_mutated <- pop_data %>%
+  mutate(`Year` = as.character(Year))%>%
+  spread(AG, Population) %>%
+  mutate(YOUNG = rowSums(.[4:8]))%>%
+  mutate(ACTIVE = rowSums(.[9:16]))  %>%
+  mutate(OLD = rowSums(.[17:21])) %>%
+  mutate(TOTAL = rowSums(.[22:24])) %>%
+  filter(Year == 2018)%>%
+  filter(TOTAL > 0)
+```
+
+## **Plotting Ternary Diagram with R**
+
+### **Plotting a static ternary diagram**
+
+Use ***ggtern()*** function of **ggtern** package to create a simple ternary plot.
+
+Active, Young, Old
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+#Building the static ternary plot
+ggtern(data=agpop_mutated,aes(x=YOUNG,y=ACTIVE, z=OLD)) +
+  geom_point()
+```
+
+## Code
+
+```{r,eval=FALSE}
+#Building the static ternary plot
+ggtern(data=agpop_mutated,aes(x=YOUNG,y=ACTIVE, z=OLD)) +
+  geom_point()
+```
+:::
+
+Population Structure 2015
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+
+#Building the static ternary plot
+ggtern(data=agpop_mutated, aes(x=YOUNG,y=ACTIVE, z=OLD)) +
+  geom_point() +
+  labs(title="Population structure, 2015") +
+  theme_rgbw()
+```
+
+## Code
+
+```{r,eval=FALSE}
+
+#Building the static ternary plot
+ggtern(data=agpop_mutated, aes(x=YOUNG,y=ACTIVE, z=OLD)) +
+  geom_point() +
+  labs(title="Population structure, 2015") +
+  theme_rgbw()
+```
+:::
+
+## **Plotting an interative ternary diagram**
+
+The code below create an interactive ternary plot using ***plot_ly()*** function of **Plotly R**.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+
+# reusable function for creating annotation object
+label <- function(txt) {
+  list(
+    text = txt, 
+    x = 0.1, y = 1,
+    ax = 0, ay = 0,
+    xref = "paper", yref = "paper", 
+    align = "center",
+    font = list(family = "serif", size = 15, color = "white"),
+    bgcolor = "#b3b3b3", bordercolor = "black", borderwidth = 2
+  )
+}
+
+# reusable function for axis formatting
+axis <- function(txt) {
+  list(
+    title = txt, tickformat = ".0%", tickfont = list(size = 10)
+  )
+}
+
+ternaryAxes <- list(
+  aaxis = axis("Young"), 
+  baxis = axis("Active"), 
+  caxis = axis("Old")
+)
+
+# Initiating a plotly visualization 
+plot_ly(
+  agpop_mutated, 
+  a = ~YOUNG, 
+  b = ~ACTIVE, 
+  c = ~OLD, 
+  color = I("black"), 
+  type = "scatterternary"
+) %>%
+  layout(
+    annotations = label("Ternary Markers"), 
+    ternary = ternaryAxes
+  )
+```
+
+## Code
+
+```{r,eval=FALSE}
+
+# reusable function for creating annotation object
+label <- function(txt) {
+  list(
+    text = txt, 
+    x = 0.1, y = 1,
+    ax = 0, ay = 0,
+    xref = "paper", yref = "paper", 
+    align = "center",
+    font = list(family = "serif", size = 15, color = "white"),
+    bgcolor = "#b3b3b3", bordercolor = "black", borderwidth = 2
+  )
+}
+
+# reusable function for axis formatting
+axis <- function(txt) {
+  list(
+    title = txt, tickformat = ".0%", tickfont = list(size = 10)
+  )
+}
+
+ternaryAxes <- list(
+  aaxis = axis("Young"), 
+  baxis = axis("Active"), 
+  caxis = axis("Old")
+)
+
+# Initiating a plotly visualization 
+plot_ly(
+  agpop_mutated, 
+  a = ~YOUNG, 
+  b = ~ACTIVE, 
+  c = ~OLD, 
+  color = I("black"), 
+  type = "scatterternary"
+) %>%
+  layout(
+    annotations = label("Ternary Markers"), 
+    ternary = ternaryAxes
+  )
+```
+:::
