@@ -78,19 +78,6 @@ Besides quality and type, the rest of the variables are numerical and continuous
 
 There are more than one way to build scatterplot matrix with R. In this section, you will learn how to create a scatterplot matrix by using the [*pairs* function](https://stat.ethz.ch/R-manual/R-devel/library/graphics/html/pairs.html) of R Graphics.
 
-```{r}
-#Deriving the young, economy active and old measures
-agpop_mutated <- pop_data %>%
-  mutate(`Year` = as.character(Year))%>%
-  spread(AG, Population) %>%
-  mutate(YOUNG = rowSums(.[4:8]))%>%
-  mutate(ACTIVE = rowSums(.[9:16]))  %>%
-  mutate(OLD = rowSums(.[17:21])) %>%
-  mutate(TOTAL = rowSums(.[22:24])) %>%
-  filter(Year == 2018)%>%
-  filter(TOTAL > 0)
-```
-
 ## **Building a basic correlation matrix**
 
 Figure below shows the scatter plot matrix of Wine Quality Data. It is a 11 by 11 matrix.
