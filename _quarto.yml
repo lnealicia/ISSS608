@@ -24,13 +24,13 @@ website:
             href: "Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_3.html"
           - text: "Hands-on Exercise 5"
             href: "Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html"
-      - icon: pencil-square
-        text: "Hands-on Exercise Part 2"
-        menu:
           - text: "Hands-on Exercise 6"
             href: "Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html"
           - text: "Hands-on Exercise 7"
             href: "Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html"
+      - icon: pencil-square
+        text: "Hands-on Exercise Part 2"
+        menu:
           - text: "Hands-on Exercise 8 Part I"
             href: "Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_1.html"
           - text: "Hands-on Exercise 8 Part II"
