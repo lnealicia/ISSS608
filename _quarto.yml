@@ -73,6 +73,9 @@ website:
             href: "Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html"
           - text: "Take-home Exercise 3"
             href: "Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html"
+      - icon: user-fill
+        text: "Group Project"
+        href: "https://isss608-g2.netlify.app/"
 
     right:
       - href: about.qmd
