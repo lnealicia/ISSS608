@@ -175,8 +175,6 @@ Note that the values are scaled now. Also note that **margins** argument is us
 
 ### **Working with heatmaply**
 
-# HERE
-
 ::: panel-tabset
 ## Plot
 
