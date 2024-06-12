@@ -529,7 +529,7 @@ ggplot(data=realis2018_selected,
 
 install *devtools* package 
 
-```{r}
+```{r,eval=FALSE}
 install.packages("devtools")
 ```
 
