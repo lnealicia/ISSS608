@@ -179,7 +179,7 @@
     "href": "index.html#hands-on-exercise",
     "title": "Visual Analytics and Applications",
     "section": "Hands On Exercise",
-    "text": "Hands On Exercise\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1 - A Layered Grammar of Graphics: ggplot2 methods\n\n\n\nAlicia Loh\n\n\nApr 13, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2 - Beyond ggplot2 Fundamentals\n\n\n\nAlicia Loh\n\n\nApr 17, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 3 - Programming Animated Statistical Graphics with R\n\n\n\nAlicia Loh\n\n\nApr 24, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 3 - Programming Interactive Data Visualisation with R\n\n\n\nAlicia Loh\n\n\nApr 20, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 4 - Funnel Plots for Fair Comparisons\n\n\n\nAlicia Loh\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 4 - Visual Statistical Analysis\n\n\n\nAlicia Loh\n\n\nApr 27, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 4 - Visualising Uncertainty\n\n\n\nAlicia Loh\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 5 - Visualising and Analysing Text Data\n\n\n\nAlicia Loh\n\n\nMay 9, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 6 - Modelling, Visualising and Analysing Network Data with R\n\n\n\nAlicia Loh\n\n\nMay 15, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 7 - Visualising and Analysing Time-Oriented Data\n\n\n\nAlicia Loh\n\n\nMay 28, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 8 Part I - Choropleth Mapping with R\n\n\n\nAlicia Loh\n\n\nJun 3, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 8 Part II - Visualising Geospatial Point Data\n\n\n\nAlicia Loh\n\n\nJun 5, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 8 Part III - Analytical Mapping\n\n\n\nAlicia Loh\n\n\nJun 5, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 9 Part I - Building Ternary Plot with R\n\n\n\nAlicia Loh\n\n\nJun 10, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 9 Part II - Visual Correlation Analysis\n\n\n\nAlicia Loh\n\n\nJun 10, 2024\n\n\n\n\n\n\n\n\nNo matching items"
+    "text": "Hands On Exercise\n\n\n\n\n\n\n\n\n\nHands-on Exercise 1 - A Layered Grammar of Graphics: ggplot2 methods\n\n\n\nAlicia Loh\n\n\nApr 13, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 2 - Beyond ggplot2 Fundamentals\n\n\n\nAlicia Loh\n\n\nApr 17, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 3 - Programming Animated Statistical Graphics with R\n\n\n\nAlicia Loh\n\n\nApr 24, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 3 - Programming Interactive Data Visualisation with R\n\n\n\nAlicia Loh\n\n\nApr 20, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 4 - Funnel Plots for Fair Comparisons\n\n\n\nAlicia Loh\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 4 - Visual Statistical Analysis\n\n\n\nAlicia Loh\n\n\nApr 27, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 4 - Visualising Uncertainty\n\n\n\nAlicia Loh\n\n\nApr 30, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 5 - Visualising and Analysing Text Data\n\n\n\nAlicia Loh\n\n\nMay 9, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 6 - Modelling, Visualising and Analysing Network Data with R\n\n\n\nAlicia Loh\n\n\nMay 15, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 7 - Visualising and Analysing Time-Oriented Data\n\n\n\nAlicia Loh\n\n\nMay 28, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 8 Part I - Choropleth Mapping with R\n\n\n\nAlicia Loh\n\n\nJun 3, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 8 Part II - Visualising Geospatial Point Data\n\n\n\nAlicia Loh\n\n\nJun 5, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 8 Part III - Analytical Mapping\n\n\n\nAlicia Loh\n\n\nJun 5, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 9 Part I - Building Ternary Plot with R\n\n\n\nAlicia Loh\n\n\nJun 10, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 9 Part II - Visual Correlation Analysis\n\n\n\nAlicia Loh\n\n\nJun 10, 2024\n\n\n\n\n\n\n\n\n\n\n\n\nHands-on Exercise 9 Part III - Heatmap for Visualising and Analysing Multivariate Data\n\n\n\nAlicia Loh\n\n\nJun 11, 2024\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html#in-class-exercise",
@@ -1776,5 +1776,47 @@
     "title": "Take-home Exercise 2 - DataVis Makeover",
     "section": "After",
     "text": "After\n\n\n\n\n\n\n\n\nNote\n\n\n\nThank you Jing Yi for providing your take home exercise 1 for my learning!"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html",
+    "href": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html",
+    "title": "Hands-on Exercise 9 Part III - Heatmap for Visualising and Analysing Multivariate Data",
+    "section": "",
+    "text": "Learning Objectives:"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html#installing-and-loading-the-required-libraries",
+    "href": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html#installing-and-loading-the-required-libraries",
+    "title": "Hands-on Exercise 9 Part III - Heatmap for Visualising and Analysing Multivariate Data",
+    "section": "Installing and loading the required libraries",
+    "text": "Installing and loading the required libraries\nThe following R packages will be used:\n\nseriation\nheatmaply\ndendextend\ntidyverse\n\nCode chunk below will be used to check if these packages have been installed and also will load them into the working R environment.\n\npacman::p_load(seriation, dendextend, heatmaply, tidyverse)"
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html#importing-data-into-r",
+    "href": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html#importing-data-into-r",
+    "title": "Hands-on Exercise 9 Part III - Heatmap for Visualising and Analysing Multivariate Data",
+    "section": "Importing Data into R",
+    "text": "Importing Data into R\n\nThe Data\nThe data of World Happines 2018 report will be used. The data set is downloaded from here. The original data set is in Microsoft Excel format. It has been extracted and saved in csv file called WHData-2018.csv.\n\n\nImporting Data\nIn the code chunk below, read_csv() of readr is used to import WHData-2018.csv into R and parsed it into tibble R data frame format.\n\nwh &lt;- read_csv(\"data/WHData-2018.csv\")\n\n\n\nPreparing the data\nChange the rows by country name instead of row number by using the code chunk below\n\nrow.names(wh) &lt;- wh$Country\n\n\n\n\n\n\n\nNote\n\n\n\nNotice that the row number has been replaced into the country name."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html#transforming-the-data-frame-into-a-matrix",
+    "href": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html#transforming-the-data-frame-into-a-matrix",
+    "title": "Hands-on Exercise 9 Part III - Heatmap for Visualising and Analysing Multivariate Data",
+    "section": "Transforming the data frame into a matrix",
+    "text": "Transforming the data frame into a matrix\nThe data was loaded into a data frame, but it has to be a data matrix to make the heatmap.\nThe code chunk below will be used to transform wh data frame into a data matrix.\n\nwh1 &lt;- dplyr::select(wh, c(3, 7:12))\nwh_matrix &lt;- data.matrix(wh)\n\n\n\n\n\n\n\nNote\n\n\n\nNotice that wh_matrix is in R matrix format."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html#static-heatmap",
+    "href": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html#static-heatmap",
+    "title": "Hands-on Exercise 9 Part III - Heatmap for Visualising and Analysing Multivariate Data",
+    "section": "Static Heatmap",
+    "text": "Static Heatmap\nThere are many R packages and functions can be used to drawing static heatmaps, they are:\n\nheatmap()of R stats package. It draws a simple heatmap.\nheatmap.2() of gplots R package. It draws an enhanced heatmap compared to the R base function.\npheatmap() of pheatmap R package. pheatmap package also known as Pretty Heatmap. The package provides functions to draws pretty heatmaps and provides more control to change the appearance of heatmaps.\nComplexHeatmap package of R/Bioconductor package. The package draws, annotates and arranges complex heatmaps (very useful for genomic data analysis). The full reference guide of the package is available here.\nsuperheat package: A Graphical Tool for Exploring Complex Datasets Using Heatmaps. A system for generating extendable and customizable heatmaps for exploring complex datasets, including big data and data with multiple data types.\n\n\nheatmap() of R Stats\nPlot a heatmap by using heatmap() of Base Stats.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nwh_heatmap &lt;- heatmap(wh_matrix,\n                      Rowv=NA, Colv=NA)\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nBy default, heatmap() plots a cluster heatmap. The arguments Rowv=NA and Colv=NA are used to switch off the option of plotting the row and column dendrograms.\n\n\nTo plot a cluster heatmap, use the default\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nwh_heatmap &lt;- heatmap(wh_matrix)\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nThe order of both rows and columns is different compared to the native wh_matrix. This is because heatmap does a reordering using clusterisation: it calculates the distance between each pair of rows and columns and try to order them by similarity. Moreover, the corresponding dendrogram are provided beside the heatmap.\n\n\nHere, red cells denote small values. This heatmap is not really informative. Indeed, the Happiness Score variable have relatively higher values, what makes that the other variables with small values all look the same. Thus, this matrix needs to be normalised. This is done using the scale argument. It can be applied to rows or to columns.\nThe code chunk below normalises the matrix column-wise.\n\nPlotCode\n\n\n\n\n\n\n\n\n\n\nwh_heatmap &lt;- heatmap(wh_matrix,\n                      scale=\"column\",\n                      cexRow = 0.6, \n                      cexCol = 0.8,\n                      margins = c(10, 4))\n\n\n\n\n\n\n\n\n\n\nNote\n\n\n\nNote that the values are scaled now. Also note that margins argument is used to ensure that the entire x-axis labels are displayed completely and, cexRow and cexCol arguments are used to define the font size used for y-axis and x-axis labels respectively."
+  },
+  {
+    "objectID": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html#creating-interactive-heatmap",
+    "href": "Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html#creating-interactive-heatmap",
+    "title": "Hands-on Exercise 9 Part III - Heatmap for Visualising and Analysing Multivariate Data",
+    "section": "Creating Interactive Heatmap",
+    "text": "Creating Interactive Heatmap\nheatmaply is an R package for building interactive cluster heatmap that can be shared online as a stand-alone HTML file. It is designed and maintained by Tal Galili.\n\nWorking with heatmaply"
   }
 ]

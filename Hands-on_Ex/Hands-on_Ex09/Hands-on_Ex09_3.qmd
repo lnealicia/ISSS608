@@ -181,20 +181,14 @@ Note that the values are scaled now. Also note that **margins** argument is us
 ## Plot
 
 ```{r,echo=FALSE}
-# Load the mtcars dataset
-data(mtcars)  
 
-# Convert the data frame to a matrix
-mtcars_matrix <- as.matrix(mtcars)
-
-# Create the heatmap
-heatmaply(mtcars_matrix)
+heatmaply(mtcars)
 ```
 
 ## Code
 
 ```{r,eval=FALSE}
-data(mtcars)
+
 heatmaply(mtcars)
 ```
 :::
@@ -204,3 +198,338 @@ The code chunk below shows the basic syntax needed to create n interactive heatm
 ```{r}
 heatmaply(wh_matrix[, -c(1, 2, 4, 5)])
 ```
+
+::: callout-note
+Note:
+
+-   Different from *heatmap()*, for *heatmaply()* the default horizontal dendrogram is placed on the left hand side of the heatmap.
+
+-   The text label of each raw, on the other hand, is placed on the right hand side of the heat map.
+
+-   When the x-axis marker labels are too long, they will be rotated by 135 degree from the north.
+:::
+
+### **Data Trasformation**
+
+When analysing multivariate data sets, it is very common that the variables include values that reflect different types of measurements. In general, these variable values have their own range. In order to ensure that all the variables have comparable values, data transformation is commonly used before clustering.
+
+Three main data transformation methods are supported by *heatmaply()*, namely: scale, normalise and percentilise.
+
+#### Scaling method
+
+-   When all variables come from or are assumed to come from a normal distribution, then scaling (i.e.: subtract the mean and divide by the standard deviation) would bring them all closer to the standard normal distribution.
+
+-   In such a case, each value would reflect the distance from the mean in units of standard deviation.
+
+-   The *scale* argument in *heatmaply()* supports column and row scaling.
+
+The code chunk below is used to scale variable values columewise.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+heatmaply(wh_matrix[, -c(1, 2, 4, 5)],
+          scale = "column")
+```
+
+## Code
+
+```{r,eval=FALSE}
+heatmaply(wh_matrix[, -c(1, 2, 4, 5)],
+          scale = "column")
+```
+:::
+
+#### Normalising method
+
+-   When variables in the data come from different (and non-normal) distributions, the normalize function can be used to bring data to the 0 to 1 scale by subtracting the minimum and dividing by the maximum of all observations.
+
+-   This preserves the shape of each variable’s distribution while making them easily comparable on the same “scale”.
+
+Different from Scaling, the normalise method is performed on the input data set i.e. wh_matrix as shown in the code chunk below.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))
+```
+
+## Code
+
+```{r,eval=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]))
+```
+:::
+
+#### Percentising method
+
+-   This is similar to ranking the variables, but instead of keeping the rank values, they are divided by the maximal rank.
+
+-   This is done by using the ecdf of the variables on their own values, bringing each value to its empirical percentile.
+
+-   The benefit of the percentize function is that each value has a relatively clear interpretation, it is the percent of observations that got that value or below it.
+
+Similar to Normalize method, the Percentize method is also performed on the input data set i.e. wh_matrix as shown in the code chunk below.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+heatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))
+```
+
+## Code
+
+```{r,eval=FALSE}
+heatmaply(percentize(wh_matrix[, -c(1, 2, 4, 5)]))
+```
+:::
+
+### **Clustering algorithm**
+
+**heatmaply** supports a variety of hierarchical clustering algorithm. The main arguments provided are:
+
+-   *distfun*: function used to compute the distance (dissimilarity) between both rows and columns. Defaults to dist. The options “pearson”, “spearman” and “kendall” can be used to use correlation-based clustering, which uses as.dist(1 - cor(t(x))) as the distance metric (using the specified correlation method).
+
+-   *hclustfun*: function used to compute the hierarchical clustering when *Rowv* or *Colv* are not dendrograms. Defaults to *hclust*.
+
+-   *dist_method* default is NULL, which results in “euclidean” to be used. It can accept alternative character strings indicating the method to be passed to distfun. By default *distfun* is “dist”” hence this can be one of “euclidean”, “maximum”, “manhattan”, “canberra”, “binary” or “minkowski”.
+
+-   *hclust_method* default is NULL, which results in “complete” method to be used. It can accept alternative character strings indicating the method to be passed to *hclustfun*. By default hclustfun is hclust hence this can be one of “ward.D”, “ward.D2”, “single”, “complete”, “average” (= UPGMA), “mcquitty” (= WPGMA), “median” (= WPGMC) or “centroid” (= UPGMC).
+
+In general, a clustering model can be calibrated either manually or statistically.
+
+### **Manual approach**
+
+In the code chunk below, the heatmap is plotted by using hierachical clustering algorithm with “Euclidean distance” and “ward.D” method.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          dist_method = "euclidean",
+          hclust_method = "ward.D")
+```
+
+## Code
+
+```{r,eval=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          dist_method = "euclidean",
+          hclust_method = "ward.D")
+```
+:::
+
+### **Statistical approach**
+
+In order to determine the best clustering method and number of cluster the *dend_expend()* and *find_k()* functions of **dendextend** package will be used.
+
+First, the *dend_expend()* will be used to determine the recommended clustering method to be used.
+
+```{r}
+wh_d <- dist(normalize(wh_matrix[, -c(1, 2, 4, 5)]), method = "euclidean")
+dend_expend(wh_d)[[3]]
+```
+
+The output table shows that “average” method should be used because it gave the high optimum value.
+
+Next, *find_k()* is used to determine the optimal number of cluster.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+wh_clust <- hclust(wh_d, method = "average")
+num_k <- find_k(wh_clust)
+plot(num_k)
+```
+
+## Code
+
+```{r,eval=FALSE}
+wh_clust <- hclust(wh_d, method = "average")
+num_k <- find_k(wh_clust)
+plot(num_k)
+```
+:::
+
+Figure above shows that k=3 (i.e. highlighted in red) is suitable.
+
+With reference to the statistical analysis results, we can prepare the code chunk as shown below.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          dist_method = "euclidean",
+          hclust_method = "average",
+          k_row = 3)
+```
+
+## Code
+
+```{r,eval=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          dist_method = "euclidean",
+          hclust_method = "average",
+          k_row = 3)
+```
+:::
+
+### **Seriation**
+
+One of the problems with hierarchical clustering is that rows do not have a definite order, it merely constrains the space of possible orderings. For example, 3 itmes A, B, and C have three possible orderings: ABC, ACB and BAC. If clustering them gives ((A+B)+C) as a tree, it is clear that C can’t end up between A and B, but there is no information as to which way to flip the A+B cluster. It is unknown if the ABC ordering will lead to a clearer-looking heatmap compared to the BAC ordering.
+
+**heatmaply** uses the seriation package to find an optimal ordering of rows and columns. Optimal means to optimise the Hamiltonian path length that is restricted by the dendrogram structure. This means to rotate the branches so that the sum of distances between each adjacent leaf (label) will be minimised. This is related to a restricted version of the travelling salesman problem.
+
+Optimal Leaf Ordering (OLO) starts with the output of an agglomerative clustering algorithm and produces a unique ordering, one that flips the various branches of the dendrogram around so as to minimise the sum of dissimilarities between adjacent leaves. Here is the result of applying Optimal Leaf Ordering to the same clustering result as the heatmap above.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "OLO")
+```
+
+## Code
+
+```{r,eval=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "OLO")
+```
+:::
+
+The default options is “OLO” (Optimal leaf ordering) which optimizes the above criterion (in O(n\^4)). Another option is “GW” (Gruvaeus and Wainer) which aims for the same goal but uses a potentially faster heuristic.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "GW")
+```
+
+## Code
+
+```{r,eval=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "GW")
+```
+:::
+
+The option “mean” gives the output we would get by default from heatmap functions in other packages such as gplots::heatmap.2.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "mean")
+```
+
+## Code
+
+```{r,eval=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "mean")
+```
+:::
+
+The option “none” gives us the dendrograms without any rotation that is based on the data matrix.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "none")
+```
+
+## Code
+
+```{r,eval=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "none")
+```
+:::
+
+### **Working with colour palettes**
+
+The default colour palette used by **heatmaply** is *viridis*. heatmaply users, however, other colour palettes can be used to to improve the aestheticness and visual friendliness of the heatmap.
+
+In the code chunk below, the Blues colour palette of rColorBrewer is used.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "none",
+          colors = Blues)
+```
+
+## Code
+
+```{r,eval=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          seriate = "none",
+          colors = Blues)
+```
+:::
+
+### **The finishing touch**
+
+Beside providing a wide collection of arguments for meeting the statistical analysis needs, *heatmaply* also provides many plotting features to ensure cartographic quality heatmap can be produced.
+
+In the code chunk below the following arguments are used:
+
+-   *k_row* is used to produce 5 groups.
+
+-   *margins* is used to change the top margin to 60 and row margin to 200.
+
+-   *fontsizw_row* and *fontsize_col* are used to change the font size for row and column labels to 4.
+
+-   *main* is used to write the main title of the plot.
+
+-   *xlab* and *ylab* are used to write the x-axis and y-axis labels respectively.
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          Colv=NA,
+          seriate = "none",
+          colors = Blues,
+          k_row = 5,
+          margins = c(NA,200,60,NA),
+          fontsize_row = 4,
+          fontsize_col = 5,
+          main="World Happiness Score and Variables by Country, 2018 \nDataTransformation using Normalise Method",
+          xlab = "World Happiness Indicators",
+          ylab = "World Countries"
+          )
+```
+
+## Code
+
+```{r,eval=FALSE}
+heatmaply(normalize(wh_matrix[, -c(1, 2, 4, 5)]),
+          Colv=NA,
+          seriate = "none",
+          colors = Blues,
+          k_row = 5,
+          margins = c(NA,200,60,NA),
+          fontsize_row = 4,
+          fontsize_col = 5,
+          main="World Happiness Score and Variables by Country, 2018 \nDataTransformation using Normalise Method",
+          xlab = "World Happiness Indicators",
+          ylab = "World Countries"
+          )
+```
+:::
