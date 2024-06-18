@@ -1,0 +1,120 @@
+---
+title: "In-class Exercise 9 Multivariate Analysis"
+author: "Alicia Loh"
+date: "15 June, 2024"
+date-modified: last-modified
+execute: 
+  eval: true
+  echo: true
+  warning: false
+  freeze: true
+---
+
+# Getting Started
+
+## Installing and loading the required libraries
+
+The following R packages will be used:
+
+-   scatterPlotMatrix
+
+-   parallelPlot
+
+-   cluster
+
+-   factoextra
+
+-   tidyverse
+
+Code chunk below will be used to check if these packages have been installed and also will load them into the working R environment.
+
+```{r}
+pacman::p_load(scatterPlotMatrix,parallelPlot,cluster,factoextra,tidyverse) 
+```
+
+## **Importing Data into R**
+
+### **Importing Data**
+
+In the code chunk below, **read_csv()** of *readr* is used to import wine_quality.csv into R and parsed it into tibble R data frame
+
+```{r}
+wine <- read_csv("data/wine_quality.csv")
+```
+
+### **View Data**
+
+```{r}
+ggplot(data= wine, 
+       aes(x = type)) +
+  geom_bar()
+```
+
+::: callout-note
+There are 2 types of wine: Red and White
+:::
+
+## **White Wine**
+
+Select relevant columns
+
+```{r}
+whitewine <- wine %>%
+  filter(type == "white") %>%
+  select(c(1:11))
+```
+
+Plot White Wine Attributes
+
+::: panel-tabset
+## Plot
+
+```{r,echo=FALSE}
+scatterPlotMatrix(whitewine,
+                  corrPlotType = "Text",
+                  distribType = 2,
+                  width = 500,
+                  height = 500,
+                  rotateTitle = TRUE)
+```
+
+## Code
+
+```{r,eval=FALSE}
+scatterPlotMatrix(whitewine,
+                  corrPlotType = "Text",
+                  distribType = 1,
+                  width = 500,
+                  height = 500)
+```
+:::
+
+Compute GAP Statistic
+
+See Data Cluster (post GAP statistic)
+
+```{r}
+set.seed(1234)
+kmeans4 <- kmeans(whitewine, 4, nstart=25)
+print(kmeans)
+```
+
+Visualise clusters
+
+```{r}
+fviz_cluster(kmeans4, data = whitewine)
+```
+
+Populate cluster values
+
+```{r}
+whitewine <- whitewine %>%
+  mutate(Cluster = kmeans4$cluster)
+```
+
+Compute cluster as factors
+
+```{r}
+whitewine$Cluster <- 
+  as_factor(whitewine$Cluster)
+```
