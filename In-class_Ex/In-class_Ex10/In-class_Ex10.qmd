@@ -1,6 +1,7 @@
 ---
 title: "In-class Exercise 10: My First Quarto Dashboard"
 format: dashboard
+orientation: columns
 ---
 
 ```{r}
