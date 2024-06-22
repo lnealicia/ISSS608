@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.555">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -47,7 +47,13 @@ ul.task-list li input[type="checkbox"] {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -56,6 +62,7 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -151,17 +158,43 @@ ul.task-list li input[type="checkbox"] {
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
 <link rel="stylesheet" href="styles.css">
 </head>
 
 <body class="nav-fixed fullcontent">
 
-
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="./index.html">
     <span class="navbar-title">ISSS608</span>
     </a>
@@ -173,179 +206,179 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercise-1" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-exercise-1" role="button" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="bi bi-pencil-square" role="img">
 </i> 
  <span class="menu-text">Hands-on Exercise 1</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-exercise-1">    
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html">
  <span class="dropdown-text">Hands-on Part 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html">
  <span class="dropdown-text">Hands-on Exercise 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_1.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_1.html">
  <span class="dropdown-text">Hands-on Exercise 3 Part I</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_2.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_2.html">
  <span class="dropdown-text">Hands-on Exercise 3 Part II</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html">
  <span class="dropdown-text">Hands-on Exercise 4 Part I</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_2.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_2.html">
  <span class="dropdown-text">Hands-on Exercise 4 Part II</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_3.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_3.html">
  <span class="dropdown-text">Hands-on Exercise 4 Part III</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html">
  <span class="dropdown-text">Hands-on Exercise 5</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html">
  <span class="dropdown-text">Hands-on Exercise 6</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html">
  <span class="dropdown-text">Hands-on Exercise 7</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-part-2" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-hands-on-part-2" role="button" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="bi bi-pencil-square" role="img">
 </i> 
  <span class="menu-text">Hands-on Part 2</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-hands-on-part-2">    
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_1.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_1.html">
  <span class="dropdown-text">Hands-on Exercise 8 Part I</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html">
  <span class="dropdown-text">Hands-on Exercise 8 Part II</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_3.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_3.html">
  <span class="dropdown-text">Hands-on Exercise 8 Part III</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_1.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_1.html">
  <span class="dropdown-text">Hands-on Exercise 9 Part I</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_2.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_2.html">
  <span class="dropdown-text">Hands-on Exercise 9 Part II</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html">
  <span class="dropdown-text">Hands-on Exercise 9 Part III</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_4.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_4.html">
  <span class="dropdown-text">Hands-on Exercise 9 Part IV</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_5.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_5.html">
  <span class="dropdown-text">Hands-on Exercise 9 Part V</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html" rel="" target="">
+    <a class="dropdown-item" href="./Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html">
  <span class="dropdown-text">Hands-on Exercise 10</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-in-class" role="button" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="bi bi-book-half" role="img">
 </i> 
  <span class="menu-text">In-class</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-in-class">    
         <li>
-    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex01/In-class_Ex01.html" rel="" target="">
+    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex01/In-class_Ex01.html">
  <span class="dropdown-text">In-class Exercise 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex02/In-class_Ex02.html" rel="" target="">
+    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex02/In-class_Ex02.html">
  <span class="dropdown-text">In-class Exercise 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex04/In-class_Ex04.html" rel="" target="">
+    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex04/In-class_Ex04.html">
  <span class="dropdown-text">In-class Exercise 4</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex05/In-class_Ex05.html" rel="" target="">
+    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex05/In-class_Ex05.html">
  <span class="dropdown-text">In-class Exercise 5</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex06/In-class_Ex06.html" rel="" target="">
+    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex06/In-class_Ex06.html">
  <span class="dropdown-text">In-class Exercise 6</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex09/In-class_Ex09.html" rel="" target="">
+    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex09/In-class_Ex09.html">
  <span class="dropdown-text">In-class Exercise 9</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex10/In-class_Ex10.html" rel="" target="">
+    <a class="dropdown-item" href="./In-class_Ex/In-class_Ex10/In-class_Ex10.html">
  <span class="dropdown-text">In-class Exercise 10</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item dropdown ">
-    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home" role="button" data-bs-toggle="dropdown" aria-expanded="false" rel="" target="">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-take-home" role="button" data-bs-toggle="dropdown" aria-expanded="false">
       <i class="bi bi-person-fill" role="img">
 </i> 
  <span class="menu-text">Take-home</span>
     </a>
     <ul class="dropdown-menu" aria-labelledby="nav-menu-take-home">    
         <li>
-    <a class="dropdown-item" href="./Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html" rel="" target="">
+    <a class="dropdown-item" href="./Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html">
  <span class="dropdown-text">Take-home Exercise 1</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Take-home_Ex/Take-home_Ex01/Take-home_Ex01_geo.html" rel="" target="">
+    <a class="dropdown-item" href="./Take-home_Ex/Take-home_Ex01/Take-home_Ex01_geo.html">
  <span class="dropdown-text">Take-home Exercise 1 (Geographical Distribution)</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html" rel="" target="">
+    <a class="dropdown-item" href="./Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html">
  <span class="dropdown-text">Take-home Exercise 2</span></a>
   </li>  
         <li>
-    <a class="dropdown-item" href="./Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html" rel="" target="">
+    <a class="dropdown-item" href="./Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html">
  <span class="dropdown-text">Take-home Exercise 3</span></a>
   </li>  
     </ul>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="https://isss608-g2.netlify.app/" rel="" target=""><i class="bi bi-user-fill" role="img">
+    <a class="nav-link" href="https://isss608-g2.netlify.app/"> <i class="bi bi-user-fill" role="img">
 </i> 
- <span class="menu-text">Group Project</span></a>
+<span class="menu-text">Group Project</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="./about.html"> 
+<span class="menu-text">About</span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools tools-wide">
-    <a href="https://www.linkedin.com/in/lnealicia/" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
-    <a href="https://github.com/lnealicia/" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
-    <a href="https://public.tableau.com/app/profile/lne.alicia/vizzes" rel="" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-bar-chart-fill"></i></a>
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools tools-wide">
+    <a href="https://www.linkedin.com/in/lnealicia/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-linkedin"></i></a>
+    <a href="https://github.com/lnealicia/" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-github"></i></a>
+    <a href="https://public.tableau.com/app/profile/lne.alicia/vizzes" title="" class="quarto-navigation-tool px-1" aria-label=""><i class="bi bi-bar-chart-fill"></i></a>
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -372,7 +405,9 @@ ul.task-list li input[type="checkbox"] {
   </div>
   
 
+
 </header>
+
 
 <p>Welcome to <strong>ISSS608 Visual Analytics and Applications</strong> homepage. In this website, you will find my coursework. Materials here are based on <a href="https://isss608-ay2023-24apr.netlify.app/lesson">https://isss608-ay2023-24apr.netlify.app/</a> by Prof Kam Tin Seong from SMU.</p>
 <p><img src="images/clipboard-514459332.png" class="img-fluid"></p>
@@ -383,7 +418,7 @@ ul.task-list li input[type="checkbox"] {
 <p></p>
 <div id="listing-Hands_on_Exercise" class="quarto-listing quarto-listing-container-grid">
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-date-sort="1712937600000" data-listing-file-modified-sort="1713597760977" data-listing-date-modified-sort="1713597760000" data-listing-reading-time-sort="15">
+<div class="g-col-1" data-index="0" data-listing-date-sort="1712937600000" data-listing-file-modified-sort="1713597760977" data-listing-date-modified-sort="1713597760000" data-listing-reading-time-sort="15" data-listing-word-count-sort="2926">
 <a href="./Hands-on_Ex/Hands-on_Ex01/Hands-on_Ex01.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex01\Hands-on_Ex01_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -403,7 +438,7 @@ Apr 13, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="1" data-listing-date-sort="1718380800000" data-listing-file-modified-sort="1718700340709" data-listing-date-modified-sort="1718700340000" data-listing-reading-time-sort="17">
+<div class="g-col-1" data-index="1" data-listing-date-sort="1718380800000" data-listing-file-modified-sort="1719040827919" data-listing-date-modified-sort="1719040827000" data-listing-reading-time-sort="17" data-listing-word-count-sort="3298">
 <a href="./Hands-on_Ex/Hands-on_Ex10/Hands-on_Ex10.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex10\Hands-on_Ex10_files\figure-html\unnamed-chunk-5-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -423,7 +458,7 @@ Jun 15, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="2" data-listing-date-sort="1713283200000" data-listing-file-modified-sort="1713595770910" data-listing-date-modified-sort="1713595770000" data-listing-reading-time-sort="15">
+<div class="g-col-1" data-index="2" data-listing-date-sort="1713283200000" data-listing-file-modified-sort="1713595770910" data-listing-date-modified-sort="1713595770000" data-listing-reading-time-sort="15" data-listing-word-count-sort="2913">
 <a href="./Hands-on_Ex/Hands-on_Ex02/Hands-on_Ex02.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex02\Hands-on_Ex02_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -443,7 +478,7 @@ Apr 17, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="3" data-listing-date-sort="1713888000000" data-listing-file-modified-sort="1714200681974" data-listing-date-modified-sort="1714200681000" data-listing-reading-time-sort="10">
+<div class="g-col-1" data-index="3" data-listing-date-sort="1713888000000" data-listing-file-modified-sort="1714200681974" data-listing-date-modified-sort="1714200681000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1812">
 <a href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_2.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex03\Hands-on_Ex03_2_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -463,7 +498,7 @@ Apr 24, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="4" data-listing-date-sort="1713542400000" data-listing-file-modified-sort="1714205310817" data-listing-date-modified-sort="1714205310000" data-listing-reading-time-sort="34">
+<div class="g-col-1" data-index="4" data-listing-date-sort="1713542400000" data-listing-file-modified-sort="1714205310817" data-listing-date-modified-sort="1714205310000" data-listing-reading-time-sort="34" data-listing-word-count-sort="6652">
 <a href="./Hands-on_Ex/Hands-on_Ex03/Hands-on_Ex03_1.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
@@ -483,7 +518,7 @@ Apr 20, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="5" data-listing-date-sort="1714406400000" data-listing-file-modified-sort="1714498364420" data-listing-date-modified-sort="1714498364000" data-listing-reading-time-sort="11">
+<div class="g-col-1" data-index="5" data-listing-date-sort="1714406400000" data-listing-file-modified-sort="1714498364420" data-listing-date-modified-sort="1714498364000" data-listing-reading-time-sort="11" data-listing-word-count-sort="2132">
 <a href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_3.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex04\Hands-on_Ex04_3_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -503,7 +538,7 @@ Apr 30, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="6" data-listing-date-sort="1714147200000" data-listing-file-modified-sort="1714495628746" data-listing-date-modified-sort="1714495628000" data-listing-reading-time-sort="16">
+<div class="g-col-1" data-index="6" data-listing-date-sort="1714147200000" data-listing-file-modified-sort="1714495628746" data-listing-date-modified-sort="1714495628000" data-listing-reading-time-sort="16" data-listing-word-count-sort="3113">
 <a href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_1.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex04\Hands-on_Ex04_1_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -523,7 +558,7 @@ Apr 27, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="7" data-listing-date-sort="1714406400000" data-listing-file-modified-sort="1714498358971" data-listing-date-modified-sort="1714498358000" data-listing-reading-time-sort="24">
+<div class="g-col-1" data-index="7" data-listing-date-sort="1714406400000" data-listing-file-modified-sort="1714498358971" data-listing-date-modified-sort="1714498358000" data-listing-reading-time-sort="24" data-listing-word-count-sort="4707">
 <a href="./Hands-on_Ex/Hands-on_Ex04/Hands-on_Ex04_2.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex04\Hands-on_Ex04_2_files\figure-html\unnamed-chunk-6-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -543,7 +578,7 @@ Apr 30, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="8" data-listing-date-sort="1715184000000" data-listing-file-modified-sort="1715252096218" data-listing-date-modified-sort="1715252096000" data-listing-reading-time-sort="16">
+<div class="g-col-1" data-index="8" data-listing-date-sort="1715184000000" data-listing-file-modified-sort="1715252096218" data-listing-date-modified-sort="1715252096000" data-listing-reading-time-sort="16" data-listing-word-count-sort="3147">
 <a href="./Hands-on_Ex/Hands-on_Ex05/Hands-on_Ex05.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex05\Hands-on_Ex05_files\figure-html\unnamed-chunk-5-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -563,7 +598,7 @@ May 9, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="9" data-listing-date-sort="1715702400000" data-listing-file-modified-sort="1715827734848" data-listing-date-modified-sort="1715827734000" data-listing-reading-time-sort="15">
+<div class="g-col-1" data-index="9" data-listing-date-sort="1715702400000" data-listing-file-modified-sort="1715827734848" data-listing-date-modified-sort="1715827734000" data-listing-reading-time-sort="15" data-listing-word-count-sort="2920">
 <a href="./Hands-on_Ex/Hands-on_Ex06/Hands-on_Ex06.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex06\Hands-on_Ex06_files\figure-html\unnamed-chunk-11-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -583,7 +618,7 @@ May 15, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="10" data-listing-date-sort="1716825600000" data-listing-file-modified-sort="1716900301583" data-listing-date-modified-sort="1716900301000" data-listing-reading-time-sort="12">
+<div class="g-col-1" data-index="10" data-listing-date-sort="1716825600000" data-listing-file-modified-sort="1716900301583" data-listing-date-modified-sort="1716900301000" data-listing-reading-time-sort="12" data-listing-word-count-sort="2269">
 <a href="./Hands-on_Ex/Hands-on_Ex07/Hands-on_Ex07.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex07\Hands-on_Ex07_files\figure-html\unnamed-chunk-7-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -603,7 +638,7 @@ May 28, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="11" data-listing-date-sort="1717344000000" data-listing-file-modified-sort="1717517548009" data-listing-date-modified-sort="1717517548000" data-listing-reading-time-sort="21">
+<div class="g-col-1" data-index="11" data-listing-date-sort="1717344000000" data-listing-file-modified-sort="1717517548009" data-listing-date-modified-sort="1717517548000" data-listing-reading-time-sort="21" data-listing-word-count-sort="4080">
 <a href="./Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_1.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex08\Hands-on_Ex08_1_files\figure-html\unnamed-chunk-9-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -623,7 +658,7 @@ Jun 3, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="12" data-listing-date-sort="1717516800000" data-listing-file-modified-sort="1717518515138" data-listing-date-modified-sort="1717518515000" data-listing-reading-time-sort="5">
+<div class="g-col-1" data-index="12" data-listing-date-sort="1717516800000" data-listing-file-modified-sort="1717518515138" data-listing-date-modified-sort="1717518515000" data-listing-reading-time-sort="5" data-listing-word-count-sort="963">
 <a href="./Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_2.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex08\images\clipboard-2477304374.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -643,7 +678,7 @@ Jun 5, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="13" data-listing-date-sort="1717516800000" data-listing-file-modified-sort="1717684901299" data-listing-date-modified-sort="1717684901000" data-listing-reading-time-sort="11">
+<div class="g-col-1" data-index="13" data-listing-date-sort="1717516800000" data-listing-file-modified-sort="1717684901299" data-listing-date-modified-sort="1717684901000" data-listing-reading-time-sort="11" data-listing-word-count-sort="2111">
 <a href="./Hands-on_Ex/Hands-on_Ex08/Hands-on_Ex08_3.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex08\Hands-on_Ex08_3_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -663,7 +698,7 @@ Jun 5, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="14" data-listing-date-sort="1717948800000" data-listing-file-modified-sort="1718037966649" data-listing-date-modified-sort="1718037966000" data-listing-reading-time-sort="5">
+<div class="g-col-1" data-index="14" data-listing-date-sort="1717948800000" data-listing-file-modified-sort="1718037966649" data-listing-date-modified-sort="1718037966000" data-listing-reading-time-sort="5" data-listing-word-count-sort="833">
 <a href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_1.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex09\Hands-on_Ex09_1_files\figure-html\unnamed-chunk-4-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -683,7 +718,7 @@ Jun 10, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="15" data-listing-date-sort="1717948800000" data-listing-file-modified-sort="1718038802158" data-listing-date-modified-sort="1718038802000" data-listing-reading-time-sort="15">
+<div class="g-col-1" data-index="15" data-listing-date-sort="1717948800000" data-listing-file-modified-sort="1718038802158" data-listing-date-modified-sort="1718038802000" data-listing-reading-time-sort="15" data-listing-word-count-sort="2829">
 <a href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_2.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex09\Hands-on_Ex09_2_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -703,7 +738,7 @@ Jun 10, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="16" data-listing-date-sort="1718035200000" data-listing-file-modified-sort="1718204446576" data-listing-date-modified-sort="1718204446000" data-listing-reading-time-sort="14">
+<div class="g-col-1" data-index="16" data-listing-date-sort="1718035200000" data-listing-file-modified-sort="1718204446576" data-listing-date-modified-sort="1718204446000" data-listing-reading-time-sort="14" data-listing-word-count-sort="2769">
 <a href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_3.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex09\Hands-on_Ex09_3_files\figure-html\unnamed-chunk-5-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -723,7 +758,7 @@ Jun 11, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="17" data-listing-date-sort="1718121600000" data-listing-file-modified-sort="1718205324709" data-listing-date-modified-sort="1718205324000" data-listing-reading-time-sort="10">
+<div class="g-col-1" data-index="17" data-listing-date-sort="1718121600000" data-listing-file-modified-sort="1718205324709" data-listing-date-modified-sort="1718205324000" data-listing-reading-time-sort="10" data-listing-word-count-sort="1826">
 <a href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_4.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Hands-on_Ex\Hands-on_Ex09\Hands-on_Ex09_4_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -743,7 +778,7 @@ Jun 12, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="18" data-listing-date-sort="1718121600000" data-listing-file-modified-sort="1718209070805" data-listing-date-modified-sort="1718209070000" data-listing-reading-time-sort="18">
+<div class="g-col-1" data-index="18" data-listing-date-sort="1718121600000" data-listing-file-modified-sort="1718209070805" data-listing-date-modified-sort="1718209070000" data-listing-reading-time-sort="18" data-listing-word-count-sort="3569">
 <a href="./Hands-on_Ex/Hands-on_Ex09/Hands-on_Ex09_5.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img data-src="Hands-on_Ex\Hands-on_Ex09\Hands-on_Ex09_5_files\figure-html\unnamed-chunk-8-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -779,7 +814,7 @@ No matching items
 <p></p>
 <div id="listing-In_Class_Exercise" class="quarto-listing quarto-listing-container-grid">
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-date-sort="1712937600000" data-listing-file-modified-sort="1716046823282" data-listing-date-modified-sort="1716046823000" data-listing-reading-time-sort="1">
+<div class="g-col-1" data-index="0" data-listing-date-sort="1712937600000" data-listing-file-modified-sort="1716046823282" data-listing-date-modified-sort="1716046823000" data-listing-reading-time-sort="1" data-listing-word-count-sort="110">
 <a href="./In-class_Ex/In-class_Ex01/In-Class_Ex01.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="In-class_Ex\In-class_Ex01\In-Class_Ex01_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -799,7 +834,7 @@ Apr 13, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="1" data-listing-date-sort="1713542400000" data-listing-file-modified-sort="1713706335054" data-listing-date-modified-sort="1713706335000" data-listing-reading-time-sort="19">
+<div class="g-col-1" data-index="1" data-listing-date-sort="1713542400000" data-listing-file-modified-sort="1713706335054" data-listing-date-modified-sort="1713706335000" data-listing-reading-time-sort="19" data-listing-word-count-sort="3778">
 <a href="./In-class_Ex/In-class_Ex02/In-Class_Ex02.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="In-class_Ex\In-class_Ex02\In-Class_Ex02_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -819,7 +854,7 @@ Apr 20, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="2" data-listing-date-sort="1714752000000" data-listing-file-modified-sort="1714807054472" data-listing-date-modified-sort="1714807054000" data-listing-reading-time-sort="7">
+<div class="g-col-1" data-index="2" data-listing-date-sort="1714752000000" data-listing-file-modified-sort="1714807054472" data-listing-date-modified-sort="1714807054000" data-listing-reading-time-sort="7" data-listing-word-count-sort="1314">
 <a href="./In-class_Ex/In-class_Ex04/In-class_Ex04.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="In-class_Ex\In-class_Ex04\In-class_Ex04_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -839,7 +874,7 @@ May 4, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="3" data-listing-date-sort="1715356800000" data-listing-file-modified-sort="1716047038425" data-listing-date-modified-sort="1716047038000" data-listing-reading-time-sort="2">
+<div class="g-col-1" data-index="3" data-listing-date-sort="1715356800000" data-listing-file-modified-sort="1716047038425" data-listing-date-modified-sort="1716047038000" data-listing-reading-time-sort="2" data-listing-word-count-sort="377">
 <a href="./In-class_Ex/In-class_Ex05/In-class_Ex05.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
@@ -859,7 +894,7 @@ May 11, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="4" data-listing-date-sort="1715961600000" data-listing-file-modified-sort="1716047065877" data-listing-date-modified-sort="1716047065000" data-listing-reading-time-sort="5">
+<div class="g-col-1" data-index="4" data-listing-date-sort="1715961600000" data-listing-file-modified-sort="1716047065877" data-listing-date-modified-sort="1716047065000" data-listing-reading-time-sort="5" data-listing-word-count-sort="870">
 <a href="./In-class_Ex/In-class_Ex06/In-class_Ex06.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="In-class_Ex\In-class_Ex06\In-class_Ex06_files\figure-html\unnamed-chunk-22-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -879,7 +914,27 @@ May 18, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="5" data-listing-date-sort="1718380800000" data-listing-file-modified-sort="1718701140034" data-listing-date-modified-sort="1718701140000" data-listing-reading-time-sort="2">
+<div class="g-col-1" data-index="5" data-listing-date-sort="1718380800000" data-listing-file-modified-sort="1719041057229" data-listing-date-modified-sort="1719041057000" data-listing-reading-time-sort="3" data-listing-word-count-sort="506">
+<a href="./In-class_Ex/In-class_Ex10/In-class_Ex10.html" class="quarto-grid-link">
+<div class="quarto-grid-item card h-100 card-left">
+<div class="listing-item-img-placeholder card-img-top" style="height: 150px;">&nbsp;</div>
+<div class="card-body post-contents">
+<h5 class="no-anchor card-title listing-title">
+In-class Exercise 10: My First Quarto Dashboard
+</h5>
+<div class="card-attribution card-text-small justify">
+<div class="listing-author">
+Alicia Loh
+</div>
+<div class="listing-date">
+Jun 15, 2024
+</div>
+</div>
+</div>
+</div>
+</a>
+</div>
+<div class="g-col-1" data-index="6" data-listing-date-sort="1718380800000" data-listing-file-modified-sort="1718701140034" data-listing-date-modified-sort="1718701140000" data-listing-reading-time-sort="2" data-listing-word-count-sort="333">
 <a href="./In-class_Ex/In-class_Ex09/In-class_Ex09.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="In-class_Ex\In-class_Ex09\In-class_Ex09_files\figure-html\unnamed-chunk-3-1.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -912,7 +967,7 @@ No matching items
 <p></p>
 <div id="listing-Take_Home_Exercise" class="quarto-listing quarto-listing-container-grid">
 <div class="list grid quarto-listing-cols-3">
-<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1713964979136" data-listing-reading-time-sort="17">
+<div class="g-col-1" data-index="0" data-listing-file-modified-sort="1713964979136" data-listing-reading-time-sort="17" data-listing-word-count-sort="3279">
 <a href="./Take-home_Ex/Take-home_Ex01/Take-home_Ex01.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Take-home_Ex\Take-home_Ex01\images\clipboard-3122103337.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -929,7 +984,7 @@ Alicia Loh
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1713963706282" data-listing-reading-time-sort="12">
+<div class="g-col-1" data-index="1" data-listing-file-modified-sort="1713963706282" data-listing-reading-time-sort="12" data-listing-word-count-sort="2344">
 <a href="./Take-home_Ex/Take-home_Ex01/Take-home_Ex01_geo.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Take-home_Ex\Take-home_Ex01\images\clipboard-3619198007.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -946,7 +1001,7 @@ Alicia Loh
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="2" data-listing-date-sort="1714406400000" data-listing-file-modified-sort="1717877522940" data-listing-date-modified-sort="1717877522000" data-listing-reading-time-sort="127">
+<div class="g-col-1" data-index="2" data-listing-date-sort="1714406400000" data-listing-file-modified-sort="1717877522940" data-listing-date-modified-sort="1717877522000" data-listing-reading-time-sort="127" data-listing-word-count-sort="25289">
 <a href="./Take-home_Ex/Take-home_Ex02/Take-home_Ex02.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Take-home_Ex\Take-home_Ex02\images\clipboard-275283112.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -966,7 +1021,7 @@ Apr 30, 2024
 </div>
 </a>
 </div>
-<div class="g-col-1" data-index="3" data-listing-date-sort="1715270400000" data-listing-file-modified-sort="1717943723056" data-listing-date-modified-sort="1717943723000" data-listing-reading-time-sort="26">
+<div class="g-col-1" data-index="3" data-listing-date-sort="1715270400000" data-listing-file-modified-sort="1717943723056" data-listing-date-modified-sort="1717943723000" data-listing-reading-time-sort="26" data-listing-word-count-sort="5181">
 <a href="./Take-home_Ex/Take-home_Ex03/Take-home_Ex03.html" class="quarto-grid-link">
 <div class="quarto-grid-item card h-100 card-left">
 <p class="card-img-top"><img src="Take-home_Ex\Take-home_Ex03\data\Oceanus Information\Oceanus Location.png" style="height: 150px;"  class="thumbnail-image card-img"/></p>
@@ -1077,10 +1132,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -1090,8 +1162,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -1103,7 +1184,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -1147,6 +1351,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -1172,6 +1377,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -1232,6 +1463,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 

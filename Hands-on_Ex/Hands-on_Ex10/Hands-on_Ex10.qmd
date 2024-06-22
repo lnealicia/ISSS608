@@ -156,7 +156,7 @@ sales_report <- coffeechain %>%
   select(Month, Product, Sales)
 ```
 
-Compute the minimum, maximum and end othe the month sales
+Compute the minimum, maximum and end of the monthly sales
 
 ```{r}
 mins <- group_by(sales_report, Product) %>% 
